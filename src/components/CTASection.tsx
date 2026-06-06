@@ -34,7 +34,7 @@ export function CTASection() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="mailto:hello@autoforge.dev"
+                href="mailto:renmengkai@gmail.com"
                 className="group flex items-center gap-2 px-8 py-3.5 bg-accent text-bg-primary font-semibold rounded-lg hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] transition-all duration-300"
               >
                 加入等候名单
@@ -44,7 +44,7 @@ export function CTASection() {
                 />
               </a>
               <a
-                href="mailto:hello@autoforge.dev"
+                href="mailto:renmengkai@gmail.com"
                 className="px-8 py-3.5 text-text-secondary border border-border rounded-lg hover:border-accent/30 hover:text-accent transition-all duration-300"
               >
                 联系我们
