@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoForge — 通用软件工厂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-void: #0c0906;
+    --bg-deep: #16110d;
+    --bg-card: #1b150f;
+    --bg-surface: #211a13;
+    --bg-rail: #110d09;
+    --border: #2a2017;
+    --border-light: #3a2c1c;
+    --ember: #e8772e;
+    --ember-dim: rgba(232,119,46,0.7);
+    --ember-glow: rgba(232,119,46,0.25);
+    --violet: #8b7ad8;
+    --blue: #4f8ed1;
+    --green: #4f9d6b;
+    --green-dim: rgba(79,157,107,0.7);
+    --yellow: #e0a32e;
+    --text-primary: #f0e6da;
+    --text-muted: #8a7a6a;
+    --text-dim: #5a4d42;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--bg-void);
+    color: var(--text-primary);
+    overflow-x: hidden;
+  }
+
+  /* === NOISE TEXTURE === */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 10000;
+    mix-blend-mode: overlay;
+  }
+
+  /* === LOADER === */
+  .loader {
+    position: fixed; inset: 0;
+    background: var(--bg-void);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 100000;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem; font-weight: 900;
+    color: var(--ember);
+    letter-spacing: 0.15em;
+    margin-bottom: 24px;
+  }
+  .loader-bar {
+    width: 180px; height: 2px;
+    background: var(--border);
+    border-radius: 2px; overflow: hidden;
+  }
+  .loader-bar-fill {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--ember), var(--violet));
+    animation: fillBar 1.8s ease forwards;
+  }
+  @keyframes fillBar { to { width: 100%; } }
+  .loader-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: var(--text-dim);
+    margin-top: 14px; letter-spacing: 0.1em;
+    animation: blink 1s ease-in-out infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+  /* === NAVIGATION === */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    padding: 16px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(12,9,6,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(42,32,23,0.5);
+    transition: background 0.3s ease;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .nav-logo-icon {
+    width: 32px; height: 32px;
+    background: var(--ember);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .nav-logo-icon::after {
+    content: 'AF';
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.55rem; font-weight: 900;
+    color: var(--bg-void);
+    letter-spacing: 0.05em;
+  }
+  .nav-logo-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem; font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  .nav-logo-text span { color: var(--text-dim); font-weight: 400; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--ember);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--ember); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 10px 24px;
+    border: 1px solid var(--ember);
+    color: var(--ember);
+    background: transparent;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  .nav-cta:hover {
+    background: var(--ember);
+    color: var(--bg-void);
+    box-shadow: 0 0 30px var(--ember-glow);
+  }
+
+  /* === HERO === */
+  .hero {
+    position: relative; width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-video-bg {
+    position: absolute; inset: 0; z-index: 0;
+  }
+  .hero-video-bg video {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.18;
+    filter: saturate(0.4) brightness(0.4) sepia(0.3);
+  }
+  .hero-gradient {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      radial-gradient(ellipse at 25% 45%, rgba(232,119,46,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 55%, rgba(139,122,216,0.05) 0%, transparent 50%),
+      linear-gradient(180deg, transparent 50%, var(--bg-void) 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 2;
+    background:
+      linear-gradient(90deg, rgba(232,119,46,0.02) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(232,119,46,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 25s linear infinite;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+  }
+  @keyframes gridDrift { to { background-position: 60px 60px; } }
+
+  .hero-content {
+    position: relative; z-index: 10;
+    text-align: center; max-width: 900px; padding: 0 20px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+    background: rgba(232,119,46,0.08);
+    border: 1px solid rgba(232,119,46,0.15);
+    border-radius: 2px;
+    margin-bottom: 32px;
+    opacity: 0; animation: fadeUp 0.7s ease 2s forwards;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; } 50% { opacity: 1; }
+  }
+  .hero-badge-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    line-height: 1.15;
+    margin-bottom: 12px;
+    opacity: 0; animation: fadeUp 0.7s ease 2.2s forwards;
+  }
+  .hero-title .accent { color: var(--ember); }
+  .hero-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.7s ease 2.35s forwards;
+  }
+  .hero-desc {
+    font-size: 1rem; font-weight: 300;
+    line-height: 1.9; color: var(--text-muted);
+    max-width: 560px; margin: 0 auto 48px;
+    opacity: 0; animation: fadeUp 0.7s ease 2.5s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; justify-content: center;
+    opacity: 0; animation: fadeUp 0.7s ease 2.7s forwards;
+  }
+  .btn-primary {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 15px 40px;
+    background: var(--ember);
+    color: var(--bg-void);
+    border: none;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(100%); }
+  .btn-primary:hover {
+    box-shadow: 0 0 35px var(--ember-glow);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 15px 40px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  .btn-ghost:hover {
+    border-color: var(--violet);
+    color: var(--violet);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%;
+    transform: translateX(-50%); z-index: 10;
+    opacity: 0; animation: fadeUp 0.7s ease 3s forwards;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: var(--border);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute; top: -100%;
+    width: 100%; height: 40%;
+    background: linear-gradient(180deg, transparent, var(--ember));
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { to { top: 250%; } }
+  .scroll-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  /* === PIPELINE MARQUEE === */
+  .marquee-band {
+    padding: 24px 0; overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-deep);
+  }
+  .marquee-track {
+    display: flex; gap: 60px;
+    animation: marqueeScroll 28s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.25em;
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .marquee-item .dot {
+    width: 5px; height: 5px;
+    background: var(--ember);
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+  @keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* === SECTION SHARED === */
+  .section-header {
+    text-align: center; margin-bottom: 72px;
+  }
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--ember);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex; align-items: center;
+    justify-content: center; gap: 14px;
+  }
+  .section-tag::before, .section-tag::after {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--border-light);
+  }
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+    line-height: 1.3;
+    margin-bottom: 18px;
+  }
+  .section-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(36px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* === PIPELINE VIDEO SECTION === */
+  .pipeline-section {
+    position: relative;
+    padding: 140px 48px;
+    background: var(--bg-deep);
+    overflow: hidden;
+  }
+  .pipeline-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+  }
+  .pipeline-showcase {
+    max-width: 1100px; margin: 0 auto;
+    position: relative;
+  }
+  .pipeline-frame {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    background: var(--bg-card);
+    /* macOS window chrome */
+    box-shadow: 0 20px 80px rgba(0,0,0,0.5);
+  }
+  .window-chrome {
+    height: 36px;
+    background: var(--bg-surface);
+    display: flex; align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .win-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .win-dot.red { background: #ff5f57; }
+  .win-dot.yellow { background: #febc2e; }
+  .win-dot.green { background: #28c840; }
+  .win-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-left: 12px;
+    letter-spacing: 0.05em;
+  }
+  .pipeline-video-area {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+  }
+  .pipeline-video-area video {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.6;
+  }
+  .pipeline-video-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, rgba(12,9,6,0.3) 0%, transparent 40%, rgba(12,9,6,0.5) 100%);
+  }
+  .play-button {
+    width: 72px; height: 72px;
+    border: 2px solid var(--ember);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(232,119,46,0.06);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .play-button:hover {
+    background: rgba(232,119,46,0.15);
+    box-shadow: 0 0 40px var(--ember-glow);
+    transform: scale(1.08);
+  }
+  .play-button svg {
+    width: 22px; height: 22px;
+    fill: var(--ember);
+    margin-left: 3px;
+  }
+  .frame-corner {
+    position: absolute; width: 16px; height: 16px; z-index: 5;
+  }
+  .frame-corner.tl { top: 36px; left: -1px; border-top: 2px solid var(--ember); border-left: 2px solid var(--ember); }
+  .frame-corner.tr { top: 36px; right: -1px; border-top: 2px solid var(--ember); border-right: 2px solid var(--ember); }
+  .frame-corner.bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--ember); border-left: 2px solid var(--ember); }
+  .frame-corner.br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--ember); border-right: 2px solid var(--ember); }
+
+  .pipeline-stats {
+    display: flex; justify-content: center; gap: 60px;
+    margin-top: 56px;
+  }
+  .p-stat { text-align: center; }
+  .p-stat-val {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900; font-size: 2.2rem;
+    color: var(--ember);
+    text-shadow: 0 0 25px var(--ember-glow);
+  }
+  .p-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* === STAT CARDS (from AutoForge UI) === */
+  .stats-section {
+    padding: 120px 48px;
+    background: var(--bg-void);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .stat-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 24px;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--card-accent, var(--ember));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .stat-card:hover::before { transform: scaleX(1); }
+  .stat-card:hover { background: var(--bg-card); }
+  .stat-card-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--card-accent-bg, rgba(232,119,46,0.12));
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+  }
+  .stat-card-icon svg {
+    width: 16px; height: 16px;
+    stroke: var(--card-accent, var(--ember));
+    fill: none; stroke-width: 2;
+  }
+  .stat-card-num {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900; font-size: 1.8rem;
+    margin-bottom: 4px;
+  }
+  .stat-card-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .stat-card-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--green);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* === FEATURES === */
+  .features-section {
+    padding: 140px 48px;
+    background: var(--bg-deep);
+    position: relative;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .feature-card {
+    padding: 44px 36px;
+    background: var(--bg-card);
+    border: 1px solid rgba(42,32,23,0.3);
+    transition: all 0.35s ease;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--ember), var(--violet));
+    transform: scaleX(0);
+    transition: transform 0.35s ease;
+  }
+  .feature-card:hover::after { transform: scaleX(1); }
+  .feature-card:hover {
+    background: var(--bg-surface);
+    border-color: rgba(232,119,46,0.1);
+  }
+  .feature-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    letter-spacing: 0.3em;
+    margin-bottom: 14px;
+  }
+  .feature-icon {
+    width: 40px; height: 40px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background: rgba(232,119,46,0.06);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .feature-icon svg {
+    width: 20px; height: 20px;
+    stroke: var(--ember); fill: none; stroke-width: 1.5;
+  }
+  .feature-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700; font-size: 0.9rem;
+    margin-bottom: 12px; letter-spacing: 0.04em;
+  }
+  .feature-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* === PRODUCT VIDEO (GLOBE) === */
+  .product-section {
+    padding: 140px 48px;
+    background: var(--bg-void);
+  }
+  .product-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+    align-items: center;
+  }
+  .product-video-wrap {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .product-video-wrap video {
+    width: 100%; display: block;
+  }
+  .product-badge {
+    position: absolute; top: 16px; right: 16px;
+    padding: 6px 16px;
+    background: linear-gradient(135deg, var(--ember), var(--violet));
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.55rem; font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--bg-void);
+    border-radius: 2px;
+  }
+  .product-text h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    line-height: 1.35;
+    margin-bottom: 18px;
+  }
+  .product-text p {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+  .product-list {
+    list-style: none;
+  }
+  .product-list li {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .product-list li .bullet {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    background: rgba(232,119,46,0.1);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .product-list li .bullet::after {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--ember);
+    border-radius: 50%;
+  }
+
+  /* === PIPELINE BAND (full-width video) === */
+  .pipeline-band {
+    position: relative; width: 100%;
+    height: 44vh;
+    overflow: hidden;
+  }
+  .pipeline-band video {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.25;
+    filter: sepia(0.2);
+  }
+  .pipeline-band-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background:
+      linear-gradient(180deg, var(--bg-void) 0%, transparent 25%),
+      linear-gradient(0deg, var(--bg-void) 0%, transparent 25%),
+      radial-gradient(ellipse at center, rgba(232,119,46,0.04) 0%, transparent 55%);
+  }
+  .pipeline-band-quote {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    text-align: center;
+    max-width: 700px; line-height: 1.5;
+    padding: 0 20px;
+  }
+  .pipeline-band-quote span { color: var(--ember); }
+  .pipeline-band-attr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+    margin-top: 24px;
+  }
+
+  /* === WORKFLOW DIAGRAM === */
+  .workflow-section {
+    padding: 140px 48px;
+    background: var(--bg-deep);
+  }
+  .workflow-steps {
+    display: flex; gap: 0;
+    max-width: 1100px; margin: 0 auto;
+    position: relative;
+  }
+  .workflow-steps::before {
+    content: '';
+    position: absolute; top: 36px; left: 60px; right: 60px;
+    height: 2px;
+    background: var(--border);
+  }
+  .workflow-step {
+    flex: 1; text-align: center;
+    position: relative; z-index: 2;
+    padding: 0 16px;
+  }
+  .workflow-dot {
+    width: 72px; height: 72px;
+    margin: 0 auto 20px;
+    border-radius: 16px;
+    background: var(--bg-surface);
+    border: 2px solid var(--border-light);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .workflow-step:hover .workflow-dot {
+    border-color: var(--ember);
+    box-shadow: 0 0 30px var(--ember-glow);
+  }
+  .workflow-dot svg {
+    width: 28px; height: 28px;
+    stroke: var(--ember); fill: none; stroke-width: 1.5;
+  }
+  .workflow-dot .step-badge {
+    position: absolute; top: -6px; right: -6px;
+    width: 20px; height: 20px;
+    background: var(--ember);
+    border-radius: 50%;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.5rem; font-weight: 900;
+    color: var(--bg-void);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .workflow-step h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem; font-weight: 700;
+    margin-bottom: 8px; letter-spacing: 0.06em;
+  }
+  .workflow-step p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* === TESTIMONIALS === */
+  .testimonials-section {
+    padding: 140px 48px;
+    background: var(--bg-void);
+    position: relative;
+  }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .testimonial-card {
+    padding: 36px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+    transition: border-color 0.3s ease;
+  }
+  .testimonial-card:hover { border-color: rgba(232,119,46,0.15); }
+  .testimonial-card::before {
+    content: '"';
+    position: absolute; top: 16px; right: 24px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    color: rgba(232,119,46,0.06);
+    line-height: 1;
+  }
+  .testimonial-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+    font-weight: 300;
+    margin-bottom: 24px;
+  }
+  .testimonial-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .testimonial-avatar {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--ember-dim), var(--violet));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem; font-weight: 700;
+    color: var(--bg-void);
+  }
+  .testimonial-name { font-size: 0.82rem; font-weight: 500; }
+  .testimonial-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* === CTA === */
+  .cta-section {
+    padding: 180px 48px;
+    text-align: center;
+    background: var(--bg-deep);
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(232,119,46,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 70%, rgba(139,122,216,0.03) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .cta-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(1.8rem, 4.5vw, 3.5rem);
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .cta-title .accent { color: var(--ember); }
+  .cta-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 460px; margin: 0 auto 44px;
+    line-height: 1.8;
+    font-weight: 300;
+    position: relative;
+  }
+  .cta-actions {
+    display: flex; gap: 16px;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* === FOOTER === */
+  footer {
+    padding: 72px 48px 36px;
+    background: var(--bg-rail);
+    border-top: 1px solid var(--border);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    max-width: 1100px; margin: 0 auto 48px;
+  }
+  .footer-brand-icon {
+    width: 28px; height: 28px;
+    background: var(--ember);
+    border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.45rem; font-weight: 900;
+    color: var(--bg-void);
+  }
+  .footer-brand p {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+    max-width: 260px;
+  }
+  .footer-col h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    margin-bottom: 18px;
+    color: var(--text-muted);
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+  }
+  .footer-col a:hover { color: var(--ember); }
+  .footer-bottom {
+    max-width: 1100px; margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.03);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-bottom p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+  .footer-social { display: flex; gap: 12px; }
+  .footer-social a {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  .footer-social a:hover {
+    border-color: var(--ember);
+    background: rgba(232,119,46,0.05);
+  }
+  .footer-social svg {
+    width: 13px; height: 13px;
+    fill: var(--text-dim);
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 1024px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .features-grid, .testimonials-grid { grid-template-columns: 1fr 1fr; }
+    .product-inner { grid-template-columns: 1fr; gap: 36px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .workflow-steps { flex-wrap: wrap; gap: 24px; }
+    .workflow-steps::before { display: none; }
+    .workflow-step { flex: 0 0 calc(50% - 12px); }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .pipeline-stats { gap: 30px; flex-wrap: wrap; }
+  }
+  @media (max-width: 640px) {
+    .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .hero-actions { flex-direction: column; align-items: center; }
+    .workflow-step { flex: 0 0 100%; }
+    .footer-top { grid-template-columns: 1fr; }
+    .cta-actions { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-logo">AutoForge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  <div class="loader-status">Unpacking assets...</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-icon"></div>
+    <div class="nav-logo-text">AUTO<span>FORGE</span></div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#pipeline">流水线</a></li>
+    <li><a href="#capabilities">核心能力</a></li>
+    <li><a href="#product">产品矩阵</a></li>
+    <li><a href="#workflow">工作流</a></li>
+    <li><a href="#voices">用户评价</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">免费试用</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-code-on-a-computer-screen-48233-large.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-gradient"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <div class="hero-badge-text">v2.0 现已发布</div>
+    </div>
+    <h1 class="hero-title">
+      <span class="accent">通用软件工厂</span><br>
+      一键构建，万物可编译
+    </h1>
+    <p class="hero-subtitle">AUTOFACTORY PLATFORM</p>
+    <p class="hero-desc">
+      AutoForge 将代码编写、打包、测试、部署整合为一条全自动流水线。<br>
+      从源码到生产环境，全程可视化，零人工干预。
+    </p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">开始构建</a>
+      <a href="#pipeline" class="btn-ghost">观看演示</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <div class="scroll-label">Scroll</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-band">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="dot"></span>BUILD</span>
+    <span class="marquee-item"><span class="dot"></span>BUNDLE</span>
+    <span class="marquee-item"><span class="dot"></span>TEST</span>
+    <span class="marquee-item"><span class="dot"></span>DEPLOY</span>
+    <span class="marquee-item"><span class="dot"></span>MONITOR</span>
+    <span class="marquee-item"><span class="dot"></span>OPTIMIZE</span>
+    <span class="marquee-item"><span class="dot"></span>SHIP</span>
+    <span class="marquee-item"><span class="dot"></span>REPEAT</span>
+    <span class="marquee-item"><span class="dot"></span>BUILD</span>
+    <span class="marquee-item"><span class="dot"></span>BUNDLE</span>
+    <span class="marquee-item"><span class="dot"></span>TEST</span>
+    <span class="marquee-item"><span class="dot"></span>DEPLOY</span>
+    <span class="marquee-item"><span class="dot"></span>MONITOR</span>
+    <span class="marquee-item"><span class="dot"></span>OPTIMIZE</span>
+    <span class="marquee-item"><span class="dot"></span>SHIP</span>
+    <span class="marquee-item"><span class="dot"></span>REPEAT</span>
+  </div>
+</div>
+
+<!-- PIPELINE VIDEO -->
+<section class="pipeline-section" id="pipeline">
+  <div class="section-header reveal">
+    <div class="section-tag">Live Pipeline</div>
+    <h2 class="section-title">看一次<span style="color:var(--ember);">构建</span>，胜过千言</h2>
+    <p class="section-desc">
+      从源码推送到生产部署，AutoForge 流水线在 90 秒内完成全链路构建
+    </p>
+  </div>
+  <div class="pipeline-showcase reveal">
+    <div class="pipeline-frame">
+      <div class="window-chrome">
+        <div class="win-dot red"></div>
+        <div class="win-dot yellow"></div>
+        <div class="win-dot green"></div>
+        <span class="win-title">AutoForge — Pipeline Dashboard</span>
+      </div>
+      <div class="pipeline-video-area">
+        <video autoplay muted loop playsinline>
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-network-connections-background-animation-34623-large.mp4" type="video/mp4">
+        </video>
+        <div class="pipeline-video-overlay">
+          <div class="play-button">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"></polygon></svg>
+          </div>
+        </div>
+      </div>
+      <div class="frame-corner tl"></div>
+      <div class="frame-corner tr"></div>
+      <div class="frame-corner bl"></div>
+      <div class="frame-corner br"></div>
+    </div>
+  </div>
+  <div class="pipeline-stats reveal">
+    <div class="p-stat">
+      <div class="p-stat-val" data-count="90">0</div>
+      <div class="p-stat-label">秒平均构建时间</div>
+    </div>
+    <div class="p-stat">
+      <div class="p-stat-val" data-count="99.97">0</div>
+      <div class="p-stat-label">成功率 %</div>
+    </div>
+    <div class="p-stat">
+      <div class="p-stat-val" data-count="50000">0</div>
+      <div class="p-stat-label">日均构建次数</div>
+    </div>
+    <div class="p-stat">
+      <div class="p-stat-val" data-count="3">0</div>
+      <div class="p-stat-label">分钟部署上线</div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT CARDS (mirroring AutoForge dashboard) -->
+<section class="stats-section" id="stats">
+  <div class="section-header reveal">
+    <div class="section-tag">Dashboard</div>
+    <h2 class="section-title">一目了然的<span style="color:var(--violet);">全局视图</span></h2>
+    <p class="section-desc">
+      实时仪表盘，如同 AutoForge 控制台，所有指标尽收眼底
+    </p>
+  </div>
+  <div class="stats-grid reveal">
+    <div class="stat-card" style="--card-accent:var(--ember);--card-accent-bg:rgba(232,119,46,0.12);">
+      <div class="stat-card-icon">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div class="stat-card-num" style="color:var(--ember)">2,847</div>
+      <div class="stat-card-label">今日构建</div>
+      <div class="stat-card-sub">+12.3% vs 昨日</div>
+    </div>
+    <div class="stat-card" style="--card-accent:var(--violet);--card-accent-bg:rgba(139,122,216,0.12);">
+      <div class="stat-card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <div class="stat-card-num" style="color:var(--violet)">156</div>
+      <div class="stat-card-label">活跃流水线</div>
+      <div class="stat-card-sub">全部健康</div>
+    </div>
+    <div class="stat-card" style="--card-accent:var(--blue);--card-accent-bg:rgba(79,142,209,0.12);">
+      <div class="stat-card-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="stat-card-num" style="color:var(--blue)">47ms</div>
+      <div class="stat-card-label">平均延迟</div>
+      <div class="stat-card-sub">P99 < 120ms</div>
+    </div>
+    <div class="stat-card" style="--card-accent:var(--green);--card-accent-bg:rgba(79,157,107,0.12);">
+      <div class="stat-card-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="stat-card-num" style="color:var(--green)">99.99%</div>
+      <div class="stat-card-label">服务可用性</div>
+      <div class="stat-card-sub">SLA 保障</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="features-section" id="capabilities">
+  <div class="section-header reveal">
+    <div class="section-tag">Core Capabilities</div>
+    <h2 class="section-title">六大核心<span style="color:var(--ember);">引擎</span></h2>
+  </div>
+  <div class="features-grid reveal">
+    <div class="feature-card">
+      <div class="feature-num">01</div>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      </div>
+      <h3 class="feature-title">智能打包</h3>
+      <p class="feature-desc">自动识别依赖树，增量压缩打包，资源体积缩减 60%+，支持 gzip 实时压缩与 Blob 注入</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">02</div>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <h3 class="feature-title">可视化编排</h3>
+      <p class="feature-desc">拖拽式流水线编排，支持多阶段并行、条件分支、人工审批节点，全流程所见即所得</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">03</div>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3 class="feature-title">多资产管理</h3>
+      <p class="feature-desc">统一管理 JS/CSS/图片/字体等全类型资产，UUID 标识、MIME 类型追踪、完整性校验</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">04</div>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+      </div>
+      <h3 class="feature-title">实时通知</h3>
+      <p class="feature-desc">构建状态实时推送，Slack/飞书/钉钉/邮件全渠道覆盖，异常自动升级告警</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">05</div>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3 class="feature-title">安全沙箱</h3>
+      <p class="feature-desc">每条流水线运行于隔离沙箱，端到端加密传输，支持私有化部署与 SOC2 合规</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">06</div>
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <h3 class="feature-title">性能分析</h3>
+      <p class="feature-desc">构建耗时瀑布图、资源大小趋势、缓存命中率、队列深度——全链路可观测</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT + VIDEO -->
+<section class="product-section" id="product">
+  <div class="product-inner">
+    <div class="product-text reveal">
+      <div class="section-tag" justify-content="flex-start">Product Suite</div>
+      <h2>不只是构建工具<br>是完整的<span style="color:var(--ember);">软件工厂</span></h2>
+      <p>
+        AutoForge 覆盖从代码提交到生产监控的全生命周期，四大产品线协同工作，让软件交付像流水线一样高效可靠。
+      </p>
+      <ul class="product-list">
+        <li><span class="bullet"></span>Forge Core — 构建引擎，支持 Monorepo / Micro-frontend / 多框架混合编译</li>
+        <li><span class="bullet"></span>Forge Pipeline — 可视化流水线，200+ 预置模板，5 分钟接入</li>
+        <li><<span class="bullet"></span>Forge Registry — 制品仓库，NPM/Docker/OCI 全协议支持</li>
+        <li><span class="bullet"></span>Forge Observe — 构建观测台，实时队列监控、告警、SLO 看板</li>
+      </ul>
+    </div>
+    <div class="product-video-wrap reveal">
+      <video autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-rotating-futuristic-hologram-of-a-globe-12765-large.mp4" type="video/mp4">
+      </video>
+      <div class="product-badge">NEW</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE BAND -->
+<section class="pipeline-band">
+  <video autoplay muted loop playsinline>
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-futuristic-devices-99786-large.mp4" type="video/mp4">
+  </video>
+  <div class="pipeline-band-overlay">
+    <p class="pipeline-band-quote">
+      "我们不是在写脚本，<br>
+      我们在<span>铸造软件的流水线</span>"
+    </p>
+    <p class="pipeline-band-attr">— AutoForge 首席架构师</p>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="workflow-section" id="workflow">
+  <div class="section-header reveal">
+    <div class="section-tag">Workflow</div>
+    <h2 class="section-title">四步完成<span style="color:var(--green);">从代码到生产</span></h2>
+  </div>
+  <div class="workflow-steps reveal">
+    <div class="workflow-step">
+      <div class="workflow-dot">
+        <svg viewBox="0 0 24 24"><path d="M16 18l2-2-2-2"/><path d="M8 6L6 8l2 2"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+        <div class="step-badge">1</div>
+      </div>
+      <h3>提交代码</h3>
+      <p>Git Push 触发 Webhook，自动识别分支与标签，启动对应流水线</p>
+    </div>
+    <div class="workflow-step">
+      <div class="workflow-dot">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <div class="step-badge">2</div>
+      </div>
+      <h3>构建打包</h3>
+      <p>依赖解析 → 代码编译 → 资源打包 → 压缩优化，全程沙箱隔离</p>
+    </div>
+    <div class="workflow-step">
+      <div class="workflow-dot">
+        <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        <div class="step-badge">3</div>
+      </div>
+      <h3>测试验证</h3>
+      <p>单元测试 → 集成测试 → E2E 测试 → 性能基准，质量门禁自动拦截</p>
+    </div>
+    <div class="workflow-step">
+      <div class="workflow-dot">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div class="step-badge">4</div>
+      </div>
+      <h3>部署上线</h3>
+      <p>制品推送 → 金丝雀发布 → 流量切换 → 健康检查，一键回滚</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section" id="voices">
+  <div class="section-header reveal">
+    <div class="section-tag">User Voices</div>
+    <h2 class="section-title">他们选择<span style="color:var(--ember);">AutoForge</span></h2>
+  </div>
+  <div class="testimonials-grid reveal">
+    <div class="testimonial-card">
+      <p class="testimonial-text">
+        "接入 AutoForge 后，我们的构建时间从 12 分钟降到 90 秒，CI/CD 成本下降了 70%。智能打包真的能识别出那些我们从未注意到的冗余依赖。"
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">W</div>
+        <div>
+          <div class="testimonial-name">王磊</div>
+          <div class="testimonial-role">某电商平台 工程效率负责人</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-text">
+        "Forge Pipeline 的可视化编排让我们终于告别了晦涩的 YAML 配置。新入职的工程师 10 分钟就能创建自己的第一条流水线。"
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">L</div>
+        <div>
+          <div class="testimonial-name">Lisa Zhang</div>
+          <div class="testimonial-role">SaaS 公司 DevOps Lead</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-text">
+        "我们管理着 400+ 微服务，AutoForge 的制品仓库和多资产管理能力是我们统一构建体系的基石。"
+      </p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">C</div>
+        <div>
+          <div class="testimonial-name">陈昊</div>
+          <div class="testimonial-role">金融科技集团 基础架构总监</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <h2 class="cta-title reveal">准备好<span class="accent">铸造</span>你的软件了吗？</h2>
+  <p class="cta-desc reveal">
+    免费试用 30 天，无需信用卡。<br>
+    5 分钟接入第一条流水线。
+  </p>
+  <div class="cta-actions reveal">
+    <a href="#" class="btn-primary">免费开始</a>
+    <a href="#" class="btn-ghost">预约演示</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-brand-icon">AF</div>
+      <p>AutoForge — 通用软件工厂。将代码到生产的全流程自动化，让每一次构建都值得信赖。</p>
+    </div>
+    <div class="footer-col">
+      <h4>产品</h4>
+      <a href="#">Forge Core</a>
+      <a href="#">Forge Pipeline</a>
+      <a href="#">Forge Registry</a>
+      <a href="#">Forge Observe</a>
+      <a href="#">API 文档</a>
+    </div>
+    <div class="footer-col">
+      <h4>资源</h4>
+      <a href="#">快速开始</a>
+      <a href="#">开发者文档</a>
+      <a href="#">技术博客</a>
+      <a href="#">变更日志</a>
+    </div>
+    <div class="footer-col">
+      <h4>公司</h4>
+      <a href="#">关于我们</a>
+      <a href="#">加入团队</a>
+      <a href="#">联系方式</a>
+      <a href="#">安全合规</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 AutoForge. All rights reserved.</p>
+    <div class="footer-social">
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77a5.07 5.07 0 00-.09-3.77S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1a5.07 5.07 0 00-.09 3.77A5.44 5.44 0 003.5 8.55c0 5.42 3.3 6.61 6.44 7a3.37 3.37 0 00-.94 2.58V22"/></svg></a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53A4.48 4.48 0 0012 7.5v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 2a2 2 0 110 4 2 2 0 010-4z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// === LOADER ===
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1800);
+});
+
+// === SCROLL REVEAL ===
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+reveals.forEach(el => obs.observe(el));
+
+// === COUNTER ANIMATION ===
+document.querySelectorAll('[data-count]').forEach(el => {
+  const target = parseFloat(el.dataset.count);
+  const isFloat = target % 1 !== 0;
+  const cObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const dur = 2000, start = performance.now();
+        function tick(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const v = target * eased;
+          el.textContent = isFloat ? v.toFixed(2) : (target >= 1000 ? Math.floor(v).toLocaleString() : Math.floor(v));
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        cObs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  cObs.observe(el);
+});
+
+// === NAV SCROLL ===
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.style.background = window.scrollY > 60 ? 'rgba(12,9,6,0.97)' : 'rgba(12,9,6,0.92)';
+});
+
+// === SMOOTH SCROLL ===
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
