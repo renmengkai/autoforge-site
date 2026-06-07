@@ -64,6 +64,10 @@ const metrics = [
       property="og:description"
       content="从需求确认到产品上线，让 AI 推进完整交付周期，人类只在关键节点做判断。"
     />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AutoForge — 通用软件工厂" />
+    <meta name="twitter:description" content="从需求确认到产品上线，让 AI 推进完整交付周期，人类只在关键节点做判断。" />
     <link rel="icon" type="image/png" href="/autoforge-logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -567,25 +571,54 @@ const metrics = [
       }
 
       const consoleMessages = [
-        ["22:14:08", "AI 正在根据项目规范实现需求..."],
-        ["22:14:11", "代码生成完成，等待人类审核关键变更..."],
-        ["22:14:13", "自动测试与安全审核全部通过..."],
-        ["22:14:17", "产品预览已部署，可进入验收。"]
+        "AI 正在根据项目规范实现需求...",
+        "代码生成完成，等待人类审核关键变更...",
+        "自动测试与安全审核全部通过...",
+        "产品预览已部署，可进入验收。"
       ];
       let messageIndex = 0;
       const consoleTime = document.querySelector(".console-time");
       const consoleCopy = document.querySelector(".console-copy");
       const liveRate = document.querySelector("[data-live-rate]");
+
+      const formatLocalTime = () => {
+        const now = new Date();
+        return [
+          String(now.getHours()).padStart(2, "0"),
+          String(now.getMinutes()).padStart(2, "0"),
+          String(now.getSeconds()).padStart(2, "0")
+        ].join(":");
+      };
+
+      const briefMeta = document.querySelector(".brief-meta span:last-child");
+      const updateClock = () => {
+        const t = formatLocalTime();
+        if (briefMeta) briefMeta.textContent = `${t} UTC+8`;
+      };
+      updateClock();
+      window.setInterval(updateClock, 1000);
+
       if (!reducedMotion) {
         window.setInterval(() => {
           messageIndex = (messageIndex + 1) % consoleMessages.length;
-          const [time, copy] = consoleMessages[messageIndex];
-          if (consoleTime) consoleTime.textContent = time;
-          if (consoleCopy) consoleCopy.textContent = copy;
-        }, 2600);
+          const copy = consoleMessages[messageIndex];
+          if (consoleCopy instanceof HTMLElement) {
+            consoleCopy.style.opacity = "0";
+            consoleCopy.style.transform = "translateY(0.4rem)";
+            window.setTimeout(() => {
+              consoleCopy.textContent = copy;
+              consoleCopy.style.opacity = "1";
+              consoleCopy.style.transform = "translateY(0)";
+            }, 220);
+          }
+          if (consoleTime) consoleTime.textContent = formatLocalTime();
+        }, 3000);
         window.setInterval(() => {
           if (liveRate) liveRate.textContent = (17 + Math.random() * 3.4).toFixed(1);
         }, 1400);
+      } else {
+        if (consoleCopy) consoleCopy.textContent = consoleMessages[0];
+        if (consoleTime) consoleTime.textContent = formatLocalTime();
       }
 
       const canvas = document.querySelector("#speed-field");
