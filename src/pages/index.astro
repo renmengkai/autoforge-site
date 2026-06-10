@@ -783,178 +783,240 @@ const pipeline = [
       }
 
       // ---- Pipeline River ----
-      // Particles flow left→right along gentle S-curve streams, representing
-      // work items moving through the 8-node delivery pipeline.
+      // Left→right particle river representing work flowing through the 8-node
+      // pipeline. Primary lanes are near-horizontal (engineered); secondary lanes
+      // curve gently (organic variation). Hot packets (18%) carry a near-white
+      // corona. Eight gate markers pulse in sequence at pipeline node cadence.
       const canvas = document.querySelector("#speed-field");
       if (canvas instanceof HTMLCanvasElement) {
         const ctx = canvas.getContext("2d");
 
         type Stream = {
           start: { x: number; y: number };
-          cp0: { x: number; y: number };
-          cp1: { x: number; y: number };
-          end: { x: number; y: number };
+          cp0:   { x: number; y: number };
+          cp1:   { x: number; y: number };
+          end:   { x: number; y: number };
           alpha: number;
           width: number;
-          hue: number;
+          hue:   number;
+          main:  boolean;
         };
-        type Particle = {
-          stream: number;
-          t: number;
-          speed: number;
+        type Dot = {
+          si:   number;
+          t:    number;
+          spd:  number;   // progress per ms
           tail: number;
-          size: number;
-          alpha: number;
-          hue: number;
+          sz:   number;
+          a:    number;
+          hue:  number;
+          hot:  boolean;
           glow: boolean;
         };
 
-        const streams: Stream[] = [];
-        const particles: Particle[] = [];
-        let W = 0;
-        let H = 0;
-        let dpr = 1;
-        let raf = 0;
+        const streams: Stream[]                     = [];
+        const dots: Dot[]                           = [];
+        const gates: { x: number; pulse: number }[] = [];
+        let W = 0, H = 0, dpr = 1, raf = 0, prevT = 0;
+        let gateSeq = 0, gateMs = 0;
+        const GATE_MS = 1100;
 
-        const rnd = (a: number, b: number) => a + Math.random() * (b - a);
+        const r = (a: number, b: number) => a + Math.random() * (b - a);
 
-        const atBez = (s: Stream, t: number) => {
+        const bez = (s: Stream, t: number) => {
           const u = 1 - t;
           return {
-            x: u ** 3 * s.start.x + 3 * u ** 2 * t * s.cp0.x + 3 * u * t ** 2 * s.cp1.x + t ** 3 * s.end.x,
-            y: u ** 3 * s.start.y + 3 * u ** 2 * t * s.cp0.y + 3 * u * t ** 2 * s.cp1.y + t ** 3 * s.end.y
+            x: u**3*s.start.x + 3*u**2*t*s.cp0.x + 3*u*t**2*s.cp1.x + t**3*s.end.x,
+            y: u**3*s.start.y + 3*u**2*t*s.cp0.y + 3*u*t**2*s.cp1.y + t**3*s.end.y
           };
         };
 
         const buildStreams = () => {
           streams.length = 0;
-          const N = W < 760 ? 14 : 26;
+          const N = W < 760 ? 16 : 28;
           for (let i = 0; i < N; i++) {
-            const ratio = i / (N - 1);
-            // Vertical spread: denser toward the center third (main channel)
-            const yBase = H * (0.04 + ratio * 0.92);
-            // Each stream is an S-curve: first half bows one way, second half the other
-            const sign = Math.random() > 0.5 ? 1 : -1;
-            const amp = rnd(0.04, 0.17) * H * sign;
+            const ratio   = i / (N - 1);
+            const yBase   = H * (0.04 + ratio * 0.92);
+            const main    = (i % 3 === 1);
+            const maxAmp  = main ? 0.042 : 0.12;
+            const sign    = Math.random() > 0.5 ? 1 : -1;
+            const amp     = r(0.01, maxAmp) * H * sign;
             streams.push({
-              start: { x: -50, y: yBase + rnd(-0.03, 0.03) * H },
-              cp0: { x: W * 0.26, y: yBase + amp },
-              cp1: { x: W * 0.74, y: yBase - amp * 0.5 },
-              end: { x: W + 50, y: yBase + rnd(-0.03, 0.03) * H },
-              alpha: rnd(0.022, 0.072),
-              width: rnd(0.28, 0.88),
-              hue: rnd(20, 34)
+              start: { x: -65,    y: yBase + r(-0.022, 0.022) * H },
+              cp0:   { x: W*0.27, y: yBase + amp                   },
+              cp1:   { x: W*0.73, y: yBase - amp * 0.44            },
+              end:   { x: W + 65, y: yBase + r(-0.022, 0.022) * H },
+              alpha: main ? r(0.045, 0.095) : r(0.015, 0.052),
+              width: main ? r(0.55,  1.05)  : r(0.22,  0.70),
+              hue:   r(21, 34),
+              main
             });
           }
         };
 
-        const resetParticle = (p: Particle, stagger = false) => {
-          p.stream = Math.floor(Math.random() * streams.length);
-          p.t = stagger ? Math.random() : rnd(-0.07, -0.01);
-          p.speed = rnd(0.0006, 0.0024);
-          p.tail = rnd(0.034, 0.11);
-          p.size = rnd(0.55, 2.3);
-          p.alpha = rnd(0.25, 0.88);
-          p.hue = rnd(20, 44);
-          p.glow = Math.random() > 0.72;
+        const buildGates = () => {
+          gates.length = 0;
+          for (let k = 1; k <= 8; k++) gates.push({ x: W * k / 9, pulse: 0 });
+        };
+
+        const spawnDot = (d: Dot, stagger = false) => {
+          d.si   = Math.floor(Math.random() * streams.length);
+          d.t    = stagger ? Math.random() : r(-0.08, -0.01);
+          d.hot  = Math.random() > 0.82;
+          if (d.hot) {
+            d.spd  = r(0.000110, 0.000340);
+            d.tail = r(0.038, 0.088);
+            d.sz   = r(0.75, 1.85);
+            d.a    = r(0.55, 0.94);
+            d.hue  = r(34, 52);
+            d.glow = true;
+          } else {
+            d.spd  = r(0.000068, 0.000210);
+            d.tail = r(0.032, 0.106);
+            d.sz   = r(0.48, 2.1);
+            d.a    = r(0.22, 0.86);
+            d.hue  = r(19, 42);
+            d.glow = Math.random() > 0.66;
+          }
         };
 
         const resize = () => {
           dpr = Math.min(window.devicePixelRatio || 1, 2);
           W = canvas.clientWidth;
           H = canvas.clientHeight;
-          canvas.width = W * dpr;
+          canvas.width  = W * dpr;
           canvas.height = H * dpr;
           ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
           buildStreams();
-          const count = W < 760 ? 56 : Math.min(138, Math.round(W / 13));
-          particles.length = 0;
-          for (let i = 0; i < count; i++) {
-            const p = {} as Particle;
-            resetParticle(p, true);
-            particles.push(p);
+          buildGates();
+          const n = W < 760 ? 64 : Math.min(158, Math.round(W / 10));
+          dots.length = 0;
+          for (let i = 0; i < n; i++) {
+            const d = {} as Dot;
+            spawnDot(d, true);
+            dots.push(d);
           }
         };
 
-        const drawStream = (s: Stream) => {
+        const paintStream = (s: Stream) => {
           if (!ctx) return;
           ctx.beginPath();
           ctx.moveTo(s.start.x, s.start.y);
           ctx.bezierCurveTo(s.cp0.x, s.cp0.y, s.cp1.x, s.cp1.y, s.end.x, s.end.y);
-          ctx.strokeStyle = `hsla(${s.hue}, 88%, 52%, ${s.alpha})`;
-          ctx.lineWidth = s.width;
+          ctx.strokeStyle = `hsla(${s.hue}, ${s.main ? 86 : 74}%, ${s.main ? 57 : 52}%, ${s.alpha})`;
+          ctx.lineWidth   = s.width;
           ctx.stroke();
         };
 
-        const drawParticle = (p: Particle) => {
-          if (!ctx || p.t <= 0 || p.t > 1.02) return;
-          const s = streams[p.stream];
-          const SEGS = 11;
-          const t0 = Math.max(0, p.t - p.tail);
+        const paintGates = () => {
+          if (!ctx) return;
+          for (const gate of gates) {
+            if (gate.pulse < 0.005) continue;
+            const a = gate.pulse * 0.28;
+            const g = ctx.createLinearGradient(gate.x, 0, gate.x, H);
+            g.addColorStop(0,    `rgba(255,168,62,0)`);
+            g.addColorStop(0.18, `rgba(255,168,62,${a})`);
+            g.addColorStop(0.50, `rgba(255,224,130,${a * 1.5})`);
+            g.addColorStop(0.82, `rgba(255,168,62,${a})`);
+            g.addColorStop(1,    `rgba(255,168,62,0)`);
+            ctx.fillStyle = g;
+            ctx.fillRect(gate.x - 1.5, 0, 3, H);
+          }
+        };
+
+        const paintDot = (d: Dot) => {
+          if (!ctx || d.t <= 0 || d.t > 1.02) return;
+          const s    = streams[d.si];
+          const SEGS = d.hot ? 13 : 10;
+          const t0   = Math.max(0, d.t - d.tail);
           for (let k = 0; k < SEGS; k++) {
-            const ta = t0 + (p.t - t0) * (k / SEGS);
-            const tb = t0 + (p.t - t0) * ((k + 1) / SEGS);
-            const pa = atBez(s, ta);
-            const pb = atBez(s, tb);
+            const ta  = t0 + (d.t - t0) * (k / SEGS);
+            const tb  = t0 + (d.t - t0) * ((k + 1) / SEGS);
+            const pa  = bez(s, ta);
+            const pb  = bez(s, tb);
             const itx = (k + 1) / SEGS;
+            let lum = 44 + itx * 32;
+            let sat = 100;
+            if (d.hot && itx > 0.75) { lum = 64 + itx * 22; sat = 86 - itx * 24; }
             ctx.beginPath();
             ctx.moveTo(pa.x, pa.y);
             ctx.lineTo(pb.x, pb.y);
-            ctx.strokeStyle = `hsla(${p.hue + itx * 10}, 100%, ${44 + itx * 32}%, ${p.alpha * itx ** 1.7})`;
-            ctx.lineWidth = p.size * (0.35 + itx * 0.95);
-            ctx.lineCap = "round";
+            ctx.strokeStyle = `hsla(${d.hue + itx * 9}, ${sat}%, ${lum}%, ${d.a * itx ** 1.65})`;
+            ctx.lineWidth   = d.sz * (0.28 + itx * 1.02);
+            ctx.lineCap     = "round";
             ctx.stroke();
           }
-          if (p.glow) {
-            // Fade in at entry, fade out at exit
-            const edgeFade = Math.min(p.t / 0.07, 1) * Math.min((1.02 - p.t) / 0.07, 1);
-            const radius = (1.8 + p.t * (1 - p.t) * 5) * edgeFade;
-            if (radius > 0.3) {
-              const head = atBez(s, p.t);
-              const g = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, radius);
-              g.addColorStop(0, "rgba(255, 224, 158, 0.88)");
-              g.addColorStop(0.32, "rgba(255, 128, 26, 0.50)");
-              g.addColorStop(1, "rgba(255, 72, 0, 0)");
-              ctx.fillStyle = g;
-              ctx.fillRect(head.x - radius, head.y - radius, radius * 2, radius * 2);
+          if (d.glow) {
+            const fade = Math.min(d.t / 0.06, 1) * Math.min((1.02 - d.t) / 0.06, 1);
+            const head = bez(s, d.t);
+            if (d.hot) {
+              const radius = (2.8 + d.t * (1 - d.t) * 9) * fade;
+              if (radius > 0.3) {
+                const g = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, radius);
+                g.addColorStop(0,    "rgba(255,255,245,0.96)");
+                g.addColorStop(0.18, "rgba(255,232,165,0.84)");
+                g.addColorStop(0.52, "rgba(255,118,14,0.42)");
+                g.addColorStop(1,    "rgba(255,52,0,0)");
+                ctx.fillStyle = g;
+                ctx.fillRect(head.x - radius, head.y - radius, radius * 2, radius * 2);
+              }
+            } else {
+              const radius = (1.7 + d.t * (1 - d.t) * 5) * fade;
+              if (radius > 0.3) {
+                const g = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, radius);
+                g.addColorStop(0,    "rgba(255,224,158,0.88)");
+                g.addColorStop(0.32, "rgba(255,128,26,0.50)");
+                g.addColorStop(1,    "rgba(255,72,0,0)");
+                ctx.fillStyle = g;
+                ctx.fillRect(head.x - radius, head.y - radius, radius * 2, radius * 2);
+              }
             }
           }
         };
 
-        const draw = () => {
+        const draw = (ts: number) => {
           if (!ctx) return;
+          const dt = Math.min(ts - prevT, 48);
+          prevT    = ts;
+
           ctx.clearRect(0, 0, W, H);
 
-          // Ambient glow anchored to the visible hero area (right half exposed by shade)
-          const gx = W * 0.62;
-          const gy = H * 0.48;
-          const amb = ctx.createRadialGradient(gx, gy, 0, gx, gy, W * 0.54);
-          amb.addColorStop(0, "rgba(255, 88, 5, 0.10)");
-          amb.addColorStop(0.44, "rgba(140, 38, 0, 0.045)");
-          amb.addColorStop(1, "rgba(0, 0, 0, 0)");
+          // Wide ambient glow — covers the full visible canvas height
+          const gx  = W * 0.60, gy = H * 0.48;
+          const amb = ctx.createRadialGradient(gx, gy, 0, gx, gy, W * 0.62);
+          amb.addColorStop(0,    "rgba(255,82,5,0.11)");
+          amb.addColorStop(0.36, "rgba(140,36,0,0.05)");
+          amb.addColorStop(0.72, "rgba(4,16,48,0.025)");
+          amb.addColorStop(1,    "rgba(0,0,0,0)");
           ctx.fillStyle = amb;
           ctx.fillRect(0, 0, W, H);
 
-          streams.forEach(drawStream);
+          // Advance gate cycle (left→right sweep, matches pipeline node cadence)
+          gateMs += dt;
+          if (gateMs >= GATE_MS) {
+            gateMs -= GATE_MS;
+            gates[gateSeq % gates.length].pulse = 1;
+            gateSeq++;
+          }
+          const decay = dt / 500;
+          for (const gate of gates) gate.pulse = Math.max(0, gate.pulse - decay);
 
-          particles.forEach((p) => {
-            // Slightly faster near edges, slower mid-flow → natural density pooling
-            const rhythm = 0.62 + Math.pow(Math.abs(p.t - 0.5) * 1.9, 0.65) * 0.58;
-            p.t += p.speed * rhythm;
-            drawParticle(p);
-            if (p.t > 1.12) resetParticle(p);
-          });
+          paintGates();
+          streams.forEach(paintStream);
 
-          raf = requestAnimationFrame(draw);
+          for (const d of dots) {
+            d.t += d.spd * dt;
+            paintDot(d);
+            if (d.t > 1.14) spawnDot(d);
+          }
+
+          if (!reducedMotion) raf = requestAnimationFrame(draw);
         };
 
         resize();
         window.addEventListener("resize", resize);
-        if (!reducedMotion) draw();
-        else {
-          draw();
-          cancelAnimationFrame(raf);
-        }
+        prevT = performance.now();
+        if (!reducedMotion) requestAnimationFrame(draw);
+        else draw(prevT);
       }
     </script>
   </body>
