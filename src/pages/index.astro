@@ -248,7 +248,7 @@ const metrics = [
             </div>
           </article>
 
-          <article class="system-card reveal spotlight-card">
+          <article class="system-card reveal spotlight-card tilt" data-tilt="7">
             <div class="card-topline">
               <span>PROJECT MATERIALS</span><span>3 CHANNELS</span>
             </div>
@@ -260,7 +260,7 @@ const metrics = [
             </div>
           </article>
 
-          <article class="system-card reveal spotlight-card">
+          <article class="system-card reveal spotlight-card tilt" data-tilt="7">
             <div class="card-topline">
               <span>PROJECT CONTEXT</span><span>READY</span>
             </div>
@@ -299,7 +299,7 @@ const metrics = [
 
         <div class="engine-list">
           {engines.map((engine) => (
-            <article class="engine-card reveal spotlight-card">
+            <article class="engine-card reveal spotlight-card tilt" data-tilt="3.5">
               <div class="engine-index">{engine.index}</div>
               <div class="engine-content">
                 <p class="eyebrow">{engine.eyebrow}</p>
@@ -445,6 +445,49 @@ const metrics = [
       );
       document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
 
+      // Decode / scramble effect on mono eyebrow labels as they enter view
+      const scrambleGlyphs = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#/<>";
+      const runScramble = (element: HTMLElement) => {
+        const finalText = element.textContent ?? "";
+        const length = finalText.length;
+        const totalFrames = 26;
+        let frame = 0;
+        const tick = () => {
+          let output = "";
+          for (let i = 0; i < length; i += 1) {
+            const char = finalText[i];
+            if (char === " ") {
+              output += " ";
+              continue;
+            }
+            const revealFrame = (i / length) * totalFrames * 0.7;
+            output +=
+              frame >= revealFrame
+                ? char
+                : scrambleGlyphs[Math.floor(Math.random() * scrambleGlyphs.length)];
+          }
+          element.textContent = output;
+          frame += 1;
+          if (frame <= totalFrames) requestAnimationFrame(tick);
+          else element.textContent = finalText;
+        };
+        tick();
+      };
+
+      if (!reducedMotion) {
+        const scrambleObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              if (entry.target instanceof HTMLElement) runScramble(entry.target);
+              scrambleObserver.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.85 }
+        );
+        document.querySelectorAll(".eyebrow").forEach((element) => scrambleObserver.observe(element));
+      }
+
       document.querySelectorAll("[data-count]").forEach((element) => {
         const target = Number(element.getAttribute("data-count"));
         const counterObserver = new IntersectionObserver(
@@ -521,6 +564,34 @@ const metrics = [
       );
       observedSections.forEach((section) => navObserver.observe(section));
 
+      // Scroll-linked workflow: light up the node at viewport center, fill the spine
+      const workflowArticles = Array.from(document.querySelectorAll(".workflow-track article"));
+      const workflowTrackEl = document.querySelector(".workflow-track");
+      if (workflowArticles.length && workflowTrackEl instanceof HTMLElement) {
+        let maxReached = -1;
+        const workflowObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const index = workflowArticles.indexOf(entry.target);
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-active");
+                if (index > maxReached) {
+                  maxReached = index;
+                  workflowTrackEl.style.setProperty(
+                    "--wf-progress",
+                    ((maxReached + 1) / workflowArticles.length).toFixed(3)
+                  );
+                }
+              } else {
+                entry.target.classList.remove("is-active");
+              }
+            });
+          },
+          { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+        );
+        workflowArticles.forEach((article) => workflowObserver.observe(article));
+      }
+
       const menuToggle = document.querySelector(".menu-toggle");
       const mobileNav = document.querySelector(".mobile-nav");
       menuToggle?.addEventListener("click", () => {
@@ -567,6 +638,24 @@ const metrics = [
             });
             element.addEventListener("pointerleave", () => {
               if (element instanceof HTMLElement) element.style.transform = "";
+            });
+          });
+
+          // 3D parallax tilt on cards
+          document.querySelectorAll(".tilt").forEach((card) => {
+            if (!(card instanceof HTMLElement)) return;
+            const max = Number(card.getAttribute("data-tilt")) || 6;
+            card.addEventListener("pointermove", (event) => {
+              const pointerEvent = event as PointerEvent;
+              const bounds = card.getBoundingClientRect();
+              const px = (pointerEvent.clientX - bounds.left) / bounds.width - 0.5;
+              const py = (pointerEvent.clientY - bounds.top) / bounds.height - 0.5;
+              card.style.transform =
+                `perspective(1100px) rotateX(${(-py * max).toFixed(2)}deg) ` +
+                `rotateY(${(px * max).toFixed(2)}deg) translateY(-0.4rem)`;
+            });
+            card.addEventListener("pointerleave", () => {
+              card.style.transform = "";
             });
           });
         }
