@@ -80,7 +80,11 @@ const pipeline = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="AutoForge is an AI software factory covering the complete eight-node delivery chain: requirements, materials, prototyping, spec review, coding, testing, security audit, and deployment. Fully replaces traditional software outsourcing."
+      content="AutoForge · AI 软件工厂 · 软件工业化。AI Agent 驱动的自动化工作流，Claude Code 全程执行编码。八节点全链路：需求收集 → Spec 审查 → 编码 → 测试 → 部署。完全替代传统外包。"
+    />
+    <meta
+      name="keywords"
+      content="AutoForge, AI 软件工厂, AI software factory, 软件工业化, software industrialization, 自动化, automation, AI Agent, agent workflow, AI 工作流, automated workflow, 工作流, workflow, 软件工厂, software factory, Claude Code, Claude Code CLI, AI 编码, AI coding, 自动部署, automated deployment, 替代外包, replace outsourcing, AI 软件开发, AI software development, 需求自动化, requirements automation, 软件自动化, software automation, AI development platform"
     />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="author" content="AutoForge" />
@@ -88,10 +92,10 @@ const pipeline = [
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="AutoForge" />
-    <meta property="og:title" content="AutoForge — AI Software Factory System" />
+    <meta property="og:title" content="AutoForge — AI Software Factory · Agent Workflow · Claude Code" />
     <meta
       property="og:description"
-      content="Everything an outsourcing team does, one AI system handles. Eight-node pipeline: requirements in, product out."
+      content="AI-Agent-driven software factory powered by Claude Code. Fully automated workflow: requirements → spec → code → test → deploy. Software industrialization."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://autoforge.dev/" />
@@ -101,8 +105,8 @@ const pipeline = [
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="AutoForge — AI Software Factory System" />
-    <meta name="twitter:description" content="Everything an outsourcing team does, one AI system handles. Eight-node pipeline: requirements in, product out." />
+    <meta name="twitter:title" content="AutoForge — AI Software Factory · Agent Workflow · Claude Code" />
+    <meta name="twitter:description" content="AI-Agent-driven software factory powered by Claude Code. Fully automated workflow: requirements → spec → code → test → deploy. Software industrialization." />
     <meta name="twitter:image" content="https://autoforge.dev/og-image.png" />
 
     <!-- Canonical + hreflang (bilingual single-page) -->
@@ -121,7 +125,7 @@ const pipeline = [
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <title>AutoForge — AI Software Factory System</title>
+    <title>AutoForge — AI 软件工厂 · 自动化工作流 · Claude Code</title>
 
     <!-- JSON-LD structured data -->
     <script is:inline type="application/ld+json">
@@ -143,14 +147,14 @@ const pipeline = [
             "contactType": "sales",
             "availableLanguage": ["Chinese", "English"]
           },
-          "description": "AutoForge is an AI software factory system that fully replaces traditional software outsourcing through an eight-node automated delivery pipeline."
+          "description": "AutoForge is an AI software factory (AI 软件工厂) and software industrialization platform. Powered by AI Agents and Claude Code CLI, it delivers fully automated software workflows — replacing traditional outsourcing entirely."
         },
         {
           "@type": "WebSite",
           "@id": "https://autoforge.dev/#website",
           "url": "https://autoforge.dev",
           "name": "AutoForge",
-          "description": "AI Software Factory System",
+          "description": "AI Software Factory · Automated Agent Workflow · Claude Code · Software Industrialization",
           "publisher": { "@id": "https://autoforge.dev/#organization" },
           "inLanguage": ["zh-CN", "en"]
         },
@@ -161,7 +165,7 @@ const pipeline = [
           "url": "https://autoforge.dev",
           "applicationCategory": "DeveloperApplication",
           "operatingSystem": "Any",
-          "description": "AutoForge is an AI software factory covering the complete eight-node delivery chain: requirements collection, materials management, prototyping, spec review, coding implementation, system testing, security audit, and production deployment. It fully replaces traditional software outsourcing.",
+          "description": "AutoForge is an AI software factory and software industrialization (软件工业化) platform. Using AI Agents and Claude Code CLI in a fully automated workflow (自动化工作流), it covers the complete eight-node delivery chain: requirements collection, materials management, prototyping, spec review, coding, testing, security audit, and deployment. It fully replaces traditional software outsourcing.",
           "offers": {
             "@type": "Offer",
             "url": "https://autoforge.dev/#contact"
@@ -188,7 +192,7 @@ const pipeline = [
               "name": "What is AutoForge?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "AutoForge is an AI software factory system that covers the complete software delivery chain across eight nodes: requirements collection, materials management, prototyping, spec review, coding, testing, security audit, and deployment. It fully replaces traditional software outsourcing."
+                "text": "AutoForge is an AI software factory (AI 软件工厂) and software industrialization platform. It uses AI Agents and Claude Code CLI to run a fully automated workflow across eight nodes: requirements collection, materials management, prototyping, spec review, coding, testing, security audit, and deployment. It fully replaces traditional software outsourcing."
               }
             },
             {
@@ -846,7 +850,9 @@ const pipeline = [
         lang = next;
         document.documentElement.lang = next === "en" ? "en" : "zh-CN";
         document.title =
-          next === "en" ? "AutoForge — AI Software Factory System" : "AutoForge — AI 软件工厂系统";
+          next === "en"
+            ? "AutoForge — AI Software Factory · Automated Agent Workflow · Claude Code"
+            : "AutoForge — AI 软件工厂 · 自动化工作流 · Claude Code";
         document.body.classList.toggle("lang-en", next === "en");
         i18nEls.forEach((el) => {
           const value = next === "en" ? el.dataset.en : el.dataset.zh;
