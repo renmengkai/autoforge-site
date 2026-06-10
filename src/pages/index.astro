@@ -20,10 +20,10 @@ const engines = [
     eyebrow: "DESIGN & SPEC",
     title: "原型设计与 Spec 审查",
     titleEn: "Prototyping & Spec Review",
-    copy: "集成 Open Design 自动生成提示词，复制至 Stitch 或 Claude Design 生成交互原型；AI 自动生成项目 Spec 与任务分解，人工审核后驱动编码精准落地。",
-    copyEn: "Built-in Open Design generates prompts you paste into Stitch or Claude Design to produce interactive prototypes. AI drafts the project spec and task breakdown; a human review locks the coding target.",
-    details: ["OpenDesign 集成，提示词一键生成", "Stitch / Claude Design 原型输出", "AI 生成 Spec，人工审核确认"],
-    detailsEn: ["OpenDesign built in, one-click prompts", "Stitch / Claude Design prototypes", "AI-drafted spec, human-approved"],
+    copy: "系统自动生成设计提示词，可直接用于 OpenDesign、Stitch、Claude Design 等设计工具生成交互原型；AI 自动生成项目 Spec 与任务分解，人工审核后驱动编码精准落地。",
+    copyEn: "AutoForge generates design prompts ready for OpenDesign, Stitch, Claude Design, and other tools to produce interactive prototypes. AI then drafts the project spec and task breakdown; a human review locks the coding target.",
+    details: ["自动生成设计提示词，支持多种设计工具", "Stitch / Claude Design / OpenDesign 均可用", "AI 生成 Spec，人工审核确认"],
+    detailsEn: ["Auto-generated prompts for any design tool", "Works with Stitch, Claude Design & OpenDesign", "AI-drafted spec, human-approved"],
     metric: "设计工具",
     metricEn: "Design tools",
     value: "3+"
@@ -46,7 +46,7 @@ const engines = [
 const workflow = [
   ["01", "需求收集", "通过 Agent 对话、批量导入或 AI 扫描，明确需求目标与验收标准", "REQUIREMENT", "Requirements", "Define goals and acceptance criteria via Agent chat, bulk import, or AI project scan."],
   ["02", "物料管理", "多 Agent 群聊自动梳理，生成设计文档等全量项目物料", "MATERIALS", "Materials", "Multi-Agent chat curates and generates design docs and every project material."],
-  ["03", "原型设计", "OpenDesign 生成提示词，复制至 Stitch 或 Claude Design 完成交互原型", "PROTOTYPE", "Prototyping", "OpenDesign generates prompts; paste into Stitch or Claude Design to finish interactive prototypes."],
+  ["03", "原型设计", "系统自动生成设计提示词，可直接用于 OpenDesign、Stitch、Claude Design 等设计工具完成交互原型", "PROTOTYPE", "Prototyping", "AutoForge generates design prompts you can use directly in OpenDesign, Stitch, Claude Design, and other tools to build interactive prototypes."],
   ["04", "Spec 审查", "AI 生成项目规范与任务分解，人工审核后锁定编码目标", "SPEC", "Spec Review", "AI drafts the project spec and task breakdown; a human review locks the coding target."],
   ["05", "编码实现", "Claude Code CLI 理解 Spec 与代码库，自主完成功能开发", "DEVELOPMENT", "Development", "Claude Code CLI reads the spec and codebase, then implements features autonomously."],
   ["06", "系统测试", "测试专用 Agent 全面验证，可将新发现的问题直接录入为需求", "TESTING", "Testing", "A dedicated testing Agent verifies everything; new findings flow straight back as requirements."],
