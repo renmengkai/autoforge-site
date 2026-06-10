@@ -2,94 +2,130 @@
 import "../styles/global.css";
 
 const lastUpdated = "2026 年 1 月 1 日";
+const lastUpdatedEn = "January 1, 2026";
 const sections = [
   {
     id: "service",
     title: "服务说明",
+    titleEn: "About the service",
     items: [
       {
         heading: "AutoForge 平台",
-        body: "AutoForge 是一套 AI 驱动的软件工厂系统，覆盖需求收集、物料管理、原型设计、Spec 审查、编码实现、系统测试、安全审查到部署上线的完整八节点交付链路。我们的服务旨在替代传统软件外包模式，通过 AI Agent 协作实现端到端的软件交付。"
+        headingEn: "The AutoForge platform",
+        body: "AutoForge 是一套 AI 驱动的软件工厂系统，覆盖需求收集、物料管理、原型设计、Spec 审查、编码实现、系统测试、安全审查到部署上线的完整八节点交付链路。我们的服务旨在替代传统软件外包模式，通过 AI Agent 协作实现端到端的软件交付。",
+        bodyEn: "AutoForge is an AI-driven software factory covering the full eight-node delivery chain: requirements, materials, prototyping, spec review, coding, testing, security review and deployment. It is designed to replace traditional software outsourcing through collaborating AI Agents that deliver software end to end."
       },
       {
         heading: "服务访问",
-        body: "使用 AutoForge 平台即表示您同意本服务条款。我们保留在提前通知的情况下修改、暂停或终止服务的权利。对于正在进行中的项目，我们将提供合理的迁移期和数据导出支持。"
+        headingEn: "Service access",
+        body: "使用 AutoForge 平台即表示您同意本服务条款。我们保留在提前通知的情况下修改、暂停或终止服务的权利。对于正在进行中的项目，我们将提供合理的迁移期和数据导出支持。",
+        bodyEn: "Using the AutoForge platform means you accept these terms. We reserve the right to modify, suspend or terminate the service with prior notice. For in-progress projects, we provide a reasonable migration window and data-export support."
       },
       {
         heading: "账户责任",
-        body: "您对在自己账户下发生的所有活动负责，包括通过 AutoForge 平台生成、提交和部署的代码及相关产物。请妥善保管您的访问凭证，及时报告任何未授权访问。"
+        headingEn: "Account responsibility",
+        body: "您对在自己账户下发生的所有活动负责，包括通过 AutoForge 平台生成、提交和部署的代码及相关产物。请妥善保管您的访问凭证，及时报告任何未授权访问。",
+        bodyEn: "You are responsible for all activity under your account, including code and artifacts generated, submitted and deployed through AutoForge. Keep your credentials safe and report any unauthorized access promptly."
       }
     ]
   },
   {
     id: "usage",
     title: "可接受使用规范",
+    titleEn: "Acceptable use",
     items: [
       {
         heading: "合法使用",
-        body: "您同意仅将 AutoForge 用于合法的软件开发目的，遵守所有适用的法律法规，包括但不限于知识产权法、数据保护法和出口管制法规。"
+        headingEn: "Lawful use",
+        body: "您同意仅将 AutoForge 用于合法的软件开发目的，遵守所有适用的法律法规，包括但不限于知识产权法、数据保护法和出口管制法规。",
+        bodyEn: "You agree to use AutoForge only for lawful software development and to comply with all applicable laws, including intellectual property, data protection and export-control regulations."
       },
       {
         heading: "禁止行为",
-        body: "严禁将平台用于生成恶意软件、参与未授权的安全测试（渗透测试需提前获得书面授权）、侵犯他人知识产权、传播虚假信息或从事任何违法违规活动。"
+        headingEn: "Prohibited conduct",
+        body: "严禁将平台用于生成恶意软件、参与未授权的安全测试（渗透测试需提前获得书面授权）、侵犯他人知识产权、传播虚假信息或从事任何违法违规活动。",
+        bodyEn: "You must not use the platform to generate malware, conduct unauthorized security testing (penetration testing requires prior written authorization), infringe intellectual property, spread misinformation or engage in any unlawful activity."
       },
       {
         heading: "资源使用",
-        body: "请合理使用平台计算资源，不得进行任何形式的资源滥用、自动化批量操作或对系统稳定性造成负面影响的行为。如有大规模使用需求，请提前联系我们协商企业级方案。"
+        headingEn: "Resource use",
+        body: "请合理使用平台计算资源，不得进行任何形式的资源滥用、自动化批量操作或对系统稳定性造成负面影响的行为。如有大规模使用需求，请提前联系我们协商企业级方案。",
+        bodyEn: "Please use platform compute responsibly. Resource abuse, automated bulk operations, or anything that harms system stability is not allowed. For large-scale needs, contact us in advance to arrange an enterprise plan."
       }
     ]
   },
   {
     id: "ip",
     title: "知识产权",
+    titleEn: "Intellectual property",
     items: [
       {
         heading: "您的代码归您所有",
-        body: "通过 AutoForge 平台生成的所有代码、文档和其他交付物的知识产权归您或您的组织所有。我们不主张对您通过平台产生的输出拥有任何所有权。"
+        headingEn: "Your code is yours",
+        body: "通过 AutoForge 平台生成的所有代码、文档和其他交付物的知识产权归您或您的组织所有。我们不主张对您通过平台产生的输出拥有任何所有权。",
+        bodyEn: "Intellectual property in all code, documentation and other deliverables generated through AutoForge belongs to you or your organization. We claim no ownership over the output you produce on the platform."
       },
       {
         heading: "平台知识产权",
-        body: "AutoForge 平台本身，包括其底层算法、工作流引擎、界面设计和品牌要素，受知识产权法保护，归 AutoForge 团队所有。您不得反向工程、复制或以其他方式滥用平台核心技术。"
+        headingEn: "Platform IP",
+        body: "AutoForge 平台本身，包括其底层算法、工作流引擎、界面设计和品牌要素，受知识产权法保护，归 AutoForge 团队所有。您不得反向工程、复制或以其他方式滥用平台核心技术。",
+        bodyEn: "The AutoForge platform itself, including its underlying algorithms, workflow engine, interface design and brand elements, is protected by intellectual property law and owned by the AutoForge team. You may not reverse engineer, copy or otherwise misuse the platform's core technology."
       },
       {
         heading: "第三方组件",
-        body: "AutoForge 集成了多种开源和第三方工具（如 Claude Code CLI、Open Design 等）。使用这些集成功能时，您同时受相关第三方服务条款约束。我们在文档中注明了主要集成组件的许可信息。"
+        headingEn: "Third-party components",
+        body: "AutoForge 集成了多种开源和第三方工具（如 Claude Code CLI、Open Design 等）。使用这些集成功能时，您同时受相关第三方服务条款约束。我们在文档中注明了主要集成组件的许可信息。",
+        bodyEn: "AutoForge integrates various open-source and third-party tools (such as Claude Code CLI and Open Design). When using these integrations you are also bound by the relevant third-party terms. License information for major integrated components is noted in our documentation."
       }
     ]
   },
   {
     id: "liability",
     title: "责任限制",
+    titleEn: "Limitation of liability",
     items: [
       {
         heading: "服务保证",
-        body: "AutoForge 平台按「现状」提供服务。虽然我们致力于保障服务质量和稳定性，但不对服务的中断、延迟或错误提供明示或暗示的保证。AI 生成的代码和建议应经过专业评审后方可用于生产环境。"
+        headingEn: "Service warranty",
+        body: "AutoForge 平台按「现状」提供服务。虽然我们致力于保障服务质量和稳定性，但不对服务的中断、延迟或错误提供明示或暗示的保证。AI 生成的代码和建议应经过专业评审后方可用于生产环境。",
+        bodyEn: "The AutoForge platform is provided on an \"as is\" basis. While we strive to ensure quality and stability, we make no express or implied warranty against interruption, delay or error. AI-generated code and suggestions should be professionally reviewed before production use."
       },
       {
         heading: "损害赔偿上限",
-        body: "在法律允许的最大范围内，AutoForge 对因使用或无法使用本服务所导致的任何间接、偶发、特殊或后果性损害不承担责任。我们的总责任上限不超过您在损害发生前三个月内支付给我们的费用金额。"
+        headingEn: "Liability cap",
+        body: "在法律允许的最大范围内，AutoForge 对因使用或无法使用本服务所导致的任何间接、偶发、特殊或后果性损害不承担责任。我们的总责任上限不超过您在损害发生前三个月内支付给我们的费用金额。",
+        bodyEn: "To the maximum extent permitted by law, AutoForge is not liable for any indirect, incidental, special or consequential damages arising from use of or inability to use the service. Our total liability shall not exceed the fees you paid us in the three months before the damage occurred."
       },
       {
         heading: "代码部署责任",
-        body: "通过 AutoForge 生成并部署到生产环境的代码，其安全性、合规性和功能正确性最终由您负责。我们提供安全审查工具和最佳实践建议，但不替代您的专业技术判断。"
+        headingEn: "Deployment responsibility",
+        body: "通过 AutoForge 生成并部署到生产环境的代码，其安全性、合规性和功能正确性最终由您负责。我们提供安全审查工具和最佳实践建议，但不替代您的专业技术判断。",
+        bodyEn: "For code generated by AutoForge and deployed to production, you are ultimately responsible for its security, compliance and functional correctness. We provide security-review tools and best-practice guidance, but they do not replace your professional judgment."
       }
     ]
   },
   {
     id: "termination",
     title: "终止与暂停",
+    titleEn: "Termination & suspension",
     items: [
       {
         heading: "您的终止权利",
-        body: "您可以随时停止使用 AutoForge 服务。如需删除您的账户和相关数据，请发送请求至 hello@autoforge.dev，我们将在 30 个工作日内处理。"
+        headingEn: "Your right to terminate",
+        body: "您可以随时停止使用 AutoForge 服务。如需删除您的账户和相关数据，请发送请求至 renmengkai@gmail.com，我们将在 30 个工作日内处理。",
+        bodyEn: "You may stop using AutoForge at any time. To delete your account and related data, send a request to renmengkai@gmail.com and we will process it within 30 business days."
       },
       {
         heading: "我们的终止权利",
-        body: "如发现违反本服务条款的行为，我们有权暂停或终止您的服务访问，通常会提前通知，但严重违规情况除外。终止前产生的费用仍需结清。"
+        headingEn: "Our right to terminate",
+        body: "如发现违反本服务条款的行为，我们有权暂停或终止您的服务访问，通常会提前通知，但严重违规情况除外。终止前产生的费用仍需结清。",
+        bodyEn: "If we find a breach of these terms, we may suspend or terminate your access, usually with prior notice except in cases of serious violation. Fees incurred before termination remain payable."
       },
       {
         heading: "数据处理",
-        body: "服务终止后，我们将根据隐私政策的规定保留或删除您的数据。您在终止前可通过平台导出所有项目数据。"
+        headingEn: "Data handling",
+        body: "服务终止后，我们将根据隐私政策的规定保留或删除您的数据。您在终止前可通过平台导出所有项目数据。",
+        bodyEn: "After termination we will retain or delete your data in accordance with the Privacy Policy. You can export all project data through the platform before termination."
       }
     ]
   }
@@ -178,6 +214,10 @@ const sections = [
       .legal-meta span {
         color: #4e4a46;
         margin-right: 0.5rem;
+      }
+
+      .legal-date {
+        font-style: normal;
       }
 
       .legal-body {
@@ -322,27 +362,28 @@ const sections = [
         <span>Auto<span>Forge</span></span>
       </a>
       <nav class="desktop-nav" aria-label="主导航">
-        <a href="/#platform">平台</a>
-        <a href="/#engines">核心能力</a>
-        <a href="/#workflow">完整周期</a>
-        <a href="/#contact">联系我们</a>
+        <a href="/#platform" data-en="Platform">平台</a>
+        <a href="/#engines" data-en="Capabilities">核心能力</a>
+        <a href="/#workflow" data-en="Full cycle">完整周期</a>
+        <a href="/#contact" data-en="Contact">联系我们</a>
       </nav>
       <div class="nav-actions">
-        <a class="text-action" href="/#pipeline">查看运行状态</a>
-        <a class="nav-button" href="/#contact">开始构建 <span aria-hidden="true">↗</span></a>
+        <a class="text-action" href="/#pipeline" data-en="View live status">查看运行状态</a>
+        <button class="lang-toggle" type="button" aria-label="Switch language">EN</button>
+        <a class="nav-button" href="/#contact" data-en={'Start building <span aria-hidden="true">↗</span>'}>开始构建 <span aria-hidden="true">↗</span></a>
       </div>
     </header>
 
     <main class="legal-page section-shell">
       <div class="legal-hero">
         <div class="legal-eyebrow">
-          <a href="/">← 返回首页</a>
+          <a href="/" data-en="← Back home">← 返回首页</a>
           <span>/</span>
           <strong>TERMS OF SERVICE</strong>
         </div>
-        <h1 class="legal-title">服务条款</h1>
+        <h1 class="legal-title" data-en="Terms of Service">服务条款</h1>
         <p class="legal-meta">
-          <span>最后更新</span>{lastUpdated}
+          <span data-en="Last updated">最后更新</span><em class="legal-date" data-en={lastUpdatedEn}>{lastUpdated}</em>
         </p>
       </div>
 
@@ -350,27 +391,27 @@ const sections = [
         <div class="legal-sections">
           {sections.map((section, i) => (
             <section id={section.id}>
-              <h2 class="legal-section-title" data-index={String(i + 1).padStart(2, "0")}>
+              <h2 class="legal-section-title" data-index={String(i + 1).padStart(2, "0")} data-en={section.titleEn}>
                 {section.title}
               </h2>
               <div class="legal-items">
                 {section.items.map((item) => (
                   <div>
-                    <h3 class="legal-item-heading">{item.heading}</h3>
-                    <p class="legal-item-body">{item.body}</p>
+                    <h3 class="legal-item-heading" data-en={item.headingEn}>{item.heading}</h3>
+                    <p class="legal-item-body" data-en={item.bodyEn}>{item.body}</p>
                   </div>
                 ))}
               </div>
             </section>
           ))}
 
-          <section>
-            <h2 class="legal-section-title" data-index="06">适用法律与争议解决</h2>
+          <section id="dispute">
+            <h2 class="legal-section-title" data-index="06" data-en="Governing law & disputes">适用法律与争议解决</h2>
             <div class="legal-items">
               <div>
-                <h3 class="legal-item-heading">适用法律</h3>
-                <p class="legal-item-body">
-                  本服务条款受中华人民共和国法律管辖并依其解释。如发生争议，双方应首先通过友好协商解决。协商不成时，提交有管辖权的人民法院依法诉讼解决。如您有任何疑问，请随时联系 hello@autoforge.dev。
+                <h3 class="legal-item-heading" data-en="Governing law">适用法律</h3>
+                <p class="legal-item-body" data-en="These terms are governed by and construed under the laws of the People's Republic of China. In the event of a dispute, the parties shall first seek an amicable resolution; failing that, the matter shall be submitted to a competent People's Court. For questions, contact renmengkai@gmail.com.">
+                  本服务条款受中华人民共和国法律管辖并依其解释。如发生争议，双方应首先通过友好协商解决。协商不成时，提交有管辖权的人民法院依法诉讼解决。如您有任何疑问，请随时联系 renmengkai@gmail.com。
                 </p>
               </div>
             </div>
@@ -378,15 +419,15 @@ const sections = [
         </div>
 
         <aside class="legal-sidebar" aria-label="目录">
-          <p class="legal-sidebar-label">目录</p>
+          <p class="legal-sidebar-label" data-en="Contents">目录</p>
           {sections.map((section) => (
-            <a href={`#${section.id}`}>{section.title}</a>
+            <a href={`#${section.id}`} data-en={section.titleEn}>{section.title}</a>
           ))}
-          <a href="#dispute">适用法律与争议解决</a>
+          <a href="#dispute" data-en="Governing law & disputes">适用法律与争议解决</a>
 
           <div class="legal-contact-box">
-            <p>如对本条款有任何疑问或需要法律相关支持，请联系我们。</p>
-            <a href="mailto:hello@autoforge.dev">hello@autoforge.dev ↗</a>
+            <p data-en="Questions about these terms or need legal support? Contact us.">如对本条款有任何疑问或需要法律相关支持，请联系我们。</p>
+            <a href="mailto:renmengkai@gmail.com">renmengkai@gmail.com ↗</a>
           </div>
         </aside>
       </div>
@@ -399,23 +440,23 @@ const sections = [
             <img class="brand-logo" src="/autoforge-logo.png" alt="" />
             <span>Auto<span>Forge</span></span>
           </a>
-          <p>八节点全链路 AI 软件工厂系统，完全替代传统外包。</p>
+          <p data-en="An eight-node AI software factory that fully replaces traditional outsourcing.">八节点全链路 AI 软件工厂系统，完全替代传统外包。</p>
         </div>
         <div>
           <p class="footer-label">PLATFORM</p>
-          <a href="/#platform">产品能力</a>
-          <a href="/#engines">核心能力</a>
-          <a href="/#workflow">完整产品周期</a>
+          <a href="/#platform" data-en="Capabilities">产品能力</a>
+          <a href="/#engines" data-en="Core engines">核心能力</a>
+          <a href="/#workflow" data-en="Full cycle">完整产品周期</a>
         </div>
         <div>
           <p class="footer-label">COMPANY</p>
-          <a href="mailto:hello@autoforge.dev">联系我们</a>
-          <a href="/privacy">隐私政策</a>
-          <a href="/terms">服务条款</a>
+          <a href="mailto:renmengkai@gmail.com" data-en="Contact">联系我们</a>
+          <a href="/privacy" data-en="Privacy">隐私政策</a>
+          <a href="/terms" data-en="Terms">服务条款</a>
         </div>
         <div class="footer-status">
           <p class="footer-label">SYSTEM STATUS</p>
-          <span><i></i> 所有系统运行正常</span>
+          <span data-en="<i></i> All systems operational"><i></i> 所有系统运行正常</span>
         </div>
       </div>
       <div class="footer-bottom section-shell">
@@ -425,6 +466,34 @@ const sections = [
     </footer>
 
     <script>
+      // ---- Bilingual (ZH / EN), shared preference with the home page ----
+      const I18N_STORE = "af-lang";
+      const langToggle = document.querySelector(".lang-toggle");
+      const i18nEls = Array.from(document.querySelectorAll("[data-en]")) as HTMLElement[];
+      i18nEls.forEach((el) => {
+        el.dataset.zh = el.innerHTML;
+      });
+
+      let lang: "zh" | "en" = localStorage.getItem(I18N_STORE) === "en" ? "en" : "zh";
+
+      const applyLang = (next: "zh" | "en") => {
+        lang = next;
+        document.documentElement.lang = next === "en" ? "en" : "zh-CN";
+        document.title = next === "en" ? "Terms of Service — AutoForge" : "服务条款 — AutoForge";
+        document.body.classList.toggle("lang-en", next === "en");
+        i18nEls.forEach((el) => {
+          const value = next === "en" ? el.dataset.en : el.dataset.zh;
+          if (value != null) el.innerHTML = value;
+        });
+        if (langToggle) langToggle.textContent = next === "en" ? "中文" : "EN";
+      };
+
+      applyLang(lang);
+      langToggle?.addEventListener("click", () => {
+        applyLang(lang === "en" ? "zh" : "en");
+        localStorage.setItem(I18N_STORE, lang);
+      });
+
       const header = document.querySelector(".site-header");
       const progress = document.querySelector(".page-progress");
       let previousScroll = 0;

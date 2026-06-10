@@ -639,7 +639,7 @@ button {
   font-size: clamp(3.3rem, 6.2vw, 6.9rem);
   font-weight: 800;
   letter-spacing: -0.075em;
-  line-height: 0.94;
+  line-height: 0.98;
   text-wrap: balance;
 }
 
@@ -647,14 +647,14 @@ button {
   display: block;
   width: fit-content;
   overflow: hidden;
-  padding: 0 0.08em 0.08em 0;
+  padding: 0.08em 0.08em 0.22em 0;
   margin-left: -0.08em;
 }
 
 .hero-line > span {
   display: block;
   opacity: 0;
-  transform: translateY(112%) rotate(1.5deg);
+  transform: translateY(128%) rotate(1.5deg);
   transform-origin: left bottom;
   animation: hero-line-reveal 1.15s var(--ease-out-expo) forwards;
 }
@@ -1167,16 +1167,17 @@ button {
   position: relative;
   width: 100%;
   height: 29rem;
-  margin-top: 1.4rem;
+  margin-top: 0.5rem;
 }
 
-/* Eight-node serpentine delivery chain (4 × 2) */
+/* Eight-node serpentine delivery chain (4 × 2), compact cards centered in view */
 .pipeline-flow {
   display: grid;
   height: 100%;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 2rem 1.7rem;
+  grid-template-rows: auto auto;
+  align-content: center;
+  gap: 5.5rem 1.4rem;
 }
 
 .pnode {
@@ -1185,11 +1186,11 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0.9rem 1rem;
+  padding: 0.8rem 0.9rem;
   border: 1px solid var(--line-strong);
-  border-radius: 0.6rem;
-  background: rgba(13, 13, 13, 0.92);
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
+  border-radius: 0.55rem;
+  background: rgba(15, 15, 15, 0.92);
+  box-shadow: 0 0.7rem 2rem rgba(0, 0, 0, 0.28);
   transition:
     border-color 0.35s ease,
     box-shadow 0.35s ease,
@@ -1219,7 +1220,7 @@ button {
 .pnode:nth-child(3)::after {
   top: 50%;
   left: 100%;
-  width: 1.7rem;
+  width: 1.4rem;
   height: 1px;
 }
 
@@ -1228,16 +1229,16 @@ button {
 .pnode:nth-child(7)::after {
   top: 50%;
   right: 100%;
-  width: 1.7rem;
+  width: 1.4rem;
   height: 1px;
   background: linear-gradient(270deg, rgba(255, 107, 0, 0.5), rgba(255, 107, 0, 0.12));
 }
 
 .pnode:nth-child(4)::after {
   top: 100%;
-  right: 1.4rem;
+  left: 50%;
   width: 1px;
-  height: 2rem;
+  height: 5.5rem;
   background: linear-gradient(180deg, rgba(255, 107, 0, 0.5), rgba(255, 107, 0, 0.12));
 }
 
