@@ -639,7 +639,7 @@ button {
   font-size: clamp(3.3rem, 6.2vw, 6.9rem);
   font-weight: 800;
   letter-spacing: -0.075em;
-  line-height: 0.98;
+  line-height: 0.96;
   text-wrap: balance;
 }
 
@@ -647,8 +647,10 @@ button {
   display: block;
   width: fit-content;
   overflow: hidden;
-  padding: 0.08em 0.08em 0.22em 0;
-  margin-left: -0.08em;
+  /* bottom padding gives CJK descenders clip room; the negative margin pulls
+     the next line back up so the three lines read as one tight block */
+  padding: 0 0.08em 0.2em 0;
+  margin: 0 0 -0.16em -0.08em;
 }
 
 .hero-line > span {
