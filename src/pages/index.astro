@@ -4,48 +4,49 @@ import "../styles/global.css";
 const engines = [
   {
     index: "01",
-    eyebrow: "REQUIREMENT INTELLIGENCE",
-    title: "需求进入，自动成形",
-    copy: "直接讨论需求、接入 GitHub Issue，或让 AI 扫描现有项目发现缺口。AutoForge 将零散输入整理为可执行、可验收的开发任务。",
-    details: ["对话式需求确认", "Issue 自动同步", "AI 项目扫描与需求补全"],
-    metric: "接入方式",
+    eyebrow: "REQUIREMENT & MATERIALS",
+    title: "需求收集与物料管理",
+    copy: "通过 Agent 对话讨论、批量导入或需求分析专用 Agent 扫描来收集需求；多 Agent 群聊自动梳理，生成设计文档等全量项目物料。",
+    details: ["Agent 对话 / 批量导入 / AI 扫描", "多 Agent 群聊整理项目物料", "自动生成设计文档与参考资料"],
+    metric: "进入方式",
     value: "3"
   },
   {
     index: "02",
-    eyebrow: "PROJECT CONTEXT",
-    title: "项目上下文，集中管理",
-    copy: "需求、设计稿、附件、参考资料、代码仓库和环境信息统一归档；开发规范、技术约束和验收规则成为 AI 持续遵守的项目记忆。",
-    details: ["全量项目物料", "开发规范与技术约束", "跨任务上下文持续复用"],
-    metric: "上下文",
-    value: "ONE"
+    eyebrow: "DESIGN & SPEC",
+    title: "原型设计与 Spec 审查",
+    copy: "集成 Open Design 自动生成提示词，复制至 Stitch 或 Claude Design 生成交互原型；AI 自动生成项目 Spec 与任务分解，人工审核后驱动编码精准落地。",
+    details: ["OpenDesign 集成，提示词一键生成", "Stitch / Claude Design 原型输出", "AI 生成 Spec，人工审核确认"],
+    metric: "设计工具",
+    value: "3+"
   },
   {
     index: "03",
-    eyebrow: "AUTONOMOUS DELIVERY",
-    title: "AI 开发，人类把关",
-    copy: "AI 根据需求和项目规范生成代码，自主完成测试与安全审核。人类只在关键决策和合并节点轻量介入，随后生成预览并推进正式上线。",
-    details: ["AI 自动完成需求开发", "人类轻在环审核", "测试、安全、预览与上线"],
+    eyebrow: "CODE · TEST · SHIP",
+    title: "编码实现到部署上线",
+    copy: "Claude Code CLI 自主完成编码；测试专用 Agent 全面验证，安全审计 Agent 审查代码；AI 生成一键部署 Shell 脚本，直达生产环境。",
+    details: ["Claude Code CLI 自动编码", "测试 + 安全 Agent 双重审查", "AI Shell 脚本一键部署"],
     metric: "交付链路",
     value: "E2E"
   }
 ];
 
 const workflow = [
-  ["01", "确认需求", "通过讨论、Issue 或 AI 扫描明确目标与验收标准", "REQUIREMENT"],
-  ["02", "汇集物料", "统一管理设计、附件、文档、链接与环境信息", "MATERIALS"],
-  ["03", "加载规范", "读取项目开发规范、架构边界与质量约束", "CONTEXT"],
-  ["04", "AI 开发", "理解现有代码并自动生成满足需求的实现", "DEVELOPMENT"],
-  ["05", "人类审核", "在关键决策、风险与合并节点轻量介入", "REVIEW"],
-  ["06", "自动验证", "执行测试、回归、安全扫描与质量审核", "QUALITY"],
-  ["07", "预览上线", "生成项目预览，确认后部署到目标环境", "DELIVERY"]
+  ["01", "需求收集", "通过 Agent 对话、批量导入或 AI 扫描，明确需求目标与验收标准", "REQUIREMENT"],
+  ["02", "物料管理", "多 Agent 群聊自动梳理，生成设计文档等全量项目物料", "MATERIALS"],
+  ["03", "原型设计", "OpenDesign 生成提示词，复制至 Stitch 或 Claude Design 完成交互原型", "PROTOTYPE"],
+  ["04", "Spec 审查", "AI 生成项目规范与任务分解，人工审核后锁定编码目标", "SPEC"],
+  ["05", "编码实现", "Claude Code CLI 理解 Spec 与代码库，自主完成功能开发", "DEVELOPMENT"],
+  ["06", "系统测试", "测试专用 Agent 全面验证，可将新发现的问题直接录入为需求", "TESTING"],
+  ["07", "安全审查", "安全审计专用 Agent 扫描代码，确保合规与安全边界清晰", "SECURITY"],
+  ["08", "部署上线", "AI 生成稳定 Shell 脚本，一键部署到目标生产环境", "DELIVERY"]
 ];
 
 const metrics = [
+  ["8 节点", "覆盖完整交付链路"],
   ["3 种", "需求进入方式"],
-  ["1 处", "管理全部项目上下文"],
-  ["AI + 人", "轻在环开发审核"],
-  ["全链路", "测试、安全、预览与上线"]
+  ["AI + 人", "轻量在环审核"],
+  ["全替代", "外包依赖归零"]
 ];
 ---
 
@@ -56,18 +57,18 @@ const metrics = [
     <meta name="viewport" content="width=device-width" />
     <meta
       name="description"
-      content="AutoForge 覆盖从需求确认、项目上下文管理、AI 自动开发，到人类审核、自动测试、安全检查、预览部署与正式上线的完整产品交付周期。"
+      content="AutoForge 是 AI 软件工厂系统，覆盖需求收集、物料管理、原型设计、Spec 审查、编码实现、系统测试、安全审查、部署上线的完整八节点链路，完全替代传统外包。"
     />
     <meta name="theme-color" content="#070707" />
-    <meta property="og:title" content="AutoForge — 通用软件工厂" />
+    <meta property="og:title" content="AutoForge — AI 软件工厂系统" />
     <meta
       property="og:description"
-      content="从需求确认到产品上线，让 AI 推进完整交付周期，人类只在关键节点做判断。"
+      content="外包能做的，AI 全部接管。八节点全链路，需求进，产品出，软件工厂化。"
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="AutoForge — 通用软件工厂" />
-    <meta name="twitter:description" content="从需求确认到产品上线，让 AI 推进完整交付周期，人类只在关键节点做判断。" />
+    <meta name="twitter:title" content="AutoForge — AI 软件工厂系统" />
+    <meta name="twitter:description" content="外包能做的，AI 全部接管。八节点全链路，需求进，产品出，软件工厂化。" />
     <link rel="icon" type="image/png" href="/autoforge-logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,7 +76,7 @@ const metrics = [
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <title>AutoForge — 通用软件工厂</title>
+    <title>AutoForge — AI 软件工厂系统</title>
   </head>
   <body>
     <a class="skip-link" href="#main-content">跳到主要内容</a>
@@ -92,7 +93,7 @@ const metrics = [
     </div>
 
     <div class="utility-bar">
-      <span>软件交付自动化平台</span>
+      <span>AI 软件工厂系统 · 完全替代外包</span>
       <a href="#contact">申请产品演示 <span aria-hidden="true">↗</span></a>
     </div>
 
@@ -143,11 +144,11 @@ const metrics = [
 
         <div class="hero-layout">
           <div class="hero-main">
-            <p class="eyebrow hero-enter">AUTONOMOUS PRODUCT DELIVERY</p>
-            <h1 aria-label="从一个需求，到可交付的产品，全程由 AI 推进">
-              <span class="hero-line"><span>从一个需求，</span></span>
-              <span class="hero-line hero-line-accent"><span>到可交付的产品，</span></span>
-              <span class="hero-line"><span>全程由 AI 推进。</span></span>
+            <p class="eyebrow hero-enter">AI SOFTWARE FACTORY SYSTEM</p>
+            <h1 aria-label="外包能做的，AI 全部接管。需求进，产品出，软件工厂化。">
+              <span class="hero-line"><span>外包能做的，</span></span>
+              <span class="hero-line hero-line-accent"><span>AI 全部接管。</span></span>
+              <span class="hero-line"><span>软件工厂化。</span></span>
             </h1>
             <div class="hero-actions hero-enter">
               <a class="button button-light magnetic" href="#platform">
@@ -159,16 +160,16 @@ const metrics = [
 
           <aside class="hero-brief hero-enter" aria-label="产品简介">
             <div class="brief-heading">
-              <span>DELIVERY SIGNAL</span>
+              <span>FACTORY STATUS</span>
               <strong><i></i> LIVE</strong>
             </div>
             <p>
-              AutoForge 理解需求与项目上下文，自动完成代码开发、测试、安全审核和预览部署。人类只在关键节点做判断。
+              AutoForge 是 AI 软件工厂系统，覆盖需求收集、物料管理、原型设计、编码、测试、安全审查到部署上线的完整八节点链路，完全替代传统外包。
             </p>
             <div class="brief-metrics">
               <div>
-                <span>ACTIVE TASKS</span>
-                <strong data-live-rate>18.4</strong>
+                <span>PIPELINE NODES</span>
+                <strong>08</strong>
               </div>
               <div>
                 <span>HUMAN GATES</span>
@@ -176,7 +177,7 @@ const metrics = [
               </div>
             </div>
             <div class="brief-meta">
-              <span>PRODUCT DELIVERY ACTIVE</span>
+              <span>PIPELINE ACTIVE</span>
               <span>22:14:17 UTC+8</span>
             </div>
           </aside>
@@ -195,8 +196,9 @@ const metrics = [
         <div class="ticker-track">
           {Array.from({ length: 2 }).map(() => (
             <div class="ticker-set">
-              <span>DISCUSS</span><i></i><span>ISSUE</span><i></i><span>CONTEXT</span><i></i>
-              <span>DEVELOP</span><i></i><span>REVIEW</span><i></i><span>DELIVER</span><i></i>
+              <span>COLLECT</span><i></i><span>MATERIALS</span><i></i><span>PROTOTYPE</span><i></i>
+              <span>SPEC</span><i></i><span>CODE</span><i></i><span>TEST</span><i></i>
+              <span>AUDIT</span><i></i><span>DEPLOY</span><i></i>
             </div>
           ))}
         </div>
@@ -206,10 +208,10 @@ const metrics = [
         <div class="section-intro reveal">
           <div>
             <p class="eyebrow">FROM REQUIREMENT TO PRODUCT</p>
-            <h2>完整周期，<br />一个工作空间。</h2>
+            <h2>八节点全链路，<br />一个工作空间。</h2>
           </div>
           <p>
-            从最初的需求讨论到最终上线，所有输入、决策、代码变更、审核和验证结果都留在同一条可追踪的交付链上。
+            从需求收集到产品部署，全部对话、物料、原型、代码变更、审核结果和部署记录都在同一条可追踪的交付链上。外包团队的所有工作，一套 AI 系统全部覆盖。
           </p>
         </div>
 
@@ -227,31 +229,31 @@ const metrics = [
                 <path class="map-line map-line-secondary" d="M330 82V258H610" />
               </svg>
               <div class="node node-source">
-                <span>01</span><strong>REQUIREMENT</strong><small>issue #184</small>
+                <span>01</span><strong>COLLECT</strong><small>issue #184</small>
               </div>
               <div class="node node-build">
-                <span>02</span><strong>CONTEXT</strong><small>36 materials</small>
+                <span>02</span><strong>DESIGN+SPEC</strong><small>prototype ready</small>
               </div>
               <div class="node node-test">
-                <span>03</span><strong>DEVELOP</strong><small>AI + human</small>
+                <span>03</span><strong>CODE+TEST</strong><small>AI + human</small>
               </div>
               <div class="node node-deploy">
-                <span>04</span><strong>DELIVER</strong><small>preview ready</small>
+                <span>04</span><strong>DEPLOY</strong><small>production</small>
               </div>
             </div>
             <div class="pipeline-console" aria-live="polite">
               <span class="console-time">22:14:08</span>
-              <span class="console-copy">AI 正在根据项目规范实现需求...</span>
+              <span class="console-copy">需求 Agent 正在分析 Issue，生成验收标准...</span>
               <span class="console-pulse"></span>
             </div>
           </article>
 
           <article class="system-card reveal spotlight-card">
             <div class="card-topline">
-              <span>REQUIREMENT INTAKE</span><span>3 CHANNELS</span>
+              <span>PROJECT MATERIALS</span><span>3 CHANNELS</span>
             </div>
             <div class="velocity-value"><strong data-count="36">0</strong><span> items</span></div>
-            <p>当前项目已管理的需求、设计与参考物料</p>
+            <p>当前项目已归档的需求、设计文档与参考物料</p>
             <div class="bar-chart" aria-hidden="true">
               <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
               <i></i><i></i><i></i><i></i>
@@ -292,7 +294,7 @@ const metrics = [
       <section class="engines section-shell" id="engines">
         <div class="engine-heading reveal">
           <p class="eyebrow">CORE CAPABILITIES</p>
-          <h2>AI 推进执行，<br />人类掌握决定。</h2>
+          <h2>AI 全程推进，<br />人类掌控决策。</h2>
         </div>
 
         <div class="engine-list">
@@ -328,10 +330,10 @@ const metrics = [
         <div class="section-intro reveal">
           <div>
             <p class="eyebrow">THE COMPLETE PRODUCT CYCLE</p>
-            <h2>从需求确认，<br />到产品交付。</h2>
+            <h2>八节点全链路，<br />从需求到上线。</h2>
           </div>
           <p>
-            七个阶段共享同一份项目上下文与审计记录。任何需求都能追溯到物料、规范、代码、审核、测试结果和最终部署。
+            八个节点共享同一份项目上下文与审计记录。任何需求都能追溯到物料、原型、Spec、代码、测试结果和最终部署。
           </p>
         </div>
 
@@ -353,10 +355,10 @@ const metrics = [
         <div class="manifesto-inner section-shell reveal">
           <p class="eyebrow">THE AUTOFORGE PRINCIPLE</p>
           <blockquote>
-            “把需求、上下文与工程能力交给 AI。<br />
-            把最终的<span>判断权留给人。</span>”
+            “把外包公司能做的所有工作，<br />
+            <span>交给 AI 系统完成。</span>”
           </blockquote>
-          <p>AUTOFORGE / ENGINEERING SYSTEMS</p>
+          <p>AUTOFORGE / AI SOFTWARE FACTORY</p>
         </div>
       </section>
 
@@ -364,7 +366,7 @@ const metrics = [
         <div class="contact-copy reveal">
           <p class="eyebrow">START BUILDING</p>
           <h2>带上一个需求，<br />看它变成产品。</h2>
-          <p>接入现有项目与 Issue，或让 AI 扫描代码库。AutoForge 会从需求确认开始，推进到可访问的产品预览。</p>
+          <p>接入现有代码库与 Issue，或让 AI 扫描项目。AutoForge 从需求收集开始，经过八个节点，推进到可访问的生产部署，无需外包。</p>
         </div>
         <div class="contact-action reveal">
           <a class="contact-circle magnetic" href="mailto:hello@autoforge.dev">
@@ -372,9 +374,9 @@ const metrics = [
             <span aria-hidden="true">↗</span>
           </a>
           <div class="contact-meta">
-            <span>支持现有代码库</span>
-            <span>支持 GitHub Issue</span>
-            <span>人类审核节点可配置</span>
+            <span>支持现有代码库接入</span>
+            <span>支持 GitHub Issue 导入</span>
+            <span>人工审核节点可配置</span>
           </div>
         </div>
       </section>
@@ -387,7 +389,7 @@ const metrics = [
             <img class="brand-logo" src="/autoforge-logo.png" alt="" />
             <span>Auto<span>Forge</span></span>
           </a>
-          <p>从需求确认到产品上线的 AI 软件工厂。</p>
+          <p>八节点全链路 AI 软件工厂系统，完全替代传统外包。</p>
         </div>
         <div>
           <p class="footer-label">PLATFORM</p>
@@ -571,10 +573,10 @@ const metrics = [
       }
 
       const consoleMessages = [
-        "AI 正在根据项目规范实现需求...",
-        "代码生成完成，等待人类审核关键变更...",
-        "自动测试与安全审核全部通过...",
-        "产品预览已部署，可进入验收。"
+        "需求 Agent 正在分析 Issue，生成验收标准...",
+        "物料整理完成，Spec 已生成，等待人工审核...",
+        "Claude Code 编码完成，测试 Agent 验证中...",
+        "安全审查通过，一键部署脚本已生成。"
       ];
       let messageIndex = 0;
       const consoleTime = document.querySelector(".console-time");

@@ -42,6 +42,19 @@ body {
   color: var(--text);
   font-family: "Geist", "Noto Sans SC", sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 中文段落正文 — 显式指定 Noto Sans SC，避免依赖 Geist 回退时字重渲染不一致 */
+.hero-brief > p,
+.section-intro > p,
+.contact-copy > p,
+.engine-content > p:not(.eyebrow),
+.system-card > p,
+.workflow-track p,
+.footer-main > div:first-child > p {
+  font-family: "Noto Sans SC", sans-serif;
+  font-weight: 400;
 }
 
 body::after {
@@ -1492,9 +1505,10 @@ button {
   margin: 0 0 1.4rem;
   color: white;
   font-family: "Noto Sans SC", sans-serif;
-  font-size: clamp(2.4rem, 4vw, 4.5rem);
-  letter-spacing: -0.07em;
-  line-height: 1;
+  font-size: clamp(2.2rem, 3.8vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1.05;
 }
 
 .engine-content > p:not(.eyebrow) {
@@ -1821,8 +1835,9 @@ button {
   max-width: 30rem;
   margin: 0;
   color: #716c67;
-  font-size: 0.82rem;
-  line-height: 1.7;
+  font-size: 0.83rem;
+  line-height: 1.78;
+  letter-spacing: 0.01em;
 }
 
 .manifesto {
