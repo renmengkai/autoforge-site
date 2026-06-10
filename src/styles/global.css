@@ -619,12 +619,25 @@ button {
 }
 
 .hero-line-accent > span {
-  color: #b4aeaa;
-  font-weight: 700;
+  font-weight: 800;
+  color: var(--orange-light);
+  background: linear-gradient(
+    100deg,
+    #ff6b00 0%,
+    #ff9d45 26%,
+    #fff3e6 50%,
+    #ff9d45 74%,
+    #ff6b00 100%
+  );
+  background-size: 230% 100%;
+  background-position: 120% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   animation:
     hero-line-reveal 1.15s var(--ease-out-expo) 0.9s forwards,
-    accent-breathe 5.2s ease-in-out 2.2s infinite alternate;
-  text-shadow: 0 0 0 rgba(255, 107, 0, 0);
+    accent-sweep 7s linear 2.1s infinite;
+  filter: drop-shadow(0 0 2.6rem rgba(255, 107, 0, 0.22));
 }
 
 .hero-enter {
@@ -882,10 +895,9 @@ button {
   }
 }
 
-@keyframes accent-breathe {
+@keyframes accent-sweep {
   to {
-    color: #c9c3be;
-    text-shadow: 0 0 3.5rem rgba(255, 107, 0, 0.11);
+    background-position: -110% 0;
   }
 }
 
@@ -1030,6 +1042,51 @@ button {
     inset 0 1px rgba(255, 255, 255, 0.04),
     0 2rem 5rem rgba(0, 0, 0, 0.22);
   transform: translateY(-0.25rem);
+}
+
+/* 3D parallax tilt — driven by pointer via inline transform from JS */
+.tilt {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.system-card.tilt {
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.22s var(--ease-out-expo);
+}
+
+.engine-card.tilt {
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.22s var(--ease-out-expo);
+}
+
+.tilt > * {
+  transform: translateZ(0);
+}
+
+/* glare sheen that tracks the pointer on tilted cards */
+.tilt::before {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  content: "";
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    18rem 18rem at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.08),
+    transparent 60%
+  );
+  transition: opacity 0.35s ease;
+}
+
+.tilt:hover::before {
+  opacity: 1;
 }
 
 .system-card-large {
@@ -1482,6 +1539,24 @@ button {
 
 .engine-card:nth-child(2) {
   top: 6.8rem;
+  grid-template-columns: 1fr 0.8fr 0.2fr;
+  background:
+    radial-gradient(circle at 18% 50%, rgba(255, 107, 0, 0.075), transparent 32rem),
+    #0d0d0d;
+}
+
+.engine-card:nth-child(2) .engine-visual {
+  order: 1;
+}
+
+.engine-card:nth-child(2) .engine-content {
+  order: 2;
+  margin-left: auto;
+}
+
+.engine-card:nth-child(2) .engine-index {
+  order: 3;
+  text-align: right;
 }
 
 .engine-card:nth-child(3) {
@@ -1734,14 +1809,11 @@ button {
   display: block;
   width: 1px;
   height: 100%;
-  background: linear-gradient(180deg, var(--orange), rgba(255, 107, 0, 0.35) 78%, transparent);
-  box-shadow: 0 0 0.8rem rgba(255, 107, 0, 0.32);
-  transform: scaleY(0);
+  background: linear-gradient(180deg, var(--orange), rgba(255, 107, 0, 0.55) 78%, rgba(255, 107, 0, 0.15));
+  box-shadow: 0 0 0.9rem rgba(255, 107, 0, 0.45);
+  transform: scaleY(var(--wf-progress, 0));
   transform-origin: top;
-}
-
-.workflow-track.is-visible .workflow-progress i {
-  animation: workflow-draw 1.4s var(--ease-out-expo) 0.25s forwards;
+  transition: transform 0.7s var(--ease-out-expo);
 }
 
 .workflow-track article {
@@ -1777,6 +1849,7 @@ button {
   color: #645f5a;
   font-family: "Geist Mono", monospace;
   font-size: 0.65rem;
+  transition: color 0.3s ease;
 }
 
 .workflow-meta small {
@@ -1784,6 +1857,7 @@ button {
   font-family: "Geist Mono", monospace;
   font-size: 0.47rem;
   letter-spacing: 0.08em;
+  transition: color 0.3s ease;
 }
 
 .workflow-marker {
@@ -1812,16 +1886,29 @@ button {
     transform 0.3s var(--ease-out-expo);
 }
 
-.workflow-track article:hover .workflow-marker i {
+.workflow-track article:hover .workflow-marker i,
+.workflow-track article.is-active .workflow-marker i {
   background: var(--orange);
-  box-shadow: 0 0 1rem rgba(255, 107, 0, 0.65);
-  transform: translate(-50%, -50%) scale(1.25);
+  box-shadow:
+    0 0 1rem rgba(255, 107, 0, 0.65),
+    0 0 2.4rem rgba(255, 107, 0, 0.4);
+  transform: translate(-50%, -50%) scale(1.35);
 }
 
-@keyframes workflow-draw {
-  to {
-    transform: scaleY(1);
-  }
+.workflow-track article.is-active {
+  background: linear-gradient(90deg, rgba(255, 107, 0, 0.06), transparent 68%);
+}
+
+.workflow-track article.is-active h3 {
+  color: white;
+}
+
+.workflow-track article.is-active .workflow-meta > span {
+  color: var(--orange);
+}
+
+.workflow-track article.is-active .workflow-meta small {
+  color: #8a8480;
 }
 
 .workflow-track h3 {
@@ -1829,6 +1916,8 @@ button {
   font-size: clamp(1.25rem, 2vw, 2rem);
   font-weight: 600;
   letter-spacing: -0.035em;
+  color: #c4bfba;
+  transition: color 0.3s ease;
 }
 
 .workflow-track p {
@@ -2357,10 +2446,22 @@ footer {
     padding: 1.5rem;
   }
 
+  /* keep consistent content-then-visual stacking on mobile */
+  .engine-card:nth-child(2) .engine-visual,
+  .engine-card:nth-child(2) .engine-content,
+  .engine-card:nth-child(2) .engine-index {
+    order: 0;
+  }
+
+  .engine-card:nth-child(2) .engine-content {
+    margin-left: 0;
+  }
+
   .engine-index {
     position: absolute;
     top: 1.5rem;
     right: 1.5rem;
+    text-align: left;
   }
 
   .engine-visual {
@@ -2493,5 +2594,10 @@ footer {
   .metrics-grid .metric {
     opacity: 1;
     transform: none;
+  }
+
+  .hero-line-accent > span {
+    -webkit-text-fill-color: var(--orange-light);
+    filter: none;
   }
 }
