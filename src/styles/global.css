@@ -699,7 +699,7 @@ button {
 
 .button:active,
 .nav-button:active,
-.contact-circle:active {
+.demo-cta:active {
   scale: 0.98;
 }
 
@@ -2000,101 +2000,119 @@ button {
 
 .contact-action {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.2rem;
 }
 
-.contact-circle {
+.demo-cta {
   position: relative;
-  z-index: 0;
-  display: grid;
-  width: 14rem;
-  height: 14rem;
-  padding: 2rem;
-  place-items: center;
-  border-radius: 50%;
-  color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2rem;
+  padding: 2rem 2.2rem;
+  border: 1px solid rgba(255, 107, 0, 0.18);
+  border-radius: 0.85rem;
+  color: inherit;
   background:
-    radial-gradient(ellipse at 38% 28%, rgba(255, 200, 120, 0.28), transparent 55%),
-    radial-gradient(ellipse at 70% 75%, rgba(180, 40, 0, 0.35), transparent 55%),
-    linear-gradient(135deg, #ff8c2a 0%, #ff6b00 45%, #d94e00 100%);
+    radial-gradient(circle at var(--mx, 88%) var(--my, 18%), rgba(255, 107, 0, 0.09), transparent 18rem),
+    linear-gradient(150deg, #131313, #0d0d0d);
   text-decoration: none;
-  isolation: isolate;
-  box-shadow:
-    inset 0 1px rgba(255, 255, 255, 0.22),
-    inset 0 -1px rgba(0, 0, 0, 0.18),
-    0 0 0 1px rgba(255, 107, 0, 0.25),
-    0 1.5rem 4rem rgba(255, 90, 0, 0.28),
-    0 0.4rem 1rem rgba(0, 0, 0, 0.32);
+  overflow: hidden;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.03);
   transition:
-    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.45s ease,
-    filter 0.35s ease;
+    border-color 0.35s ease,
+    box-shadow 0.4s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.contact-circle span:first-child {
-  max-width: 6rem;
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.25;
-  text-align: center;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
-  letter-spacing: -0.01em;
-}
-
-.contact-circle::before,
-.contact-circle::after {
+.demo-cta::after {
   position: absolute;
-  z-index: -1;
+  inset: 0;
   content: "";
-  border-radius: 50%;
-  transition: transform 0.55s var(--ease-out-expo), opacity 0.35s ease;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 107, 0, 0.11), transparent 18rem);
+  transition: opacity 0.35s ease;
 }
 
-.contact-circle::before {
-  inset: -0.7rem;
-  border: 1px solid rgba(255, 140, 42, 0.35);
-}
-
-.contact-circle::after {
-  inset: -1.25rem;
-  border: 1px dashed rgba(255, 107, 0, 0.18);
-  animation: circle-orbit 12s linear infinite;
-}
-
-@keyframes circle-orbit {
-  to { transform: rotate(360deg); }
-}
-
-.contact-circle:hover {
-  filter: brightness(1.1) saturate(1.12);
+.demo-cta:hover {
+  border-color: rgba(255, 140, 42, 0.45);
   box-shadow:
-    inset 0 1px rgba(255, 255, 255, 0.28),
-    inset 0 -1px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(255, 140, 42, 0.45),
-    0 2rem 6rem rgba(255, 100, 0, 0.45),
-    0 0.4rem 1.2rem rgba(0, 0, 0, 0.38);
-  transform: scale(1.04);
+    inset 0 1px rgba(255, 255, 255, 0.05),
+    0 0 4rem rgba(255, 107, 0, 0.13),
+    0 1.2rem 3rem rgba(0, 0, 0, 0.28);
+  transform: translateY(-0.25rem);
 }
 
-.contact-circle:hover::before {
-  transform: scale(1.08) rotate(12deg);
-  opacity: 0.8;
+.demo-cta:hover::after {
+  opacity: 1;
 }
 
-.contact-circle:hover::after {
-  transform: scale(0.93) rotate(-8deg);
-  animation-play-state: paused;
+.demo-cta-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.contact-circle span:last-child {
-  position: absolute;
-  top: 1.75rem;
-  right: 1.8rem;
-  font-size: 1.35rem;
-  line-height: 1;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+.demo-cta-head > span:first-child {
+  color: var(--orange);
+  font-family: "Geist Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
+
+.demo-cta-arrow {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid rgba(255, 107, 0, 0.32);
+  border-radius: 50%;
+  color: var(--orange);
+  font-size: 0.9rem;
+  transition:
+    background 0.28s ease,
+    border-color 0.28s ease,
+    color 0.28s ease,
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.demo-cta:hover .demo-cta-arrow {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #080808;
+  transform: translate(0.18rem, -0.18rem);
+}
+
+.demo-cta-title {
+  display: block;
+  color: white;
+  font-family: "Noto Sans SC", sans-serif;
+  font-size: clamp(2.8rem, 4.6vw, 4.6rem);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+  line-height: 0.95;
+}
+
+.demo-cta-foot {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.demo-cta-foot span {
+  color: #685f59;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  transition: color 0.25s ease;
+}
+
+.demo-cta:hover .demo-cta-foot span {
+  color: #9a918b;
 }
 
 .contact-meta {
@@ -2559,25 +2577,12 @@ footer {
     gap: 4rem;
   }
 
-  .contact-action {
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+  .demo-cta {
+    padding: 1.6rem;
   }
 
-  .contact-circle {
-    width: 11rem;
-    height: 11rem;
-    padding: 1.5rem;
-  }
-
-  .contact-circle span:first-child {
-    font-size: 0.92rem;
-  }
-
-  .contact-circle span:last-child {
-    top: 1.35rem;
-    right: 1.4rem;
+  .demo-cta-title {
+    font-size: clamp(2.4rem, 12vw, 3.2rem);
   }
 
   .footer-main {
