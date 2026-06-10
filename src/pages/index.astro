@@ -6,47 +6,70 @@ const engines = [
     index: "01",
     eyebrow: "REQUIREMENT & MATERIALS",
     title: "需求收集与物料管理",
+    titleEn: "Requirements & Materials",
     copy: "通过 Agent 对话讨论、批量导入或需求分析专用 Agent 扫描来收集需求；多 Agent 群聊自动梳理，生成设计文档等全量项目物料。",
+    copyEn: "Collect requirements through Agent discussion, bulk import, or a dedicated analysis Agent that scans your project. Multi-Agent chat then organizes everything into design docs and the full set of project materials.",
     details: ["Agent 对话 / 批量导入 / AI 扫描", "多 Agent 群聊整理项目物料", "自动生成设计文档与参考资料"],
+    detailsEn: ["Agent chat / bulk import / AI scan", "Multi-Agent chat curates materials", "Auto-generated design docs & references"],
     metric: "进入方式",
+    metricEn: "Intake",
     value: "3"
   },
   {
     index: "02",
     eyebrow: "DESIGN & SPEC",
     title: "原型设计与 Spec 审查",
+    titleEn: "Prototyping & Spec Review",
     copy: "集成 Open Design 自动生成提示词，复制至 Stitch 或 Claude Design 生成交互原型；AI 自动生成项目 Spec 与任务分解，人工审核后驱动编码精准落地。",
+    copyEn: "Built-in Open Design generates prompts you paste into Stitch or Claude Design to produce interactive prototypes. AI drafts the project spec and task breakdown; a human review locks the coding target.",
     details: ["OpenDesign 集成，提示词一键生成", "Stitch / Claude Design 原型输出", "AI 生成 Spec，人工审核确认"],
+    detailsEn: ["OpenDesign built in, one-click prompts", "Stitch / Claude Design prototypes", "AI-drafted spec, human-approved"],
     metric: "设计工具",
+    metricEn: "Design tools",
     value: "3+"
   },
   {
     index: "03",
     eyebrow: "CODE · TEST · SHIP",
     title: "编码实现到部署上线",
+    titleEn: "Code, Test & Ship",
     copy: "Claude Code CLI 自主完成编码；测试专用 Agent 全面验证，安全审计 Agent 审查代码；AI 生成一键部署 Shell 脚本，直达生产环境。",
+    copyEn: "Claude Code CLI writes the implementation autonomously. A testing Agent verifies it and a security Agent audits the code, then AI generates a one-click deploy script straight to production.",
     details: ["Claude Code CLI 自动编码", "测试 + 安全 Agent 双重审查", "AI Shell 脚本一键部署"],
+    detailsEn: ["Claude Code CLI writes the code", "Test + security Agent double review", "One-click AI deploy script"],
     metric: "交付链路",
+    metricEn: "Delivery",
     value: "E2E"
   }
 ];
 
 const workflow = [
-  ["01", "需求收集", "通过 Agent 对话、批量导入或 AI 扫描，明确需求目标与验收标准", "REQUIREMENT"],
-  ["02", "物料管理", "多 Agent 群聊自动梳理，生成设计文档等全量项目物料", "MATERIALS"],
-  ["03", "原型设计", "OpenDesign 生成提示词，复制至 Stitch 或 Claude Design 完成交互原型", "PROTOTYPE"],
-  ["04", "Spec 审查", "AI 生成项目规范与任务分解，人工审核后锁定编码目标", "SPEC"],
-  ["05", "编码实现", "Claude Code CLI 理解 Spec 与代码库，自主完成功能开发", "DEVELOPMENT"],
-  ["06", "系统测试", "测试专用 Agent 全面验证，可将新发现的问题直接录入为需求", "TESTING"],
-  ["07", "安全审查", "安全审计专用 Agent 扫描代码，确保合规与安全边界清晰", "SECURITY"],
-  ["08", "部署上线", "AI 生成稳定 Shell 脚本，一键部署到目标生产环境", "DELIVERY"]
+  ["01", "需求收集", "通过 Agent 对话、批量导入或 AI 扫描，明确需求目标与验收标准", "REQUIREMENT", "Requirements", "Define goals and acceptance criteria via Agent chat, bulk import, or AI project scan."],
+  ["02", "物料管理", "多 Agent 群聊自动梳理，生成设计文档等全量项目物料", "MATERIALS", "Materials", "Multi-Agent chat curates and generates design docs and every project material."],
+  ["03", "原型设计", "OpenDesign 生成提示词，复制至 Stitch 或 Claude Design 完成交互原型", "PROTOTYPE", "Prototyping", "OpenDesign generates prompts; paste into Stitch or Claude Design to finish interactive prototypes."],
+  ["04", "Spec 审查", "AI 生成项目规范与任务分解，人工审核后锁定编码目标", "SPEC", "Spec Review", "AI drafts the project spec and task breakdown; a human review locks the coding target."],
+  ["05", "编码实现", "Claude Code CLI 理解 Spec 与代码库，自主完成功能开发", "DEVELOPMENT", "Development", "Claude Code CLI reads the spec and codebase, then implements features autonomously."],
+  ["06", "系统测试", "测试专用 Agent 全面验证，可将新发现的问题直接录入为需求", "TESTING", "Testing", "A dedicated testing Agent verifies everything; new findings flow straight back as requirements."],
+  ["07", "安全审查", "安全审计专用 Agent 扫描代码，确保合规与安全边界清晰", "SECURITY", "Security", "A security-audit Agent scans the code to keep compliance and security boundaries clear."],
+  ["08", "部署上线", "AI 生成稳定 Shell 脚本，一键部署到目标生产环境", "DELIVERY", "Deployment", "AI generates a stable shell script and deploys to the target production environment in one click."]
 ];
 
 const metrics = [
-  ["8 节点", "覆盖完整交付链路"],
-  ["3 种", "需求进入方式"],
-  ["AI + 人", "轻量在环审核"],
-  ["全替代", "外包依赖归零"]
+  ["8 节点", "覆盖完整交付链路", "8 Nodes", "Across the full delivery chain"],
+  ["3 种", "需求进入方式", "3 Ways", "To bring requirements in"],
+  ["AI + 人", "轻量在环审核", "AI + Human", "Lightweight in-the-loop review"],
+  ["全替代", "外包依赖归零", "100%", "Outsourcing replaced"]
+];
+
+const pipeline = [
+  ["01", "需求收集", "Collect", "REQ"],
+  ["02", "物料管理", "Materials", "MAT"],
+  ["03", "原型设计", "Prototype", "PROTO"],
+  ["04", "Spec 审查", "Spec", "SPEC"],
+  ["05", "编码实现", "Develop", "CODE"],
+  ["06", "系统测试", "Test", "TEST"],
+  ["07", "安全审查", "Audit", "AUDIT"],
+  ["08", "部署上线", "Ship", "SHIP"]
 ];
 ---
 
@@ -79,7 +102,7 @@ const metrics = [
     <title>AutoForge — AI 软件工厂系统</title>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <a class="skip-link" href="#main-content" data-en="Skip to content">跳到主要内容</a>
     <div class="page-progress" aria-hidden="true"></div>
     <div class="cursor-aura" aria-hidden="true"></div>
 
@@ -93,8 +116,11 @@ const metrics = [
     </div>
 
     <div class="utility-bar">
-      <span>AI 软件工厂系统 · 完全替代外包</span>
-      <a href="#contact">申请产品演示 <span aria-hidden="true">↗</span></a>
+      <span data-en="AI Software Factory · Fully replaces outsourcing">AI 软件工厂系统 · 完全替代外包</span>
+      <div class="utility-actions">
+        <button class="lang-toggle" type="button" aria-label="Switch language">EN</button>
+        <a href="#contact" data-en={'Request a demo <span aria-hidden="true">↗</span>'}>申请产品演示 <span aria-hidden="true">↗</span></a>
+      </div>
     </div>
 
     <header class="site-header">
@@ -104,15 +130,15 @@ const metrics = [
       </a>
 
       <nav class="desktop-nav" aria-label="主导航">
-        <a href="#platform">平台</a>
-        <a href="#engines">核心能力</a>
-        <a href="#workflow">完整周期</a>
-        <a href="#contact">联系我们</a>
+        <a href="#platform" data-en="Platform">平台</a>
+        <a href="#engines" data-en="Capabilities">核心能力</a>
+        <a href="#workflow" data-en="Full cycle">完整周期</a>
+        <a href="#contact" data-en="Contact">联系我们</a>
       </nav>
 
       <div class="nav-actions">
-        <a class="text-action" href="#pipeline">查看运行状态</a>
-        <a class="nav-button" href="#contact">开始构建 <span aria-hidden="true">↗</span></a>
+        <a class="text-action" href="#pipeline" data-en="View live status">查看运行状态</a>
+        <a class="nav-button" href="#contact" data-en={'Start building <span aria-hidden="true">↗</span>'}>开始构建 <span aria-hidden="true">↗</span></a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">
           <span></span><span></span>
           <span class="sr-only">打开菜单</span>
@@ -120,10 +146,10 @@ const metrics = [
       </div>
 
       <nav class="mobile-nav" id="mobile-nav" aria-label="移动端导航">
-        <a href="#platform">平台</a>
-        <a href="#engines">核心能力</a>
-        <a href="#workflow">完整周期</a>
-        <a href="#contact">联系我们</a>
+        <a href="#platform" data-en="Platform">平台</a>
+        <a href="#engines" data-en="Capabilities">核心能力</a>
+        <a href="#workflow" data-en="Full cycle">完整周期</a>
+        <a href="#contact" data-en="Contact">联系我们</a>
       </nav>
     </header>
 
@@ -145,16 +171,16 @@ const metrics = [
         <div class="hero-layout">
           <div class="hero-main">
             <p class="eyebrow hero-enter">AI SOFTWARE FACTORY SYSTEM</p>
-            <h1 aria-label="外包能做的，AI 全部接管。需求进，产品出，软件工厂化。">
-              <span class="hero-line"><span>外包能做的，</span></span>
-              <span class="hero-line hero-line-accent"><span>AI 全部接管。</span></span>
-              <span class="hero-line"><span>软件工厂化。</span></span>
+            <h1 aria-label="外包能做的，AI 全部接管。软件工厂化。">
+              <span class="hero-line"><span data-en="Everything agencies do,">外包能做的，</span></span>
+              <span class="hero-line hero-line-accent"><span data-en="AI now handles.">AI 全部接管。</span></span>
+              <span class="hero-line"><span data-en="Software, industrialized.">软件工厂化。</span></span>
             </h1>
             <div class="hero-actions hero-enter">
-              <a class="button button-light magnetic" href="#platform">
+              <a class="button button-light magnetic" href="#platform" data-en={'See the full cycle <span aria-hidden="true">↗</span>'}>
                 查看完整周期 <span aria-hidden="true">↗</span>
               </a>
-              <a class="button button-ghost magnetic" href="#engines">了解核心能力</a>
+              <a class="button button-ghost magnetic" href="#engines" data-en="Explore capabilities">了解核心能力</a>
             </div>
           </div>
 
@@ -163,7 +189,7 @@ const metrics = [
               <span>FACTORY STATUS</span>
               <strong><i></i> LIVE</strong>
             </div>
-            <p>
+            <p data-en="AutoForge is an AI software factory covering the full eight-node chain: requirements, materials, prototyping, coding, testing, security review and deployment. It fully replaces traditional outsourcing.">
               AutoForge 是 AI 软件工厂系统，覆盖需求收集、物料管理、原型设计、编码、测试、安全审查到部署上线的完整八节点链路，完全替代传统外包。
             </p>
             <div class="brief-metrics">
@@ -208,9 +234,9 @@ const metrics = [
         <div class="section-intro reveal">
           <div>
             <p class="eyebrow">FROM REQUIREMENT TO PRODUCT</p>
-            <h2>八节点全链路，<br />一个工作空间。</h2>
+            <h2 data-en="Eight nodes,<br />one workspace.">八节点全链路，<br />一个工作空间。</h2>
           </div>
-          <p>
+          <p data-en="From requirements to deployment, every conversation, material, prototype, code change, review and deploy record lives on one traceable delivery chain. Everything an outsourced team does, one AI system covers.">
             从需求收集到产品部署，全部对话、物料、原型、代码变更、审核结果和部署记录都在同一条可追踪的交付链上。外包团队的所有工作，一套 AI 系统全部覆盖。
           </p>
         </div>
@@ -222,28 +248,19 @@ const metrics = [
               <span class="live-label"><i></i> RUNNING</span>
             </div>
             <div class="pipeline-map" id="pipeline">
-              <svg viewBox="0 0 860 340" role="img" aria-label="AutoForge 流水线运行图">
-                <path class="map-line map-line-muted" d="M62 169H214C266 169 270 82 330 82H495C550 82 554 169 610 169H794" />
-                <path class="map-line map-line-active" d="M62 169H214C266 169 270 82 330 82H495C550 82 554 169 610 169H794" />
-                <path class="map-line map-line-muted" d="M330 82V258H610" />
-                <path class="map-line map-line-secondary" d="M330 82V258H610" />
-              </svg>
-              <div class="node node-source">
-                <span>01</span><strong>COLLECT</strong><small>issue #184</small>
-              </div>
-              <div class="node node-build">
-                <span>02</span><strong>DESIGN+SPEC</strong><small>prototype ready</small>
-              </div>
-              <div class="node node-test">
-                <span>03</span><strong>CODE+TEST</strong><small>AI + human</small>
-              </div>
-              <div class="node node-deploy">
-                <span>04</span><strong>DEPLOY</strong><small>production</small>
+              <div class="pipeline-flow" role="img" aria-label="AutoForge 八节点交付链路运行图">
+                {pipeline.map(([num, zh, en, code]) => (
+                  <article class="pnode">
+                    <span class="pnode-idx">{num}</span>
+                    <strong data-en={en}>{zh}</strong>
+                    <small>{code}</small>
+                  </article>
+                ))}
               </div>
             </div>
             <div class="pipeline-console" aria-live="polite">
               <span class="console-time">22:14:08</span>
-              <span class="console-copy">需求 Agent 正在分析 Issue，生成验收标准...</span>
+              <span class="console-copy">需求 Agent 正在分析 Issue，生成验收标准…</span>
               <span class="console-pulse"></span>
             </div>
           </article>
@@ -253,7 +270,7 @@ const metrics = [
               <span>PROJECT MATERIALS</span><span>3 CHANNELS</span>
             </div>
             <div class="velocity-value"><strong data-count="36">0</strong><span> items</span></div>
-            <p>当前项目已归档的需求、设计文档与参考物料</p>
+            <p data-en="Requirements, design docs and references already archived for this project.">当前项目已归档的需求、设计文档与参考物料</p>
             <div class="bar-chart" aria-hidden="true">
               <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
               <i></i><i></i><i></i><i></i>
@@ -273,7 +290,7 @@ const metrics = [
               <i class="satellite satellite-three"></i>
             </div>
             <div class="region-list">
-              <span><i></i> 物料</span><span><i></i> 规范</span><span><i></i> 代码库</span>
+              <span data-en="<i></i> Materials"><i></i> 物料</span><span data-en="<i></i> Specs"><i></i> 规范</span><span data-en="<i></i> Repos"><i></i> 代码库</span>
             </div>
           </article>
         </div>
@@ -281,11 +298,11 @@ const metrics = [
 
       <section class="metrics">
         <div class="metrics-grid section-shell reveal">
-          {metrics.map(([value, label], index) => (
+          {metrics.map(([value, label, valueEn, labelEn], index) => (
             <div class="metric">
               <small>0{index + 1}</small>
-              <strong>{value}</strong>
-              <span>{label}</span>
+              <strong data-en={valueEn}>{value}</strong>
+              <span data-en={labelEn}>{label}</span>
             </div>
           ))}
         </div>
@@ -294,7 +311,7 @@ const metrics = [
       <section class="engines section-shell" id="engines">
         <div class="engine-heading reveal">
           <p class="eyebrow">CORE CAPABILITIES</p>
-          <h2>AI 全程推进，<br />人类掌控决策。</h2>
+          <h2 data-en="AI drives execution,<br />humans hold the call.">AI 全程推进，<br />人类掌控决策。</h2>
         </div>
 
         <div class="engine-list">
@@ -303,10 +320,10 @@ const metrics = [
               <div class="engine-index">{engine.index}</div>
               <div class="engine-content">
                 <p class="eyebrow">{engine.eyebrow}</p>
-                <h3>{engine.title}</h3>
-                <p>{engine.copy}</p>
+                <h3 data-en={engine.titleEn}>{engine.title}</h3>
+                <p data-en={engine.copyEn}>{engine.copy}</p>
                 <ul class="engine-details">
-                  {engine.details.map((detail) => <li>{detail}</li>)}
+                  {engine.details.map((detail, di) => <li data-en={engine.detailsEn[di]}>{detail}</li>)}
                 </ul>
               </div>
               <div class={`engine-visual engine-visual-${engine.index}`} aria-hidden="true">
@@ -317,7 +334,7 @@ const metrics = [
                   <i></i>
                 </div>
                 <div class="engine-metric">
-                  <span>{engine.metric}</span>
+                  <span data-en={engine.metricEn}>{engine.metric}</span>
                   <strong>{engine.value}</strong>
                 </div>
               </div>
@@ -330,21 +347,21 @@ const metrics = [
         <div class="section-intro reveal">
           <div>
             <p class="eyebrow">THE COMPLETE PRODUCT CYCLE</p>
-            <h2>八节点全链路，<br />从需求到上线。</h2>
+            <h2 data-en="Eight nodes,<br />from idea to live.">八节点全链路，<br />从需求到上线。</h2>
           </div>
-          <p>
+          <p data-en="All eight nodes share one project context and audit trail. Any requirement traces back to its materials, prototype, spec, code, test results and final deployment.">
             八个节点共享同一份项目上下文与审计记录。任何需求都能追溯到物料、原型、Spec、代码、测试结果和最终部署。
           </p>
         </div>
 
         <div class="workflow-track reveal">
           <div class="workflow-progress" aria-hidden="true"><i></i></div>
-          {workflow.map(([index, title, copy, label]) => (
+          {workflow.map(([index, title, copy, label, titleEn, copyEn]) => (
             <article>
               <div class="workflow-meta"><span>{index}</span><small>{label}</small></div>
               <div class="workflow-marker"><i></i></div>
-              <h3>{title}</h3>
-              <p>{copy}</p>
+              <h3 data-en={titleEn}>{title}</h3>
+              <p data-en={copyEn}>{copy}</p>
             </article>
           ))}
         </div>
@@ -354,7 +371,7 @@ const metrics = [
         <div class="manifesto-glow" aria-hidden="true"></div>
         <div class="manifesto-inner section-shell reveal">
           <p class="eyebrow">THE AUTOFORGE PRINCIPLE</p>
-          <blockquote>
+          <blockquote data-en="&ldquo;Everything an agency can do,<br /><span>now done by one AI system.</span>&rdquo;">
             “把外包公司能做的所有工作，<br />
             <span>交给 AI 系统完成。</span>”
           </blockquote>
@@ -365,18 +382,18 @@ const metrics = [
       <section class="contact section-shell" id="contact">
         <div class="contact-copy reveal">
           <p class="eyebrow">START BUILDING</p>
-          <h2>带上一个需求，<br />看它变成产品。</h2>
-          <p>接入现有代码库与 Issue，或让 AI 扫描项目。AutoForge 从需求收集开始，经过八个节点，推进到可访问的生产部署，无需外包。</p>
+          <h2 data-en="Bring a requirement,<br />watch it become a product.">带上一个需求，<br />看它变成产品。</h2>
+          <p data-en="Connect an existing repo and issues, or let AI scan the project. AutoForge starts at requirements, moves through eight nodes, and ships a reachable production deployment. No outsourcing needed.">接入现有代码库与 Issue，或让 AI 扫描项目。AutoForge 从需求收集开始，经过八个节点，推进到可访问的生产部署，无需外包。</p>
         </div>
         <div class="contact-action reveal">
           <a class="contact-circle magnetic" href="mailto:hello@autoforge.dev">
-            <span>预约演示</span>
+            <span data-en="Book a demo">预约演示</span>
             <span aria-hidden="true">↗</span>
           </a>
           <div class="contact-meta">
-            <span>支持现有代码库接入</span>
-            <span>支持 GitHub Issue 导入</span>
-            <span>人工审核节点可配置</span>
+            <span data-en="Works with existing repos">支持现有代码库接入</span>
+            <span data-en="Imports GitHub Issues">支持 GitHub Issue 导入</span>
+            <span data-en="Configurable human review gates">人工审核节点可配置</span>
           </div>
         </div>
       </section>
@@ -389,23 +406,23 @@ const metrics = [
             <img class="brand-logo" src="/autoforge-logo.png" alt="" />
             <span>Auto<span>Forge</span></span>
           </a>
-          <p>八节点全链路 AI 软件工厂系统，完全替代传统外包。</p>
+          <p data-en="An eight-node AI software factory that fully replaces traditional outsourcing.">八节点全链路 AI 软件工厂系统，完全替代传统外包。</p>
         </div>
         <div>
           <p class="footer-label">PLATFORM</p>
-          <a href="#platform">产品能力</a>
-          <a href="#engines">核心能力</a>
-          <a href="#workflow">完整产品周期</a>
+          <a href="#platform" data-en="Capabilities">产品能力</a>
+          <a href="#engines" data-en="Core engines">核心能力</a>
+          <a href="#workflow" data-en="Full cycle">完整产品周期</a>
         </div>
         <div>
           <p class="footer-label">COMPANY</p>
-          <a href="mailto:hello@autoforge.dev">联系我们</a>
-          <a href="/privacy">隐私政策</a>
-          <a href="/terms">服务条款</a>
+          <a href="mailto:hello@autoforge.dev" data-en="Contact">联系我们</a>
+          <a href="/privacy" data-en="Privacy">隐私政策</a>
+          <a href="/terms" data-en="Terms">服务条款</a>
         </div>
         <div class="footer-status">
           <p class="footer-label">SYSTEM STATUS</p>
-          <span><i></i> 所有系统运行正常</span>
+          <span data-en="<i></i> All systems operational"><i></i> 所有系统运行正常</span>
         </div>
       </div>
       <div class="footer-bottom section-shell">
@@ -661,13 +678,53 @@ const metrics = [
         }
       }
 
-      const consoleMessages = [
-        "需求 Agent 正在分析 Issue，生成验收标准...",
-        "物料整理完成，Spec 已生成，等待人工审核...",
-        "Claude Code 编码完成，测试 Agent 验证中...",
-        "安全审查通过，一键部署脚本已生成。"
-      ];
+      // ---- Bilingual (ZH / EN) ----
+      const I18N_STORE = "af-lang";
+      const langToggle = document.querySelector(".lang-toggle");
+      const i18nEls = Array.from(document.querySelectorAll("[data-en]")) as HTMLElement[];
+      i18nEls.forEach((el) => {
+        el.dataset.zh = el.innerHTML;
+      });
+
+      const consoleMessages = {
+        zh: [
+          "需求 Agent 正在分析 Issue，生成验收标准…",
+          "物料整理完成，Spec 已生成，等待人工审核…",
+          "Claude Code 编码完成，测试 Agent 验证中…",
+          "安全审查通过，一键部署脚本已生成。"
+        ],
+        en: [
+          "Requirement Agent is parsing the issue and drafting acceptance criteria…",
+          "Materials curated, spec generated, awaiting human review…",
+          "Claude Code finished the implementation, testing Agent verifying…",
+          "Security review passed, one-click deploy script is ready."
+        ]
+      };
+
+      let lang: "zh" | "en" = localStorage.getItem(I18N_STORE) === "en" ? "en" : "zh";
       let messageIndex = 0;
+
+      const applyLang = (next: "zh" | "en") => {
+        lang = next;
+        document.documentElement.lang = next === "en" ? "en" : "zh-CN";
+        document.title =
+          next === "en" ? "AutoForge — AI Software Factory" : "AutoForge — AI 软件工厂系统";
+        document.body.classList.toggle("lang-en", next === "en");
+        i18nEls.forEach((el) => {
+          const value = next === "en" ? el.dataset.en : el.dataset.zh;
+          if (value != null) el.innerHTML = value;
+        });
+        if (langToggle) langToggle.textContent = next === "en" ? "中文" : "EN";
+        const copyEl = document.querySelector(".console-copy");
+        if (copyEl) copyEl.textContent = consoleMessages[next][messageIndex % consoleMessages[next].length];
+      };
+
+      applyLang(lang);
+      langToggle?.addEventListener("click", () => {
+        applyLang(lang === "en" ? "zh" : "en");
+        localStorage.setItem(I18N_STORE, lang);
+      });
+
       const consoleTime = document.querySelector(".console-time");
       const consoleCopy = document.querySelector(".console-copy");
       const liveRate = document.querySelector("[data-live-rate]");
@@ -689,10 +746,12 @@ const metrics = [
       updateClock();
       window.setInterval(updateClock, 1000);
 
+      const pnodes = Array.from(document.querySelectorAll(".pnode"));
+
       if (!reducedMotion) {
         window.setInterval(() => {
-          messageIndex = (messageIndex + 1) % consoleMessages.length;
-          const copy = consoleMessages[messageIndex];
+          messageIndex = (messageIndex + 1) % consoleMessages[lang].length;
+          const copy = consoleMessages[lang][messageIndex];
           if (consoleCopy instanceof HTMLElement) {
             consoleCopy.style.opacity = "0";
             consoleCopy.style.transform = "translateY(0.4rem)";
@@ -707,9 +766,21 @@ const metrics = [
         window.setInterval(() => {
           if (liveRate) liveRate.textContent = (17 + Math.random() * 3.4).toFixed(1);
         }, 1400);
+
+        // Pipeline: cycle the live node along the 8-node chain
+        if (pnodes.length) {
+          let liveNode = 0;
+          pnodes[0].classList.add("is-live");
+          window.setInterval(() => {
+            pnodes[liveNode].classList.remove("is-live");
+            liveNode = (liveNode + 1) % pnodes.length;
+            pnodes[liveNode].classList.add("is-live");
+          }, 1100);
+        }
       } else {
-        if (consoleCopy) consoleCopy.textContent = consoleMessages[0];
+        if (consoleCopy) consoleCopy.textContent = consoleMessages[lang][0];
         if (consoleTime) consoleTime.textContent = formatLocalTime();
+        pnodes.forEach((node) => node.classList.add("is-live"));
       }
 
       const canvas = document.querySelector("#speed-field");
