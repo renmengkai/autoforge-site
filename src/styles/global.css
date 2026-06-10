@@ -752,7 +752,7 @@ button {
 
 .button:active,
 .nav-button:active,
-.contact-circle:active {
+.demo-cta:active {
   scale: 0.98;
 }
 
@@ -2075,71 +2075,119 @@ button {
 
 .contact-action {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.2rem;
 }
 
-.contact-circle {
+.demo-cta {
   position: relative;
-  z-index: 0;
-  display: grid;
-  width: 14rem;
-  height: 14rem;
-  padding: 2rem;
-  place-items: center;
-  border-radius: 50%;
-  color: #090909;
-  background: var(--orange);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2rem;
+  padding: 2rem 2.2rem;
+  border: 1px solid rgba(255, 107, 0, 0.18);
+  border-radius: 0.85rem;
+  color: inherit;
+  background:
+    radial-gradient(circle at var(--mx, 88%) var(--my, 18%), rgba(255, 107, 0, 0.09), transparent 18rem),
+    linear-gradient(150deg, #131313, #0d0d0d);
   text-decoration: none;
-  isolation: isolate;
+  overflow: hidden;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.03);
   transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.25s ease;
+    border-color 0.35s ease,
+    box-shadow 0.4s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.contact-circle span:first-child {
-  max-width: 6rem;
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.25;
-  text-align: center;
-}
-
-.contact-circle::before,
-.contact-circle::after {
+.demo-cta::after {
   position: absolute;
-  inset: -0.65rem;
-  z-index: -1;
+  inset: 0;
   content: "";
-  border: 1px solid rgba(255, 107, 0, 0.28);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 107, 0, 0.11), transparent 18rem);
+  transition: opacity 0.35s ease;
+}
+
+.demo-cta:hover {
+  border-color: rgba(255, 140, 42, 0.45);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.05),
+    0 0 4rem rgba(255, 107, 0, 0.13),
+    0 1.2rem 3rem rgba(0, 0, 0, 0.28);
+  transform: translateY(-0.25rem);
+}
+
+.demo-cta:hover::after {
+  opacity: 1;
+}
+
+.demo-cta-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.demo-cta-head > span:first-child {
+  color: var(--orange);
+  font-family: "Geist Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
+
+.demo-cta-arrow {
+  display: grid;
+  width: 2.1rem;
+  height: 2.1rem;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid rgba(255, 107, 0, 0.32);
   border-radius: 50%;
-  transition: transform 0.5s var(--ease-out-expo);
+  color: var(--orange);
+  font-size: 0.9rem;
+  transition:
+    background 0.28s ease,
+    border-color 0.28s ease,
+    color 0.28s ease,
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.contact-circle::after {
-  inset: -1.15rem;
-  border-color: rgba(255, 107, 0, 0.1);
+.demo-cta:hover .demo-cta-arrow {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #080808;
+  transform: translate(0.18rem, -0.18rem);
 }
 
-.contact-circle:hover {
-  background: white;
+.demo-cta-title {
+  display: block;
+  color: white;
+  font-family: "Noto Sans SC", sans-serif;
+  font-size: clamp(2.8rem, 4.6vw, 4.6rem);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+  line-height: 0.95;
 }
 
-.contact-circle:hover::before {
-  transform: scale(1.06) rotate(9deg);
+.demo-cta-foot {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
 }
 
-.contact-circle:hover::after {
-  transform: scale(0.94) rotate(-7deg);
+.demo-cta-foot span {
+  color: #685f59;
+  font-family: "Geist Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  transition: color 0.25s ease;
 }
 
-.contact-circle span:last-child {
-  position: absolute;
-  top: 1.75rem;
-  right: 1.8rem;
-  font-size: 1.35rem;
-  line-height: 1;
+.demo-cta:hover .demo-cta-foot span {
+  color: #9a918b;
 }
 
 .contact-meta {
@@ -2596,25 +2644,12 @@ footer {
     gap: 4rem;
   }
 
-  .contact-action {
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+  .demo-cta {
+    padding: 1.6rem;
   }
 
-  .contact-circle {
-    width: 11rem;
-    height: 11rem;
-    padding: 1.5rem;
-  }
-
-  .contact-circle span:first-child {
-    font-size: 0.92rem;
-  }
-
-  .contact-circle span:last-child {
-    top: 1.35rem;
-    right: 1.4rem;
+  .demo-cta-title {
+    font-size: clamp(2.4rem, 12vw, 3.2rem);
   }
 
   .footer-main {
