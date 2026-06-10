@@ -587,32 +587,39 @@ const pipeline = [
       );
       observedSections.forEach((section) => navObserver.observe(section));
 
-      // Scroll-linked workflow: light up the node at viewport center, fill the spine
+      // Scroll-linked workflow: exactly one node active at a time (closest to viewport center)
       const workflowArticles = Array.from(document.querySelectorAll(".workflow-track article"));
       const workflowTrackEl = document.querySelector(".workflow-track");
       if (workflowArticles.length && workflowTrackEl instanceof HTMLElement) {
         let maxReached = -1;
-        const workflowObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              const index = workflowArticles.indexOf(entry.target);
-              if (entry.isIntersecting) {
-                entry.target.classList.add("is-active");
-                if (index > maxReached) {
-                  maxReached = index;
-                  workflowTrackEl.style.setProperty(
-                    "--wf-progress",
-                    ((maxReached + 1) / workflowArticles.length).toFixed(3)
-                  );
-                }
-              } else {
-                entry.target.classList.remove("is-active");
-              }
-            });
-          },
-          { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
-        );
-        workflowArticles.forEach((article) => workflowObserver.observe(article));
+
+        const updateWorkflowActive = () => {
+          const mid = window.innerHeight / 2;
+          let closest = 0;
+          let closestDist = Infinity;
+          workflowArticles.forEach((article, i) => {
+            const rect = article.getBoundingClientRect();
+            const dist = Math.abs((rect.top + rect.bottom) / 2 - mid);
+            if (dist < closestDist) { closestDist = dist; closest = i; }
+          });
+          workflowArticles.forEach((article, i) => {
+            article.classList.toggle("is-active", i === closest);
+          });
+          if (closest > maxReached) {
+            maxReached = closest;
+            workflowTrackEl.style.setProperty(
+              "--wf-progress",
+              ((maxReached + 1) / workflowArticles.length).toFixed(3)
+            );
+          }
+        };
+
+        let wfRaf: number | null = null;
+        window.addEventListener("scroll", () => {
+          if (wfRaf !== null) return;
+          wfRaf = requestAnimationFrame(() => { updateWorkflowActive(); wfRaf = null; });
+        }, { passive: true });
+        updateWorkflowActive();
       }
 
       const menuToggle = document.querySelector(".menu-toggle");
