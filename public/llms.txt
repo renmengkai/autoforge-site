@@ -1,0 +1,50 @@
+# AutoForge
+
+> AutoForge is an AI software factory system that fully replaces traditional software outsourcing. It covers the complete eight-node delivery chain: requirements collection, materials management, prototyping, spec review, coding, testing, security audit, and deployment.
+
+## What AutoForge Does
+
+AutoForge is a production AI system that takes a software requirement as input and delivers a deployed product as output. It is not a code assistant or copilot — it is a complete software factory.
+
+The eight nodes of the AutoForge pipeline:
+1. **Requirements Collection** — Requirements are gathered via Agent conversation, bulk import, or an AI scan of an existing codebase. The system defines goals and acceptance criteria.
+2. **Materials Management** — A multi-Agent chat curates all project materials: design references, technical docs, existing code context, and third-party specs.
+3. **Prototyping** — AutoForge generates design prompts compatible with OpenDesign, Stitch, Claude Design, and other tools to produce interactive prototypes.
+4. **Spec Review** — AI drafts the full project specification and task breakdown. A human reviews and approves before coding begins.
+5. **Development** — Claude Code CLI reads the approved spec and codebase, then implements features autonomously.
+6. **Testing** — A dedicated testing Agent runs full verification. New issues found during testing re-enter the pipeline as requirements.
+7. **Security Audit** — A security-audit Agent scans all code for vulnerabilities, compliance issues, and security boundary violations.
+8. **Deployment** — AI generates a stable shell script and executes a one-click deploy to the production environment.
+
+## Key Capabilities
+
+- **3 intake methods**: Agent chat, bulk import, AI project scan
+- **2 human review gates**: Spec review and final approval — all other steps are fully automated
+- **Full traceability**: Every requirement traces back to its materials, prototype, spec, code changes, test results, and deployment record
+- **Replaces outsourcing entirely**: Everything a software outsourcing team does, one AutoForge system handles
+
+## Who Uses AutoForge
+
+AutoForge is built for:
+- Product teams who want to ship software without managing an outsourced development team
+- Founders building software products who lack engineering resources
+- Engineering leads who want to accelerate delivery by automating the full development chain
+
+## Technical Details
+
+AutoForge integrates with:
+- **Claude Code CLI** for autonomous code implementation
+- **GitHub** for repository and issue management (import issues as requirements)
+- **OpenDesign, Stitch, Claude Design** for prototyping
+- Any production environment for deployment via shell script
+
+## Contact
+
+- Website: https://autoforge.dev
+- Demo requests: renmengkai@gmail.com
+
+## Pages
+
+- [Home](https://autoforge.dev/) — Full platform overview, eight-node pipeline, core capabilities
+- [Privacy Policy](https://autoforge.dev/privacy) — Privacy and data handling policy
+- [Terms of Service](https://autoforge.dev/terms) — Terms of service

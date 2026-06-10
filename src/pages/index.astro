@@ -80,22 +80,38 @@ const pipeline = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="AutoForge 是 AI 软件工厂系统，覆盖需求收集、物料管理、原型设计、Spec 审查、编码实现、系统测试、安全审查、部署上线的完整八节点链路，完全替代传统外包。"
+      content="AutoForge is an AI software factory covering the complete eight-node delivery chain: requirements, materials, prototyping, spec review, coding, testing, security audit, and deployment. Fully replaces traditional software outsourcing."
     />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="author" content="AutoForge" />
     <meta name="theme-color" content="#070707" />
-    <meta property="og:title" content="AutoForge — AI 软件工厂系统" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="AutoForge" />
+    <meta property="og:title" content="AutoForge — AI Software Factory System" />
     <meta
       property="og:description"
-      content="外包能做的，AI 全部接管。八节点全链路，需求进，产品出，软件工业化。"
+      content="Everything an outsourcing team does, one AI system handles. Eight-node pipeline: requirements in, product out."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://autoforge.dev/" />
     <meta property="og:image" content="https://autoforge.dev/og-image.png" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="AutoForge — AI 软件工厂系统" />
-    <meta name="twitter:description" content="外包能做的，AI 全部接管。八节点全链路，需求进，产品出，软件工业化。" />
+    <meta name="twitter:title" content="AutoForge — AI Software Factory System" />
+    <meta name="twitter:description" content="Everything an outsourcing team does, one AI system handles. Eight-node pipeline: requirements in, product out." />
     <meta name="twitter:image" content="https://autoforge.dev/og-image.png" />
+
+    <!-- Canonical + hreflang (bilingual single-page) -->
     <link rel="canonical" href="https://autoforge.dev/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://autoforge.dev/" />
+    <link rel="alternate" hreflang="en" href="https://autoforge.dev/" />
+    <link rel="alternate" hreflang="x-default" href="https://autoforge.dev/" />
+
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <link rel="icon" type="image/png" href="/autoforge-logo.png" />
     <link rel="apple-touch-icon" href="/autoforge-logo.png" />
     <link rel="preload" as="image" href="/autoforge-logo.png" />
@@ -105,7 +121,113 @@ const pipeline = [
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <title>AutoForge — AI 软件工厂系统</title>
+    <title>AutoForge — AI Software Factory System</title>
+
+    <!-- JSON-LD structured data -->
+    <script is:inline type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://autoforge.dev/#organization",
+          "name": "AutoForge",
+          "url": "https://autoforge.dev",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://autoforge.dev/autoforge-logo.png"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "renmengkai@gmail.com",
+            "contactType": "sales",
+            "availableLanguage": ["Chinese", "English"]
+          },
+          "description": "AutoForge is an AI software factory system that fully replaces traditional software outsourcing through an eight-node automated delivery pipeline."
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://autoforge.dev/#website",
+          "url": "https://autoforge.dev",
+          "name": "AutoForge",
+          "description": "AI Software Factory System",
+          "publisher": { "@id": "https://autoforge.dev/#organization" },
+          "inLanguage": ["zh-CN", "en"]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://autoforge.dev/#software",
+          "name": "AutoForge",
+          "url": "https://autoforge.dev",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Any",
+          "description": "AutoForge is an AI software factory covering the complete eight-node delivery chain: requirements collection, materials management, prototyping, spec review, coding implementation, system testing, security audit, and production deployment. It fully replaces traditional software outsourcing.",
+          "offers": {
+            "@type": "Offer",
+            "url": "https://autoforge.dev/#contact"
+          },
+          "featureList": [
+            "AI-driven requirements collection via Agent conversation, bulk import, or project scan",
+            "Automated materials management with multi-Agent curation",
+            "Design prompt generation for OpenDesign, Stitch, and Claude Design",
+            "AI-generated project specification and task breakdown with human review gate",
+            "Autonomous coding via Claude Code CLI",
+            "Automated testing with dedicated testing Agent",
+            "Security audit via dedicated security Agent",
+            "One-click deployment via AI-generated shell scripts",
+            "Full traceability across all eight pipeline nodes",
+            "GitHub repository and issue integration"
+          ],
+          "provider": { "@id": "https://autoforge.dev/#organization" }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is AutoForge?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AutoForge is an AI software factory system that covers the complete software delivery chain across eight nodes: requirements collection, materials management, prototyping, spec review, coding, testing, security audit, and deployment. It fully replaces traditional software outsourcing."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does AutoForge replace outsourcing?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AutoForge automates every stage of software development using AI agents. Requirements enter via Agent conversation, bulk import, or AI project scan. The system generates designs, writes specs, implements code via Claude Code CLI, runs tests and security audits, then deploys to production — all with only two lightweight human review gates."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What are the eight nodes of the AutoForge pipeline?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The eight nodes are: (1) Requirements Collection — gather goals via Agent chat, import, or AI scan; (2) Materials Management — multi-Agent curation of docs and references; (3) Prototyping — AI-generated design prompts for tools like Stitch and Claude Design; (4) Spec Review — AI-drafted specification with human approval gate; (5) Development — autonomous coding by Claude Code CLI; (6) Testing — full verification by a dedicated testing Agent; (7) Security Audit — code scan by a security Agent; (8) Deployment — one-click production deploy via AI-generated shell script."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How many human review steps does AutoForge require?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AutoForge has two lightweight human-in-the-loop review gates: the Spec Review (before coding begins) and the final deployment approval. All other steps are fully automated by AI agents."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What integrations does AutoForge support?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AutoForge integrates with GitHub (repository and issue import), Claude Code CLI (autonomous coding), and design tools including OpenDesign, Stitch, and Claude Design. It deploys to any production environment via shell script."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
     <noscript><style>.loader{display:none}</style></noscript>
   </head>
   <body>
@@ -724,7 +846,7 @@ const pipeline = [
         lang = next;
         document.documentElement.lang = next === "en" ? "en" : "zh-CN";
         document.title =
-          next === "en" ? "AutoForge — AI Software Factory" : "AutoForge — AI 软件工厂系统";
+          next === "en" ? "AutoForge — AI Software Factory System" : "AutoForge — AI 软件工厂系统";
         document.body.classList.toggle("lang-en", next === "en");
         i18nEls.forEach((el) => {
           const value = next === "en" ? el.dataset.en : el.dataset.zh;
