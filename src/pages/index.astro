@@ -77,7 +77,7 @@ const pipeline = [
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
       content="AutoForge 是 AI 软件工厂系统，覆盖需求收集、物料管理、原型设计、Spec 审查、编码实现、系统测试、安全审查、部署上线的完整八节点链路，完全替代传统外包。"
@@ -89,10 +89,16 @@ const pipeline = [
       content="外包能做的，AI 全部接管。八节点全链路，需求进，产品出，软件工业化。"
     />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://autoforge.dev/" />
+    <meta property="og:image" content="https://autoforge.dev/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="AutoForge — AI 软件工厂系统" />
     <meta name="twitter:description" content="外包能做的，AI 全部接管。八节点全链路，需求进，产品出，软件工业化。" />
+    <meta name="twitter:image" content="https://autoforge.dev/og-image.png" />
+    <link rel="canonical" href="https://autoforge.dev/" />
     <link rel="icon" type="image/png" href="/autoforge-logo.png" />
+    <link rel="apple-touch-icon" href="/autoforge-logo.png" />
+    <link rel="preload" as="image" href="/autoforge-logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -100,6 +106,7 @@ const pipeline = [
       rel="stylesheet"
     />
     <title>AutoForge — AI 软件工厂系统</title>
+    <noscript><style>.loader{display:none}</style></noscript>
   </head>
   <body>
     <a class="skip-link" href="#main-content" data-en="Skip to content">跳到主要内容</a>
@@ -118,7 +125,7 @@ const pipeline = [
     <div class="utility-bar">
       <span data-en="AI Software Factory · Fully replaces outsourcing">AI 软件工厂系统 · 完全替代外包</span>
       <div class="utility-actions">
-        <button class="lang-toggle" type="button" aria-label="Switch language">EN</button>
+        <button class="lang-toggle" type="button" role="switch" aria-pressed="false" aria-label="Switch language">EN</button>
         <a href="#contact" data-en={'Request a demo <span aria-hidden="true">↗</span>'}>申请产品演示 <span aria-hidden="true">↗</span></a>
       </div>
     </div>
@@ -167,7 +174,7 @@ const pipeline = [
             <h1 aria-label="外包能做的，AI 全部接管。软件工业化。">
               <span class="hero-line"><span data-en="Everything agencies do,">外包能做的，</span></span>
               <span class="hero-line hero-line-accent"><span data-en="AI now handles.">AI 全部接管。</span></span>
-              <span class="hero-line"><span data-en="Software, industrialized.">软件工业化</span></span>
+              <span class="hero-line"><span data-en="Software, industrialized.">软件工业化。</span></span>
             </h1>
             <div class="hero-actions hero-enter">
               <a class="button button-light magnetic" href="#platform" data-en={'See the full cycle <span aria-hidden="true">↗</span>'}>
@@ -700,7 +707,10 @@ const pipeline = [
         ]
       };
 
-      let lang: "zh" | "en" = localStorage.getItem(I18N_STORE) === "en" ? "en" : "zh";
+      const savedLang = localStorage.getItem(I18N_STORE);
+      let lang: "zh" | "en" = savedLang
+        ? (savedLang === "en" ? "en" : "zh")
+        : (navigator.language.startsWith("en") ? "en" : "zh");
       let messageIndex = 0;
 
       const applyLang = (next: "zh" | "en") => {
@@ -713,7 +723,10 @@ const pipeline = [
           const value = next === "en" ? el.dataset.en : el.dataset.zh;
           if (value != null) el.innerHTML = value;
         });
-        if (langToggle) langToggle.textContent = next === "en" ? "中文" : "EN";
+        if (langToggle) {
+          langToggle.textContent = next === "en" ? "中文" : "EN";
+          langToggle.setAttribute("aria-pressed", String(next === "en"));
+        }
         const copyEl = document.querySelector(".console-copy");
         if (copyEl) copyEl.textContent = consoleMessages[next][messageIndex % consoleMessages[next].length];
       };
@@ -743,12 +756,14 @@ const pipeline = [
         if (briefMeta) briefMeta.textContent = `${t} UTC+8`;
       };
       updateClock();
-      window.setInterval(updateClock, 1000);
+      let clockTimer = window.setInterval(updateClock, 1000);
 
       const pnodes = Array.from(document.querySelectorAll(".pnode"));
 
+      let animTimers: number[] = [];
+
       if (!reducedMotion) {
-        window.setInterval(() => {
+        animTimers.push(window.setInterval(() => {
           messageIndex = (messageIndex + 1) % consoleMessages[lang].length;
           const copy = consoleMessages[lang][messageIndex];
           if (consoleCopy instanceof HTMLElement) {
@@ -761,21 +776,57 @@ const pipeline = [
             }, 220);
           }
           if (consoleTime) consoleTime.textContent = formatLocalTime();
-        }, 3000);
-        window.setInterval(() => {
+        }, 3000));
+        animTimers.push(window.setInterval(() => {
           if (liveRate) liveRate.textContent = (17 + Math.random() * 3.4).toFixed(1);
-        }, 1400);
+        }, 1400));
 
         // Pipeline: cycle the live node along the 8-node chain
         if (pnodes.length) {
           let liveNode = 0;
           pnodes[0].classList.add("is-live");
-          window.setInterval(() => {
+          animTimers.push(window.setInterval(() => {
             pnodes[liveNode].classList.remove("is-live");
             liveNode = (liveNode + 1) % pnodes.length;
             pnodes[liveNode].classList.add("is-live");
-          }, 1100);
+          }, 1100));
         }
+
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden) {
+            animTimers.forEach(window.clearInterval);
+            animTimers = [];
+            window.clearInterval(clockTimer);
+          } else {
+            updateClock();
+            clockTimer = window.setInterval(updateClock, 1000);
+            animTimers.push(window.setInterval(() => {
+              messageIndex = (messageIndex + 1) % consoleMessages[lang].length;
+              const copy = consoleMessages[lang][messageIndex];
+              if (consoleCopy instanceof HTMLElement) {
+                consoleCopy.style.opacity = "0";
+                consoleCopy.style.transform = "translateY(0.4rem)";
+                window.setTimeout(() => {
+                  consoleCopy.textContent = copy;
+                  consoleCopy.style.opacity = "1";
+                  consoleCopy.style.transform = "translateY(0)";
+                }, 220);
+              }
+              if (consoleTime) consoleTime.textContent = formatLocalTime();
+            }, 3000));
+            animTimers.push(window.setInterval(() => {
+              if (liveRate) liveRate.textContent = (17 + Math.random() * 3.4).toFixed(1);
+            }, 1400));
+            if (pnodes.length) {
+              let liveNode = 0;
+              animTimers.push(window.setInterval(() => {
+                pnodes[liveNode].classList.remove("is-live");
+                liveNode = (liveNode + 1) % pnodes.length;
+                pnodes[liveNode].classList.add("is-live");
+              }, 1100));
+            }
+          }
+        });
       } else {
         if (consoleCopy) consoleCopy.textContent = consoleMessages[lang][0];
         if (consoleTime) consoleTime.textContent = formatLocalTime();
