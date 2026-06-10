@@ -1890,17 +1890,6 @@ button {
   color: #8a8480;
 }
 
-/* Once scroll tracking has picked a winner, suppress hover on non-active articles */
-.workflow-track:has(article.is-active) article:not(.is-active):hover {
-  padding-inline: 0;
-  background: none;
-}
-.workflow-track:has(article.is-active) article:not(.is-active):hover .workflow-marker i {
-  background: var(--bg);
-  box-shadow: none;
-  transform: translate(-50%, -50%) scale(1);
-}
-
 .workflow-track h3 {
   margin: 0;
   font-size: clamp(1.25rem, 2vw, 2rem);
