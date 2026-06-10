@@ -199,7 +199,7 @@ button {
   padding-bottom: 0.8rem;
   color: var(--muted);
   font-family: "Geist Mono", monospace;
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   letter-spacing: 0.12em;
 }
 
@@ -230,7 +230,7 @@ button {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   color: #68635f;
   background: #050505;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
 }
 
 .utility-bar a {
@@ -289,7 +289,7 @@ button {
   align-items: center;
   gap: 0.7rem;
   color: white;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
   letter-spacing: -0.03em;
@@ -318,7 +318,7 @@ button {
 .text-action {
   position: relative;
   color: #8c8782;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   text-decoration: none;
   transition: color 0.25s ease;
 }
@@ -364,7 +364,7 @@ button {
   border: 1px solid var(--line-strong);
   border-radius: 0.45rem;
   color: white;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   text-decoration: none;
   transition:
     color 0.25s ease,
@@ -540,7 +540,7 @@ button {
   left: 50%;
   color: rgba(255, 160, 94, 0.52);
   font-family: "Geist Mono", monospace;
-  font-size: 0.48rem;
+  font-size: 0.8rem;
   letter-spacing: 0.08em;
   white-space: nowrap;
   transform: translateX(-50%);
@@ -574,7 +574,7 @@ button {
   margin: 0 0 1.7rem;
   color: var(--orange);
   font-family: "Geist Mono", monospace;
-  font-size: 0.67rem;
+  font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.08em;
 }
@@ -666,7 +666,7 @@ button {
   gap: 2.6rem;
   padding: 0 1.25rem;
   border-radius: 999px;
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
   transition:
@@ -740,7 +740,7 @@ button {
   margin-bottom: 1.3rem;
   color: #6e6964;
   font-family: "Geist Mono", monospace;
-  font-size: 0.54rem;
+  font-size: 0.8rem;
   letter-spacing: 0.09em;
 }
 
@@ -764,7 +764,7 @@ button {
 .hero-brief > p {
   margin: 0;
   color: #aaa39e;
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.65;
   text-wrap: pretty;
 }
@@ -794,7 +794,7 @@ button {
   margin-bottom: 0.5rem;
   color: #66615c;
   font-family: "Geist Mono", monospace;
-  font-size: 0.5rem;
+  font-size: 0.8rem;
   letter-spacing: 0.06em;
 }
 
@@ -812,7 +812,7 @@ button {
   padding-top: 0.8rem;
   color: #625d58;
   font-family: "Geist Mono", monospace;
-  font-size: 0.5rem;
+  font-size: 0.8rem;
   letter-spacing: 0.05em;
 }
 
@@ -846,7 +846,7 @@ button {
   justify-content: space-between;
   color: #6b6661;
   font-family: "Geist Mono", monospace;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   letter-spacing: 0.08em;
   animation-delay: 1.55s;
 }
@@ -931,7 +931,7 @@ button {
   padding: 1rem;
   color: #625e5a;
   font-family: "Geist Mono", monospace;
-  font-size: 0.67rem;
+  font-size: 0.8rem;
   letter-spacing: 0.12em;
 }
 
@@ -989,7 +989,7 @@ button {
   max-width: 29rem;
   margin: 0 0 0.4rem auto;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1.75;
   text-wrap: pretty;
 }
@@ -1102,7 +1102,7 @@ button {
   justify-content: space-between;
   color: #68635f;
   font-family: "Geist Mono", monospace;
-  font-size: 0.61rem;
+  font-size: 0.8rem;
   letter-spacing: 0.08em;
 }
 
@@ -1184,20 +1184,20 @@ button {
 .node span {
   color: var(--orange);
   font-family: "Geist Mono", monospace;
-  font-size: 0.55rem;
+  font-size: 0.8rem;
 }
 
 .node strong {
   margin: 0.3rem 0;
   color: #e4e0dd;
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   letter-spacing: 0.08em;
 }
 
 .node small {
   color: #6f6a65;
   font-family: "Geist Mono", monospace;
-  font-size: 0.53rem;
+  font-size: 0.8rem;
 }
 
 .node-source {
@@ -1235,7 +1235,7 @@ button {
   color: #8e8883;
   background: #090909;
   font-family: "Geist Mono", monospace;
-  font-size: 0.62rem;
+  font-size: 0.8rem;
 }
 
 .console-time {
@@ -1287,7 +1287,7 @@ button {
 .system-card > p {
   margin: 0.8rem 0 0;
   color: #77716c;
-  font-size: 0.78rem;
+  font-size: 1rem;
 }
 
 .bar-chart {
@@ -1407,7 +1407,7 @@ button {
   gap: 1rem;
   color: #746f6a;
   font-family: "Geist Mono", monospace;
-  font-size: 0.55rem;
+  font-size: 0.8rem;
 }
 
 .region-list i {
@@ -1473,7 +1473,7 @@ button {
   right: 1.2rem;
   color: #494542;
   font-family: "Geist Mono", monospace;
-  font-size: 0.52rem;
+  font-size: 0.8rem;
 }
 
 .metric:last-child {
@@ -1493,7 +1493,7 @@ button {
   display: block;
   margin-top: 3.8rem;
   color: #736d68;
-  font-size: 0.75rem;
+  font-size: 1rem;
 }
 
 .engine-heading {
@@ -1567,7 +1567,7 @@ button {
   align-self: start;
   color: #5f5a56;
   font-family: "Geist Mono", monospace;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
 }
 
 .engine-content {
@@ -1589,7 +1589,7 @@ button {
 .engine-content > p:not(.eyebrow) {
   margin: 0;
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 1rem;
   line-height: 1.75;
   text-wrap: pretty;
 }
@@ -1607,7 +1607,7 @@ button {
   align-items: center;
   gap: 0.7rem;
   color: #aaa49e;
-  font-size: 0.72rem;
+  font-size: 0.9rem;
 }
 
 .engine-details li::before {
@@ -1777,7 +1777,7 @@ button {
 
 .engine-metric span {
   color: #69645f;
-  font-size: 0.63rem;
+  font-size: 0.8rem;
 }
 
 .engine-metric strong {
@@ -1848,14 +1848,14 @@ button {
 .workflow-meta > span {
   color: #645f5a;
   font-family: "Geist Mono", monospace;
-  font-size: 0.65rem;
+  font-size: 0.8rem;
   transition: color 0.3s ease;
 }
 
 .workflow-meta small {
   color: #4e4a46;
   font-family: "Geist Mono", monospace;
-  font-size: 0.47rem;
+  font-size: 0.8rem;
   letter-spacing: 0.08em;
   transition: color 0.3s ease;
 }
@@ -1924,7 +1924,7 @@ button {
   max-width: 30rem;
   margin: 0;
   color: #716c67;
-  font-size: 0.83rem;
+  font-size: 1rem;
   line-height: 1.78;
   letter-spacing: 0.01em;
 }
@@ -1980,7 +1980,7 @@ button {
 .manifesto-inner > p:last-child {
   color: #716b66;
   font-family: "Geist Mono", monospace;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   letter-spacing: 0.1em;
 }
 
@@ -2072,7 +2072,7 @@ button {
   gap: 0.85rem;
   color: #726c67;
   font-family: "Geist Mono", monospace;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   letter-spacing: 0.03em;
 }
 
@@ -2086,7 +2086,7 @@ button {
 .contact-meta span::before {
   color: var(--orange);
   content: "—";
-  font-size: 0.5rem;
+  font-size: 0.8rem;
   opacity: 0.7;
 }
 
@@ -2118,13 +2118,13 @@ footer {
   max-width: 17rem;
   margin: 1rem 0 0;
   color: #625d59;
-  font-size: 0.75rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
 .footer-main a:not(.brand) {
   color: #77716c;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   text-decoration: none;
   transition: color 0.25s ease;
 }
@@ -2137,13 +2137,13 @@ footer {
   margin: 0 0 0.8rem;
   color: #4f4b48;
   font-family: "Geist Mono", monospace;
-  font-size: 0.58rem;
+  font-size: 0.8rem;
   letter-spacing: 0.08em;
 }
 
 .footer-status span {
   color: #77716c;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
 }
 
 .footer-bottom {
@@ -2154,7 +2154,7 @@ footer {
   border-top: 1px solid rgba(255, 255, 255, 0.055);
   color: #4a4542;
   font-family: "Geist Mono", monospace;
-  font-size: 0.54rem;
+  font-size: 0.8rem;
   letter-spacing: 0.07em;
 }
 
@@ -2303,7 +2303,7 @@ footer {
     padding: 1.2rem 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     color: #aaa49e;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-decoration: none;
   }
 
