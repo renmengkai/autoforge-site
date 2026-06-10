@@ -789,228 +789,178 @@ const pipeline = [
         pnodes.forEach((node) => node.classList.add("is-live"));
       }
 
+      // ---- Pipeline River ----
+      // Particles flow left→right along gentle S-curve streams, representing
+      // work items moving through the 8-node delivery pipeline.
       const canvas = document.querySelector("#speed-field");
       if (canvas instanceof HTMLCanvasElement) {
-        const context = canvas.getContext("2d");
-        type Point = {
-          x: number;
-          y: number;
-        };
-        type Lane = {
-          start: Point;
-          controlA: Point;
-          controlB: Point;
-          end: Point;
+        const ctx = canvas.getContext("2d");
+
+        type Stream = {
+          start: { x: number; y: number };
+          cp0: { x: number; y: number };
+          cp1: { x: number; y: number };
+          end: { x: number; y: number };
           alpha: number;
           width: number;
           hue: number;
         };
-        type Spark = {
-          lane: number;
-          progress: number;
+        type Particle = {
+          stream: number;
+          t: number;
           speed: number;
           tail: number;
-          width: number;
+          size: number;
           alpha: number;
           hue: number;
           glow: boolean;
         };
 
-        const lanes: Lane[] = [];
-        const sparks: Spark[] = [];
-        let width = 0;
-        let height = 0;
+        const streams: Stream[] = [];
+        const particles: Particle[] = [];
+        let W = 0;
+        let H = 0;
         let dpr = 1;
-        let frame = 0;
-        const baseOrigin = { x: 0, y: 0 };
-        const camera = { x: 0, y: 0 };
+        let raf = 0;
 
-        const randomBetween = (minimum: number, maximum: number) =>
-          minimum + Math.random() * (maximum - minimum);
+        const rnd = (a: number, b: number) => a + Math.random() * (b - a);
 
-        const pointOnCurve = (lane: Lane, progress: number) => {
-          const t = Math.max(0, Math.min(progress, 1));
-          const inverse = 1 - t;
-          const originInfluence = inverse * inverse;
+        const atBez = (s: Stream, t: number) => {
+          const u = 1 - t;
           return {
-            x:
-              inverse ** 3 * lane.start.x +
-              3 * inverse ** 2 * t * lane.controlA.x +
-              3 * inverse * t ** 2 * lane.controlB.x +
-              t ** 3 * lane.end.x +
-              camera.x * originInfluence,
-            y:
-              inverse ** 3 * lane.start.y +
-              3 * inverse ** 2 * t * lane.controlA.y +
-              3 * inverse * t ** 2 * lane.controlB.y +
-              t ** 3 * lane.end.y +
-              camera.y * originInfluence
+            x: u ** 3 * s.start.x + 3 * u ** 2 * t * s.cp0.x + 3 * u * t ** 2 * s.cp1.x + t ** 3 * s.end.x,
+            y: u ** 3 * s.start.y + 3 * u ** 2 * t * s.cp0.y + 3 * u * t ** 2 * s.cp1.y + t ** 3 * s.end.y
           };
         };
 
-        const createLane = (index: number, count: number): Lane => {
-          const ratio = index / Math.max(count - 1, 1);
-          let end: Point;
-
-          if (ratio < 0.5) {
-            const spread = ratio / 0.5;
-            end = {
-              x: width * randomBetween(0.1 + spread * 0.65, 0.33 + spread * 0.9),
-              y: height * randomBetween(0.82, 1.16)
-            };
-          } else if (ratio < 0.82) {
-            end = {
-              x: width * randomBetween(1.02, 1.2),
-              y: height * randomBetween(0.22, 0.78)
-            };
-          } else {
-            end = {
-              x: width * randomBetween(0.18, 0.62),
-              y: height * randomBetween(0.7, 1.08)
-            };
+        const buildStreams = () => {
+          streams.length = 0;
+          const N = W < 760 ? 14 : 26;
+          for (let i = 0; i < N; i++) {
+            const ratio = i / (N - 1);
+            // Vertical spread: denser toward the center third (main channel)
+            const yBase = H * (0.04 + ratio * 0.92);
+            // Each stream is an S-curve: first half bows one way, second half the other
+            const sign = Math.random() > 0.5 ? 1 : -1;
+            const amp = rnd(0.04, 0.17) * H * sign;
+            streams.push({
+              start: { x: -50, y: yBase + rnd(-0.03, 0.03) * H },
+              cp0: { x: W * 0.26, y: yBase + amp },
+              cp1: { x: W * 0.74, y: yBase - amp * 0.5 },
+              end: { x: W + 50, y: yBase + rnd(-0.03, 0.03) * H },
+              alpha: rnd(0.022, 0.072),
+              width: rnd(0.28, 0.88),
+              hue: rnd(20, 34)
+            });
           }
-
-          const dx = end.x - baseOrigin.x;
-          const dy = end.y - baseOrigin.y;
-          const distance = Math.max(Math.hypot(dx, dy), 1);
-          const normalX = -dy / distance;
-          const normalY = dx / distance;
-          const bend = randomBetween(-0.15, 0.15) * Math.min(width, height);
-
-          return {
-            start: { ...baseOrigin },
-            controlA: {
-              x: baseOrigin.x + dx * randomBetween(0.11, 0.2) + normalX * bend * 0.18,
-              y: baseOrigin.y + dy * randomBetween(0.08, 0.16) + normalY * bend * 0.18
-            },
-            controlB: {
-              x: baseOrigin.x + dx * randomBetween(0.55, 0.72) + normalX * bend,
-              y: baseOrigin.y + dy * randomBetween(0.48, 0.68) + normalY * bend
-            },
-            end,
-            alpha: randomBetween(0.035, 0.13),
-            width: randomBetween(0.45, 1.15),
-            hue: randomBetween(18, 34)
-          };
         };
 
-        const resetSpark = (spark: Spark, initial = false) => {
-          spark.lane = Math.floor(Math.random() * lanes.length);
-          spark.progress = initial ? Math.random() : randomBetween(-0.14, -0.02);
-          spark.speed = randomBetween(0.0015, 0.0042);
-          spark.tail = randomBetween(0.025, 0.11);
-          spark.width = randomBetween(0.55, 2.25);
-          spark.alpha = randomBetween(0.28, 0.92);
-          spark.hue = randomBetween(20, 40);
-          spark.glow = Math.random() > 0.74;
+        const resetParticle = (p: Particle, stagger = false) => {
+          p.stream = Math.floor(Math.random() * streams.length);
+          p.t = stagger ? Math.random() : rnd(-0.07, -0.01);
+          p.speed = rnd(0.0006, 0.0024);
+          p.tail = rnd(0.034, 0.11);
+          p.size = rnd(0.55, 2.3);
+          p.alpha = rnd(0.25, 0.88);
+          p.hue = rnd(20, 44);
+          p.glow = Math.random() > 0.72;
         };
 
-        const resizeCanvas = () => {
+        const resize = () => {
           dpr = Math.min(window.devicePixelRatio || 1, 2);
-          width = canvas.clientWidth;
-          height = canvas.clientHeight;
-          canvas.width = width * dpr;
-          canvas.height = height * dpr;
-          context?.setTransform(dpr, 0, 0, dpr, 0, 0);
-          baseOrigin.x = width * (width < 760 ? 0.68 : 0.665);
-          baseOrigin.y = height * (width < 760 ? 0.43 : 0.405);
-
-          const laneCount = width < 760 ? 24 : 42;
-          const sparkCount = width < 760 ? 54 : Math.min(118, Math.round(width / 15));
-          lanes.length = 0;
-          sparks.length = 0;
-          for (let index = 0; index < laneCount; index += 1) {
-            lanes.push(createLane(index, laneCount));
-          }
-          for (let index = 0; index < sparkCount; index += 1) {
-            const spark = {} as Spark;
-            resetSpark(spark, true);
-            sparks.push(spark);
+          W = canvas.clientWidth;
+          H = canvas.clientHeight;
+          canvas.width = W * dpr;
+          canvas.height = H * dpr;
+          ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+          buildStreams();
+          const count = W < 760 ? 56 : Math.min(138, Math.round(W / 13));
+          particles.length = 0;
+          for (let i = 0; i < count; i++) {
+            const p = {} as Particle;
+            resetParticle(p, true);
+            particles.push(p);
           }
         };
 
-        const drawLane = (lane: Lane) => {
-          if (!context) return;
-          context.beginPath();
-          context.moveTo(lane.start.x + camera.x, lane.start.y + camera.y);
-          context.bezierCurveTo(
-            lane.controlA.x + camera.x * 0.72,
-            lane.controlA.y + camera.y * 0.72,
-            lane.controlB.x + camera.x * 0.18,
-            lane.controlB.y + camera.y * 0.18,
-            lane.end.x,
-            lane.end.y
-          );
-          context.strokeStyle = `hsla(${lane.hue}, 92%, 48%, ${lane.alpha})`;
-          context.lineWidth = lane.width;
-          context.stroke();
+        const drawStream = (s: Stream) => {
+          if (!ctx) return;
+          ctx.beginPath();
+          ctx.moveTo(s.start.x, s.start.y);
+          ctx.bezierCurveTo(s.cp0.x, s.cp0.y, s.cp1.x, s.cp1.y, s.end.x, s.end.y);
+          ctx.strokeStyle = `hsla(${s.hue}, 88%, 52%, ${s.alpha})`;
+          ctx.lineWidth = s.width;
+          ctx.stroke();
         };
 
-        const drawSpark = (spark: Spark) => {
-          if (!context || spark.progress <= 0) return;
-          const lane = lanes[spark.lane];
-          const segments = 12;
-          const start = Math.max(0, spark.progress - spark.tail * (0.35 + spark.progress * 0.9));
-
-          for (let segment = 0; segment < segments; segment += 1) {
-            const fromProgress = start + (spark.progress - start) * (segment / segments);
-            const toProgress = start + (spark.progress - start) * ((segment + 1) / segments);
-            const from = pointOnCurve(lane, fromProgress);
-            const to = pointOnCurve(lane, toProgress);
-            const intensity = (segment + 1) / segments;
-            context.beginPath();
-            context.moveTo(from.x, from.y);
-            context.lineTo(to.x, to.y);
-            context.strokeStyle = `hsla(${spark.hue + intensity * 9}, 100%, ${48 + intensity * 28}%, ${
-              spark.alpha * intensity ** 1.8
-            })`;
-            context.lineWidth = spark.width * (0.45 + intensity * 0.95) * (0.55 + spark.progress);
-            context.lineCap = "round";
-            context.stroke();
+        const drawParticle = (p: Particle) => {
+          if (!ctx || p.t <= 0 || p.t > 1.02) return;
+          const s = streams[p.stream];
+          const SEGS = 11;
+          const t0 = Math.max(0, p.t - p.tail);
+          for (let k = 0; k < SEGS; k++) {
+            const ta = t0 + (p.t - t0) * (k / SEGS);
+            const tb = t0 + (p.t - t0) * ((k + 1) / SEGS);
+            const pa = atBez(s, ta);
+            const pb = atBez(s, tb);
+            const itx = (k + 1) / SEGS;
+            ctx.beginPath();
+            ctx.moveTo(pa.x, pa.y);
+            ctx.lineTo(pb.x, pb.y);
+            ctx.strokeStyle = `hsla(${p.hue + itx * 10}, 100%, ${44 + itx * 32}%, ${p.alpha * itx ** 1.7})`;
+            ctx.lineWidth = p.size * (0.35 + itx * 0.95);
+            ctx.lineCap = "round";
+            ctx.stroke();
           }
-
-          if (spark.glow && spark.progress > 0.35) {
-            const head = pointOnCurve(lane, spark.progress);
-            const radius = 2 + spark.progress * 5;
-            const glow = context.createRadialGradient(head.x, head.y, 0, head.x, head.y, radius);
-            glow.addColorStop(0, "rgba(255, 226, 184, 0.9)");
-            glow.addColorStop(0.28, "rgba(255, 132, 36, 0.55)");
-            glow.addColorStop(1, "rgba(255, 88, 0, 0)");
-            context.fillStyle = glow;
-            context.fillRect(head.x - radius, head.y - radius, radius * 2, radius * 2);
+          if (p.glow) {
+            // Fade in at entry, fade out at exit
+            const edgeFade = Math.min(p.t / 0.07, 1) * Math.min((1.02 - p.t) / 0.07, 1);
+            const radius = (1.8 + p.t * (1 - p.t) * 5) * edgeFade;
+            if (radius > 0.3) {
+              const head = atBez(s, p.t);
+              const g = ctx.createRadialGradient(head.x, head.y, 0, head.x, head.y, radius);
+              g.addColorStop(0, "rgba(255, 224, 158, 0.88)");
+              g.addColorStop(0.32, "rgba(255, 128, 26, 0.50)");
+              g.addColorStop(1, "rgba(255, 72, 0, 0)");
+              ctx.fillStyle = g;
+              ctx.fillRect(head.x - radius, head.y - radius, radius * 2, radius * 2);
+            }
           }
         };
 
         const draw = () => {
-          if (!context) return;
-          context.clearRect(0, 0, width, height);
-          camera.x += (pointerTarget.x * width * 0.025 - camera.x) * 0.035;
-          camera.y += (pointerTarget.y * height * 0.018 - camera.y) * 0.035;
+          if (!ctx) return;
+          ctx.clearRect(0, 0, W, H);
 
-          const originX = baseOrigin.x + camera.x;
-          const originY = baseOrigin.y + camera.y;
-          const glow = context.createRadialGradient(originX, originY, 0, originX, originY, width * 0.48);
-          glow.addColorStop(0, "rgba(255, 103, 10, 0.24)");
-          glow.addColorStop(0.22, "rgba(164, 48, 0, 0.13)");
-          glow.addColorStop(1, "rgba(0, 0, 0, 0)");
-          context.fillStyle = glow;
-          context.fillRect(0, 0, width, height);
+          // Ambient glow anchored to the visible hero area (right half exposed by shade)
+          const gx = W * 0.62;
+          const gy = H * 0.48;
+          const amb = ctx.createRadialGradient(gx, gy, 0, gx, gy, W * 0.54);
+          amb.addColorStop(0, "rgba(255, 88, 5, 0.10)");
+          amb.addColorStop(0.44, "rgba(140, 38, 0, 0.045)");
+          amb.addColorStop(1, "rgba(0, 0, 0, 0)");
+          ctx.fillStyle = amb;
+          ctx.fillRect(0, 0, W, H);
 
-          lanes.forEach(drawLane);
-          sparks.forEach((spark) => {
-            spark.progress += spark.speed * (0.22 + Math.max(spark.progress, 0) * 2.9);
-            drawSpark(spark);
-            if (spark.progress > 1.08) resetSpark(spark);
+          streams.forEach(drawStream);
+
+          particles.forEach((p) => {
+            // Slightly faster near edges, slower mid-flow → natural density pooling
+            const rhythm = 0.62 + Math.pow(Math.abs(p.t - 0.5) * 1.9, 0.65) * 0.58;
+            p.t += p.speed * rhythm;
+            drawParticle(p);
+            if (p.t > 1.12) resetParticle(p);
           });
-          frame = requestAnimationFrame(draw);
+
+          raf = requestAnimationFrame(draw);
         };
 
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
+        resize();
+        window.addEventListener("resize", resize);
         if (!reducedMotion) draw();
         else {
           draw();
-          cancelAnimationFrame(frame);
+          cancelAnimationFrame(raf);
         }
       }
     </script>
