@@ -1,48 +1,57 @@
 # AutoForge
 
-> AutoForge is an AI software factory (AI 软件工厂) and software industrialization (软件工业化) platform. It runs a fully automated Agent workflow powered by Claude Code CLI to deliver software from requirements to production — entirely replacing traditional outsourcing.
+> AutoForge is a human-gated autonomous software factory (人类轻度在环的自主软件产线). It connects to any Git repository, uses Claude Code as its execution engine, and runs analysis, isolated implementation, testing, and security audit on one auditable line. Two human gates — requirement review and code review — keep the decision of what to build and what to merge in human hands. Software is priced per requirement, not per engineering hour.
 
 ## What AutoForge Does
 
-AutoForge is a production AI system that takes a software requirement as input and delivers a deployed product as output. It is not a code assistant or copilot — it is a complete software factory with an automated eight-node workflow.
+AutoForge takes a software requirement as input and produces a merged, delivered change as output — with a human signing off at two well-defined gates. It is not a chat assistant, a CI/CD tool, or a code-review tool. It is a runnable software line that strings agents, tools, rules, and audit together, and it runs local-first as a desktop application.
 
-The eight nodes of the AutoForge automation workflow (自动化工作流):
-1. **Requirements Collection (需求收集)** — Requirements are gathered via Agent conversation, bulk import, or an AI scan of an existing codebase. The system defines goals and acceptance criteria.
-2. **Materials Management (物料管理)** — A multi-Agent chat curates all project materials: design references, technical docs, existing code context, and third-party specs.
-3. **Prototyping (原型设计)** — AutoForge generates design prompts compatible with OpenDesign, Stitch, Claude Design, and other tools to produce interactive prototypes.
-4. **Spec Review (Spec 审查)** — AI drafts the full project specification and task breakdown. A human reviews and approves before coding begins. This is one of two human-in-the-loop gates.
-5. **Development (编码实现)** — Claude Code CLI reads the approved spec and codebase, then implements features autonomously. This is the core AI coding (AI 编码) step.
-6. **Testing (系统测试)** — A dedicated testing Agent runs full verification. New issues found during testing re-enter the pipeline as requirements.
-7. **Security Audit (安全审查)** — A security-audit Agent scans all code for vulnerabilities, compliance issues, and security boundary violations.
-8. **Deployment (部署上线)** — AI generates a stable shell script and executes automated deployment (自动部署) to the production environment in one click.
+The core idea: human judgment is scarce, so concentrate it on two questions and automate the rest.
+1. **Should we build it?** — Is the requirement real, feasible, and worth doing.
+2. **Is it right to ship?** — Do the code, tests, and risk meet the bar to merge.
+
+## The Pipeline (eight stages, two are human gates)
+
+1. **Intake (需求进入)** — Requirements arrive via quick entry, meeting notes, GitHub / Webhook, or an embeddable widget, with automatic duplicate and priority analysis. The Blueprint Studio can iterate a large idea into a PRD, spec, and executable tasks before they enter the shared requirement pool.
+2. **Sanitize (输入消毒)** — External requirements, web pages, and tool return values are treated as untrusted data, with obvious prompt injection detected and flagged.
+3. **Analyze (分析分流)** — A requirement-analysis Agent breaks down the problem, drafts acceptance criteria, and routes it to the right path.
+4. **Requirement Gate (需求审核 · 闸口 1)** — A human confirms the problem is real, the scope clear, and the approach worth doing. This is the first of two human-in-the-loop gates.
+5. **Implement (隔离实现)** — Claude Code implements the change inside an isolated Git worktree, producing a change summary and delivery artifacts. Backpressure flow control and concurrency slots (default 5) keep the long-tail backlog moving without overloading the model or system.
+6. **Test & Audit (测试与审计)** — A testing Agent verifies the change; functional and security audits are recorded pipeline stages, not verbal promises.
+7. **Code Gate (代码审核 · 闸口 2)** — A human decides whether to merge against the change summary, diff, tests, and security results. This is the second human gate.
+8. **Merge (合并交付)** — The change merges through a single controlled entry point, with a full end-to-end trace of where every result came from.
 
 ## Key Capabilities
 
-- **AI Agent workflow**: Every node is driven by a specialized AI Agent
-- **Claude Code CLI**: Autonomous coding agent that reads specs and implements features
-- **Software industrialization (软件工业化)**: Treats software delivery as a factory pipeline, not a craft
-- **Automation (自动化)**: 6 of 8 nodes are fully automated; only 2 lightweight human review gates remain
-- **Full traceability**: Every requirement traces back to its materials, prototype, spec, code changes, test results, and deployment record
-- **Replaces outsourcing entirely**: Everything a software outsourcing team does, one AutoForge system handles
+- **Human-gated autonomy**: Agents run analysis, implementation, testing, and delivery; humans appear only at the requirement gate and the code gate, and hold the final merge.
+- **Claude Code execution engine**: Autonomous implementation, testing, and audit inside isolated Git worktrees.
+- **Requirement intake & Blueprint Studio**: Quick entry, meeting notes, GitHub / Webhook, and widget intake; ideas iterated into PRDs, specs, and tasks.
+- **Backpressure & concurrency**: Flow control and concurrency slots (default 5) digest the backlog steadily.
+- **Safety as a constraint**: Isolated worktree execution, Git guardrails through a single controlled merge entry, mandatory recorded tests and security audits, untrusted-input handling, and full traceability.
+- **Local-first**: Desktop application; business state (SQLite, in-process scheduling) stays on the user's machine. Model data boundaries are decided by the chosen Claude CLI or API.
 
 ## Keywords
 
-AI software factory, AI 软件工厂, software industrialization, 软件工业化, automation, 自动化, AI Agent, agent workflow, AI 工作流, automated workflow, workflow, 工作流, software factory, 软件工厂, Claude Code, Claude Code CLI, AI coding, AI 编码, automated deployment, 自动部署, replace outsourcing, 替代外包, software automation, AI development platform, requirements automation
+AutoForge, human-gated autonomous software factory, 自主软件产线, 人类轻度在环, human-in-the-loop, AI Agent, agent workflow, AI 工作流, Claude Code, Claude Code CLI, AI coding, AI 编码, Git worktree, isolated execution, 隔离执行, requirement review, 需求审核, code review, 代码审核, Blueprint Studio, 蓝图工作室, backpressure, 背压流控, concurrency slots, 并发槽位, local-first, 本地优先, priced per requirement, 按需求计产, software automation, AI development platform
 
 ## Who Uses AutoForge
 
 AutoForge is built for:
-- Product teams who want to ship software without managing an outsourced development team
-- Founders building software products who lack engineering resources
-- Engineering leads who want to accelerate delivery by automating the full development chain
+- Teams who want to ship software by managing an AI line instead of an outsourced development team
+- Founders and small teams who want to turn a backlog of ideas into merged changes with limited engineering capacity
+- Engineering leads who want autonomous execution while keeping the merge decision firmly in human hands
 
 ## Technical Details
 
-AutoForge integrates with:
-- **Claude Code CLI** for autonomous code implementation (AI 编码 / AI coding)
-- **GitHub** for repository and issue management (import issues as requirements)
-- **OpenDesign, Stitch, Claude Design** for prototyping
-- Any production environment for deployment via shell script
+- **Desktop shell**: Tauri 2
+- **Frontend**: React 18 · TypeScript · Vite
+- **Backend**: Rust · Tokio
+- **Data**: SQLite · local filesystem (local-first)
+- **Agents**: local Claude CLI · configurable LLM · MCP · Skills
+- **Engineering isolation**: Git worktree · single controlled merge entry
+- **Intake integrations**: GitHub, Webhook, embeddable widget
+
+> Status: AutoForge is in Alpha — suitable for local trials, product validation, and internal workflow exploration; not yet recommended for unattended use on critical production repositories.
 
 ## Contact
 
@@ -51,6 +60,6 @@ AutoForge integrates with:
 
 ## Pages
 
-- [Home](https://autoforge.dev/) — Full platform overview, eight-node pipeline, core capabilities
+- [Home](https://autoforge.dev/) — Positioning, the eight-stage pipeline with two human gates, core capabilities
 - [Privacy Policy](https://autoforge.dev/privacy) — Privacy and data handling policy
 - [Terms of Service](https://autoforge.dev/terms) — Terms of service

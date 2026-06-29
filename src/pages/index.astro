@@ -4,72 +4,72 @@ import "../styles/global.css";
 const engines = [
   {
     index: "01",
-    eyebrow: "REQUIREMENT & MATERIALS",
-    title: "需求收集与物料管理",
-    titleEn: "Requirements & Materials",
-    copy: "通过 Agent 对话讨论、批量导入或需求分析专用 Agent 扫描来收集需求；多 Agent 群聊自动梳理，生成设计文档等全量项目物料。",
-    copyEn: "Collect requirements through Agent discussion, bulk import, or a dedicated analysis Agent that scans your project. Multi-Agent chat then organizes everything into design docs and the full set of project materials.",
-    details: ["Agent 对话 / 批量导入 / AI 扫描", "多 Agent 群聊整理项目物料", "自动生成设计文档与参考资料"],
-    detailsEn: ["Agent chat / bulk import / AI scan", "Multi-Agent chat curates materials", "Auto-generated design docs & references"],
-    metric: "进入方式",
+    eyebrow: "REQUIREMENT INTAKE",
+    title: "需求接入与蓝图",
+    titleEn: "Intake & Blueprint",
+    copy: "快速录入、会议材料、GitHub / Webhook 与嵌入式 Widget 多入口接入需求；蓝图工作室把大想法迭代成 PRD、规格与可执行任务，重复与优先级自动分析后统一进入需求池。",
+    copyEn: "Bring requirements in via quick entry, meeting notes, GitHub / Webhook, or an embeddable widget. The Blueprint Studio turns big ideas into PRDs, specs, and executable tasks — with duplicate and priority analysis — before they enter one shared pool.",
+    details: ["Widget / 会议材料 / GitHub / Webhook 多入口", "蓝图工作室 → PRD · 规格 · 可执行任务", "重复检测与优先级自动分析"],
+    detailsEn: ["Widget / notes / GitHub / Webhook intake", "Blueprint Studio → PRD · spec · tasks", "Automatic dedup & priority analysis"],
+    metric: "接入入口",
     metricEn: "Intake",
-    value: "3"
+    value: "4"
   },
   {
     index: "02",
-    eyebrow: "DESIGN & SPEC",
-    title: "原型设计与 Spec 审查",
-    titleEn: "Prototyping & Spec Review",
-    copy: "系统自动生成设计提示词，可直接用于 OpenDesign、Stitch、Claude Design 等设计工具生成交互原型；AI 自动生成项目 Spec 与任务分解，人工审核后驱动编码精准落地。",
-    copyEn: "AutoForge generates design prompts ready for OpenDesign, Stitch, Claude Design, and other tools to produce interactive prototypes. AI then drafts the project spec and task breakdown; a human review locks the coding target.",
-    details: ["自动生成设计提示词，支持多种设计工具", "Stitch / Claude Design / OpenDesign 均可用", "AI 生成 Spec，人工审核确认"],
-    detailsEn: ["Auto-generated prompts for any design tool", "Works with Stitch, Claude Design & OpenDesign", "AI-drafted spec, human-approved"],
-    metric: "设计工具",
-    metricEn: "Design tools",
-    value: "3+"
+    eyebrow: "AUTONOMOUS EXECUTION",
+    title: "隔离实现与自主运行",
+    titleEn: "Isolated, Autonomous Execution",
+    copy: "Claude Code 在独立 Git worktree 中完成实现、测试与安全审计，生成变更摘要与交付产物。背压式流控与并发槽位让长尾 backlog 稳定消化，不冲垮模型与系统。",
+    copyEn: "Claude Code implements, tests, and audits inside an isolated Git worktree, producing a change summary and delivery artifacts. Backpressure flow control and concurrency slots keep the long-tail backlog moving without overloading the model or system.",
+    details: ["每个变更在独立 worktree 中执行", "背压式流控 + 并发槽位（默认 5）", "变更摘要 + 测试 + 安全审计留痕"],
+    detailsEn: ["Each change runs in its own worktree", "Backpressure + concurrency slots (default 5)", "Change summary + tests + audit on record"],
+    metric: "并发槽位",
+    metricEn: "Concurrency",
+    value: "×5"
   },
   {
     index: "03",
-    eyebrow: "CODE · TEST · SHIP",
-    title: "编码实现到部署上线",
-    titleEn: "Code, Test & Ship",
-    copy: "Claude Code CLI 自主完成编码；测试专用 Agent 全面验证，安全审计 Agent 审查代码；AI 生成一键部署 Shell 脚本，直达生产环境。",
-    copyEn: "Claude Code CLI writes the implementation autonomously. A testing Agent verifies it and a security Agent audits the code, then AI generates a one-click deploy script straight to production.",
-    details: ["Claude Code CLI 自动编码", "测试 + 安全 Agent 双重审查", "AI Shell 脚本一键部署"],
-    detailsEn: ["Claude Code CLI writes the code", "Test + security Agent double review", "One-click AI deploy script"],
-    metric: "交付链路",
-    metricEn: "Delivery",
-    value: "E2E"
+    eyebrow: "TWO HUMAN GATES",
+    title: "两道人工闸口",
+    titleEn: "Two Human Gates",
+    copy: "闸口 1 需求审核——确认问题真实、范围清楚、方案值得执行；闸口 2 代码审核——对照变更摘要、Diff、测试与安全结果决定是否合并。最终合并权始终留在人手中。",
+    copyEn: "Gate 1, requirement review — confirm the problem is real, the scope clear, the approach worth doing. Gate 2, code review — decide whether to merge against the change summary, diff, tests, and security results. The final merge stays in human hands.",
+    details: ["闸口 1 · 需求审核（要不要做）", "闸口 2 · 代码审核（做得对不对）", "双栏实现预览，逐项对比"],
+    detailsEn: ["Gate 1 · requirement review (should we?)", "Gate 2 · code review (is it right?)", "Side-by-side implementation preview"],
+    metric: "人工闸口",
+    metricEn: "Gates",
+    value: "2"
   }
 ];
 
 const workflow = [
-  ["01", "需求收集", "通过 Agent 对话、批量导入或 AI 扫描，明确需求目标与验收标准", "REQUIREMENT", "Requirements", "Define goals and acceptance criteria via Agent chat, bulk import, or AI project scan."],
-  ["02", "物料管理", "多 Agent 群聊自动梳理，生成设计文档等全量项目物料", "MATERIALS", "Materials", "Multi-Agent chat curates and generates design docs and every project material."],
-  ["03", "原型设计", "系统自动生成设计提示词，可直接用于 OpenDesign、Stitch、Claude Design 等设计工具完成交互原型", "PROTOTYPE", "Prototyping", "AutoForge generates design prompts you can use directly in OpenDesign, Stitch, Claude Design, and other tools to build interactive prototypes."],
-  ["04", "Spec 审查", "AI 生成项目规范与任务分解，人工审核后锁定编码目标", "SPEC", "Spec Review", "AI drafts the project spec and task breakdown; a human review locks the coding target."],
-  ["05", "编码实现", "Claude Code CLI 理解 Spec 与代码库，自主完成功能开发", "DEVELOPMENT", "Development", "Claude Code CLI reads the spec and codebase, then implements features autonomously."],
-  ["06", "系统测试", "测试专用 Agent 全面验证，可将新发现的问题直接录入为需求", "TESTING", "Testing", "A dedicated testing Agent verifies everything; new findings flow straight back as requirements."],
-  ["07", "安全审查", "安全审计专用 Agent 扫描代码，确保合规与安全边界清晰", "SECURITY", "Security", "A security-audit Agent scans the code to keep compliance and security boundaries clear."],
-  ["08", "部署上线", "AI 生成稳定 Shell 脚本，一键部署到目标生产环境", "DELIVERY", "Deployment", "AI generates a stable shell script and deploys to the target production environment in one click."]
+  ["01", "需求进入", "快速录入、会议材料、GitHub / Webhook 或 Widget 接入，自动做重复与优先级分析", "INTAKE", "Intake", "Quick entry, meeting notes, GitHub / Webhook, or widget — with automatic dedup and priority analysis."],
+  ["02", "输入消毒", "外部需求、网页与工具返回值按不可信数据处理，检测明显的 Prompt Injection", "SANITIZE", "Sanitize", "External requirements, pages, and tool output are treated as untrusted data, with obvious prompt injection flagged."],
+  ["03", "分析分流", "需求分析 Agent 拆解问题、生成验收标准，再分流到合适的处理路径", "ANALYZE", "Analyze", "The analysis Agent breaks down the problem, drafts acceptance criteria, and routes it to the right path."],
+  ["04", "需求审核 · 闸口 1", "人工确认问题真实、范围清楚、方案值得执行后放行", "GATE · REQ", "Requirement Gate", "A human confirms the problem is real, the scope clear, and the approach worth doing before it passes."],
+  ["05", "隔离实现", "Claude Code 在独立 worktree 中实现变更，生成变更摘要与交付产物", "IMPLEMENT", "Implement", "Claude Code implements the change in an isolated worktree, producing a change summary and artifacts."],
+  ["06", "测试与审计", "测试 Agent 验证，功能与安全审计作为流水线阶段留痕，而不是口头承诺", "TEST · AUDIT", "Test & Audit", "A testing Agent verifies; functional and security audits are recorded pipeline stages, not verbal promises."],
+  ["07", "代码审核 · 闸口 2", "对照变更摘要、Diff、测试与安全结果，决定是否合并", "GATE · CODE", "Code Gate", "Decide whether to merge against the change summary, diff, tests, and security results."],
+  ["08", "合并交付", "通过单一受控入口合并，完整 trace 记录结果从何而来", "MERGE", "Merge", "Merge through a single controlled entry point, with a full trace of where every result came from."]
 ];
 
 const metrics = [
-  ["8 节点", "覆盖完整交付链路", "8 Nodes", "Across the full delivery chain"],
-  ["3 种", "需求进入方式", "3 Ways", "To bring requirements in"],
-  ["AI + 人", "轻量在环审核", "AI + Human", "Lightweight in-the-loop review"],
-  ["全替代", "外包依赖归零", "100%", "Outsourcing replaced"]
+  ["2 闸口", "需求审核与代码审核", "2 Gates", "Requirement & code review"],
+  ["×5 并发", "默认隔离实现槽位", "×5 Slots", "Isolated runs by default"],
+  ["100% 本地", "业务状态留在本机", "100% Local", "State stays on your machine"],
+  ["1 个人", "管理整支 AI 工厂", "1 Operator", "Runs the whole factory"]
 ];
 
 const pipeline = [
-  ["01", "需求收集", "Collect", "REQ"],
-  ["02", "物料管理", "Materials", "MAT"],
-  ["03", "原型设计", "Prototype", "PROTO"],
-  ["04", "Spec 审查", "Spec", "SPEC"],
-  ["05", "编码实现", "Develop", "CODE"],
-  ["06", "系统测试", "Test", "TEST"],
-  ["07", "安全审查", "Audit", "AUDIT"],
-  ["08", "部署上线", "Ship", "SHIP"]
+  ["01", "需求进入", "Intake", "IN"],
+  ["02", "输入消毒", "Sanitize", "LINT"],
+  ["03", "分析分流", "Analyze", "SCAN"],
+  ["04", "需求审核", "Gate 1", "G1"],
+  ["05", "隔离实现", "Implement", "CODE"],
+  ["06", "测试审计", "Test", "TEST"],
+  ["07", "代码审核", "Gate 2", "G2"],
+  ["08", "合并交付", "Merge", "SHIP"]
 ];
 ---
 
@@ -80,22 +80,22 @@ const pipeline = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="AutoForge · AI 软件工厂 · 软件工业化。AI Agent 驱动的自动化工作流，Claude Code 全程执行编码。八节点全链路：需求收集 → Spec 审查 → 编码 → 测试 → 部署。完全替代传统外包。"
+      content="AutoForge · 人类轻度在环的自主软件产线。接入任意 Git 仓库，以 Claude Code 为执行引擎，在隔离 worktree 中完成分析、实现、测试与安全审计。两道人工闸口——需求审核与代码审核——你来签字放行。软件按需求计产，而不是按工时计价。"
     />
     <meta
       name="keywords"
-      content="AutoForge, AI 软件工厂, AI software factory, 软件工业化, software industrialization, 自动化, automation, AI Agent, agent workflow, AI 工作流, automated workflow, 工作流, workflow, 软件工厂, software factory, Claude Code, Claude Code CLI, AI 编码, AI coding, 自动部署, automated deployment, 替代外包, replace outsourcing, AI 软件开发, AI software development, 需求自动化, requirements automation, 软件自动化, software automation, AI development platform"
+      content="AutoForge, AI 软件工厂, AI software factory, 自主软件产线, autonomous software factory, human-gated, 人类在环, human-in-the-loop, AI Agent, agent workflow, AI 工作流, Claude Code, Claude Code CLI, AI 编码, AI coding, Git worktree, 隔离执行, 需求审核, 代码审核, code review, 蓝图工作室, 按需求计产, 背压流控, backpressure, 并发槽位, 软件自动化, software automation, AI development platform, 本地优先, local-first"
     />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="author" content="AutoForge" />
-    <meta name="theme-color" content="#070707" />
+    <meta name="theme-color" content="#0c0907" />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="AutoForge" />
-    <meta property="og:title" content="AutoForge — AI Software Factory · Agent Workflow · Claude Code" />
+    <meta property="og:title" content="AutoForge — A human-gated autonomous software factory · Claude Code · Git worktree" />
     <meta
       property="og:description"
-      content="AI-Agent-driven software factory powered by Claude Code. Fully automated workflow: requirements → spec → code → test → deploy. Software industrialization."
+      content="An autonomous software line you can sign off on. Claude Code implements in isolated Git worktrees; two human gates — requirement review and code review — keep the merge in your hands. Software priced per requirement, not per hour."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://autoforge.dev/" />
@@ -105,8 +105,8 @@ const pipeline = [
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="AutoForge — AI Software Factory · Agent Workflow · Claude Code" />
-    <meta name="twitter:description" content="AI-Agent-driven software factory powered by Claude Code. Fully automated workflow: requirements → spec → code → test → deploy. Software industrialization." />
+    <meta name="twitter:title" content="AutoForge — A human-gated autonomous software factory · Claude Code · Git worktree" />
+    <meta name="twitter:description" content="An autonomous software line you can sign off on. Claude Code implements in isolated Git worktrees; two human gates keep the merge in your hands. Priced per requirement, not per hour." />
     <meta name="twitter:image" content="https://autoforge.dev/og-image.png" />
 
     <!-- Canonical + hreflang (bilingual single-page) -->
@@ -125,7 +125,7 @@ const pipeline = [
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <title>AutoForge — AI 软件工厂 · 自动化工作流 · Claude Code</title>
+    <title>AutoForge — 自主软件产线 · 人类轻度在环 · Claude Code</title>
 
     <!-- JSON-LD structured data -->
     <script is:inline type="application/ld+json">
@@ -147,14 +147,14 @@ const pipeline = [
             "contactType": "sales",
             "availableLanguage": ["Chinese", "English"]
           },
-          "description": "AutoForge is an AI software factory (AI 软件工厂) and software industrialization platform. Powered by AI Agents and Claude Code CLI, it delivers fully automated software workflows — replacing traditional outsourcing entirely."
+          "description": "AutoForge is a human-gated autonomous software factory. It connects to any Git repository, uses Claude Code as its execution engine, and runs analysis, isolated implementation, testing, and security audit on a single auditable line. Two human gates — requirement review and code review — keep the merge decision in human hands."
         },
         {
           "@type": "WebSite",
           "@id": "https://autoforge.dev/#website",
           "url": "https://autoforge.dev",
           "name": "AutoForge",
-          "description": "AI Software Factory · Automated Agent Workflow · Claude Code · Software Industrialization",
+          "description": "Human-gated autonomous software factory · Claude Code · Git worktree · Local-first",
           "publisher": { "@id": "https://autoforge.dev/#organization" },
           "inLanguage": ["zh-CN", "en"]
         },
@@ -164,23 +164,23 @@ const pipeline = [
           "name": "AutoForge",
           "url": "https://autoforge.dev",
           "applicationCategory": "DeveloperApplication",
-          "operatingSystem": "Any",
-          "description": "AutoForge is an AI software factory and software industrialization (软件工业化) platform. Using AI Agents and Claude Code CLI in a fully automated workflow (自动化工作流), it covers the complete eight-node delivery chain: requirements collection, materials management, prototyping, spec review, coding, testing, security audit, and deployment. It fully replaces traditional software outsourcing.",
+          "operatingSystem": "macOS, Linux, Windows",
+          "description": "AutoForge is a human-gated autonomous software factory and a local-first desktop application. It connects to any Git repository and uses Claude Code as its execution engine: requirements enter, are sanitized and analyzed, then — between two human review gates — Claude Code implements, tests, and audits each change inside an isolated Git worktree before a controlled merge. Software is priced per requirement, not per engineering hour.",
           "offers": {
             "@type": "Offer",
             "url": "https://autoforge.dev/#contact"
           },
           "featureList": [
-            "AI-driven requirements collection via Agent conversation, bulk import, or project scan",
-            "Automated materials management with multi-Agent curation",
-            "Design prompt generation for OpenDesign, Stitch, and Claude Design",
-            "AI-generated project specification and task breakdown with human review gate",
-            "Autonomous coding via Claude Code CLI",
-            "Automated testing with dedicated testing Agent",
-            "Security audit via dedicated security Agent",
-            "One-click deployment via AI-generated shell scripts",
-            "Full traceability across all eight pipeline nodes",
-            "GitHub repository and issue integration"
+            "Requirement intake via quick entry, meeting notes, GitHub / Webhook, and embeddable widget",
+            "Blueprint Studio that turns ideas into PRDs, specs, and executable tasks",
+            "Input sanitization treating external requirements and tool output as untrusted data (prompt-injection detection)",
+            "Requirement-review gate (gate 1) before any implementation begins",
+            "Autonomous implementation by Claude Code inside isolated Git worktrees",
+            "Backpressure flow control and concurrency slots (default 5)",
+            "Testing and security audit recorded as pipeline stages",
+            "Code-review gate (gate 2) with change summary, diff, tests, and security results",
+            "Controlled single-entry merge with full end-to-end trace",
+            "Local-first: business state stays on the user's machine (SQLite, in-process scheduling)"
           ],
           "provider": { "@id": "https://autoforge.dev/#organization" }
         },
@@ -192,39 +192,39 @@ const pipeline = [
               "name": "What is AutoForge?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "AutoForge is an AI software factory (AI 软件工厂) and software industrialization platform. It uses AI Agents and Claude Code CLI to run a fully automated workflow across eight nodes: requirements collection, materials management, prototyping, spec review, coding, testing, security audit, and deployment. It fully replaces traditional software outsourcing."
+                "text": "AutoForge is a human-gated autonomous software factory. It connects to any Git repository and uses Claude Code as its execution engine. Requirements enter, are sanitized and analyzed, then — between two human review gates — Claude Code implements, tests, and audits each change inside an isolated Git worktree before a controlled merge. It runs local-first as a desktop application, so one person can manage an AI factory."
               }
             },
             {
               "@type": "Question",
-              "name": "How does AutoForge replace outsourcing?",
+              "name": "What are the two human gates in AutoForge?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "AutoForge automates every stage of software development using AI agents. Requirements enter via Agent conversation, bulk import, or AI project scan. The system generates designs, writes specs, implements code via Claude Code CLI, runs tests and security audits, then deploys to production — all with only two lightweight human review gates."
+                "text": "Gate 1 is requirement review: a human confirms the problem is real, the scope is clear, and the approach is worth doing. Gate 2 is code review: a human decides whether to merge by checking the change summary, diff, tests, and security results. Everything between the gates runs autonomously, and the final merge decision always stays with a human."
               }
             },
             {
               "@type": "Question",
-              "name": "What are the eight nodes of the AutoForge pipeline?",
+              "name": "How does the AutoForge pipeline work?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "The eight nodes are: (1) Requirements Collection — gather goals via Agent chat, import, or AI scan; (2) Materials Management — multi-Agent curation of docs and references; (3) Prototyping — AI-generated design prompts for tools like Stitch and Claude Design; (4) Spec Review — AI-drafted specification with human approval gate; (5) Development — autonomous coding by Claude Code CLI; (6) Testing — full verification by a dedicated testing Agent; (7) Security Audit — code scan by a security Agent; (8) Deployment — one-click production deploy via AI-generated shell script."
+                "text": "The pipeline has eight stages: (1) Intake — quick entry, meeting notes, GitHub / Webhook, or widget, with dedup and priority analysis; (2) Sanitize — external input is treated as untrusted, with prompt-injection detection; (3) Analyze — an Agent breaks down the problem and drafts acceptance criteria; (4) Requirement Gate (human); (5) Implement — Claude Code works inside an isolated Git worktree; (6) Test & Audit — recorded testing and security stages; (7) Code Gate (human); (8) Merge — a single controlled entry point with a full trace."
               }
             },
             {
               "@type": "Question",
-              "name": "How many human review steps does AutoForge require?",
+              "name": "Does AutoForge run in the cloud or locally?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "AutoForge has two lightweight human-in-the-loop review gates: the Spec Review (before coding begins) and the final deployment approval. All other steps are fully automated by AI agents."
+                "text": "AutoForge is local-first. It runs as a desktop application with business state stored on your machine (SQLite and in-process scheduling), so there is no business server to deploy. Model data boundaries are determined by the Claude CLI or API you configure."
               }
             },
             {
               "@type": "Question",
-              "name": "What integrations does AutoForge support?",
+              "name": "How does AutoForge keep autonomous execution safe?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "AutoForge integrates with GitHub (repository and issue import), Claude Code CLI (autonomous coding), and design tools including OpenDesign, Stitch, and Claude Design. It deploys to any production environment via shell script."
+                "text": "Safety is a constraint across the whole line, not a final check. Each change runs in an isolated Git worktree; the agent layer intercepts dangerous Git operations and merges happen through a single controlled entry point; tests and security audits are recorded pipeline stages; external input is handled as untrusted data with prompt-injection detection; and agents, models, and tool calls are linked to one trace for full traceability."
               }
             }
           ]
@@ -249,7 +249,7 @@ const pipeline = [
     </div>
 
     <div class="utility-bar">
-      <span data-en="AI Software Factory · Fully replaces outsourcing">AI 软件工厂系统 · 完全替代外包</span>
+      <span data-en="Autonomous software line · gated only by you">自主软件产线 · 你只在闸口签字</span>
       <div class="utility-actions">
         <button class="lang-toggle" type="button" role="switch" aria-pressed="false" aria-label="Switch language">EN</button>
         <a href="#contact" data-en={'Request a demo <span aria-hidden="true">↗</span>'}>申请产品演示 <span aria-hidden="true">↗</span></a>
@@ -265,7 +265,7 @@ const pipeline = [
       <nav class="desktop-nav" aria-label="主导航">
         <a href="#platform" data-en="Platform">平台</a>
         <a href="#engines" data-en="Capabilities">核心能力</a>
-        <a href="#workflow" data-en="Full cycle">完整周期</a>
+        <a href="#workflow" data-en="Pipeline">完整产线</a>
         <a href="#contact" data-en="Contact">联系我们</a>
       </nav>
 
@@ -281,7 +281,7 @@ const pipeline = [
       <nav class="mobile-nav" id="mobile-nav" aria-label="移动端导航">
         <a href="#platform" data-en="Platform">平台</a>
         <a href="#engines" data-en="Capabilities">核心能力</a>
-        <a href="#workflow" data-en="Full cycle">完整周期</a>
+        <a href="#workflow" data-en="Pipeline">完整产线</a>
         <a href="#contact" data-en="Contact">联系我们</a>
       </nav>
     </header>
@@ -296,15 +296,15 @@ const pipeline = [
 
         <div class="hero-layout">
           <div class="hero-main">
-            <p class="eyebrow hero-enter">AI SOFTWARE FACTORY SYSTEM</p>
-            <h1 aria-label="外包能做的，AI 全部接管。软件工业化。">
-              <span class="hero-line"><span data-en="Everything agencies do,">外包能做的，</span></span>
-              <span class="hero-line hero-line-accent"><span data-en="AI now handles.">AI 全部接管。</span></span>
-              <span class="hero-line"><span data-en="Software, industrialized.">软件工业化。</span></span>
+            <p class="eyebrow hero-enter">HUMAN-GATED AUTONOMOUS SOFTWARE FACTORY</p>
+            <h1 aria-label="一条自主软件产线，你敢签字放行。一个人，管理一支 AI 工厂。">
+              <span class="hero-line"><span data-en="An autonomous software line">一条自主软件产线，</span></span>
+              <span class="hero-line hero-line-accent"><span data-en="you can sign off on.">你敢签字放行。</span></span>
+              <span class="hero-line"><span data-en="One person runs the factory.">一个人管理一支 AI 工厂。</span></span>
             </h1>
             <div class="hero-actions hero-enter">
-              <a class="button button-light magnetic" href="#platform" data-en={'See the full cycle <span aria-hidden="true">↗</span>'}>
-                查看完整周期 <span aria-hidden="true">↗</span>
+              <a class="button button-light magnetic" href="#platform" data-en={'See the pipeline <span aria-hidden="true">↗</span>'}>
+                查看完整产线 <span aria-hidden="true">↗</span>
               </a>
               <a class="button button-ghost magnetic" href="#engines" data-en="Explore capabilities">了解核心能力</a>
             </div>
@@ -315,17 +315,17 @@ const pipeline = [
               <span>FACTORY STATUS</span>
               <strong><i></i> LIVE</strong>
             </div>
-            <p data-en="AutoForge is an AI software factory covering the full eight-node chain: requirements, materials, prototyping, coding, testing, security review and deployment. It fully replaces traditional outsourcing.">
-              AutoForge 是 AI 软件工厂系统，覆盖需求收集、物料管理、原型设计、编码、测试、安全审查到部署上线的完整八节点链路，完全替代传统外包。
+            <p data-en="AutoForge connects to any Git repository and uses Claude Code to analyze, implement, test, and audit each change inside an isolated worktree. Two human gates — requirement review and code review — decide what to build and what to merge.">
+              AutoForge 接入任意 Git 仓库，以 Claude Code 为执行引擎，在隔离 worktree 中完成分析、实现、测试与安全审计。两道人工闸口——需求审核与代码审核——决定要不要做、做得对不对。
             </p>
             <div class="brief-metrics">
               <div>
-                <span>PIPELINE NODES</span>
-                <strong>08</strong>
-              </div>
-              <div>
                 <span>HUMAN GATES</span>
                 <strong>02</strong>
+              </div>
+              <div>
+                <span>CONCURRENCY</span>
+                <strong>×5</strong>
               </div>
             </div>
             <div class="brief-meta">
@@ -348,9 +348,9 @@ const pipeline = [
         <div class="ticker-track">
           {Array.from({ length: 2 }).map(() => (
             <div class="ticker-set">
-              <span>COLLECT</span><i></i><span>MATERIALS</span><i></i><span>PROTOTYPE</span><i></i>
-              <span>SPEC</span><i></i><span>CODE</span><i></i><span>TEST</span><i></i>
-              <span>AUDIT</span><i></i><span>DEPLOY</span><i></i>
+              <span>INTAKE</span><i></i><span>SANITIZE</span><i></i><span>ANALYZE</span><i></i>
+              <span>GATE·1</span><i></i><span>IMPLEMENT</span><i></i><span>TEST</span><i></i>
+              <span>AUDIT</span><i></i><span>GATE·2</span><i></i><span>MERGE</span><i></i>
             </div>
           ))}
         </div>
@@ -359,11 +359,11 @@ const pipeline = [
       <section class="platform section-shell" id="platform">
         <div class="section-intro reveal">
           <div>
-            <p class="eyebrow">FROM REQUIREMENT TO PRODUCT</p>
-            <h2 data-en="Eight nodes,<br />one workspace.">八节点全链路，<br />一个工作空间。</h2>
+            <p class="eyebrow">FROM IDEA TO MERGE</p>
+            <h2 data-en="Between two gates,<br />the line runs itself.">两道闸口之间，<br />产线自主运转。</h2>
           </div>
-          <p data-en="From requirements to deployment, every conversation, material, prototype, code change, review and deploy record lives on one traceable delivery chain. Everything an outsourced team does, one AI system covers.">
-            从需求收集到产品部署，全部对话、物料、原型、代码变更、审核结果和部署记录都在同一条可追踪的交付链上。外包团队的所有工作，一套 AI 系统全部覆盖。
+          <p data-en="From intake to merge, analysis, isolated implementation, testing, and security audit all run automatically. Humans appear at exactly two gates: deciding what to build, and confirming it is right to ship.">
+            从需求进入到合并交付，分析、隔离实现、测试与安全审计全部自动完成。人类只在两道闸口出现：决定要不要做，确认做得对不对。
           </p>
         </div>
 
@@ -374,7 +374,7 @@ const pipeline = [
               <span class="live-label"><i></i> RUNNING</span>
             </div>
             <div class="pipeline-map" id="pipeline">
-              <div class="pipeline-flow" role="img" aria-label="AutoForge 八节点交付链路运行图">
+              <div class="pipeline-flow" role="img" aria-label="AutoForge 八阶段产线运行图，含需求审核与代码审核两道人工闸口">
                 {pipeline.map(([num, zh, en, code]) => (
                   <article class="pnode">
                     <span class="pnode-idx">{num}</span>
@@ -393,10 +393,10 @@ const pipeline = [
 
           <article class="system-card reveal spotlight-card tilt" data-tilt="7">
             <div class="card-topline">
-              <span>PROJECT MATERIALS</span><span>3 CHANNELS</span>
+              <span>REQUIREMENT INTAKE</span><span>4 CHANNELS</span>
             </div>
-            <div class="velocity-value"><strong data-count="36">0</strong><span> items</span></div>
-            <p data-en="Requirements, design docs and references already archived for this project.">当前项目已归档的需求、设计文档与参考物料</p>
+            <div class="velocity-value"><strong data-count="36">0</strong><span> in pool</span></div>
+            <p data-en="Requirements pulled in via widget, meeting notes, GitHub and Webhook — deduped and prioritized into one pool.">通过 Widget、会议材料、GitHub 与 Webhook 接入的需求，去重并按优先级汇入需求池</p>
             <div class="bar-chart" aria-hidden="true">
               <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
               <i></i><i></i><i></i><i></i>
@@ -416,7 +416,7 @@ const pipeline = [
               <i class="satellite satellite-three"></i>
             </div>
             <div class="region-list">
-              <span data-en="<i></i> Materials"><i></i> 物料</span><span data-en="<i></i> Specs"><i></i> 规范</span><span data-en="<i></i> Repos"><i></i> 代码库</span>
+              <span data-en="<i></i> Specs"><i></i> 规格</span><span data-en="<i></i> Memory"><i></i> 记忆</span><span data-en="<i></i> Skills · MCP"><i></i> Skills · MCP</span>
             </div>
           </article>
         </div>
@@ -437,7 +437,7 @@ const pipeline = [
       <section class="engines section-shell" id="engines">
         <div class="engine-heading reveal">
           <p class="eyebrow">CORE CAPABILITIES</p>
-          <h2 data-en="AI drives execution,<br />humans hold the call.">AI 全程推进，<br />人类掌控决策。</h2>
+          <h2 data-en="AI runs the line,<br />you decide two things.">AI 全程推进，<br />你只管两件事。</h2>
         </div>
 
         <div class="engine-list">
@@ -472,11 +472,11 @@ const pipeline = [
       <section class="workflow section-shell" id="workflow">
         <div class="section-intro reveal">
           <div>
-            <p class="eyebrow">THE COMPLETE PRODUCT CYCLE</p>
-            <h2 data-en="Eight nodes,<br />from idea to live.">八节点全链路，<br />从需求到上线。</h2>
+            <p class="eyebrow">THE COMPLETE PIPELINE</p>
+            <h2 data-en="From intake,<br />to a merge you trust.">从需求进入，<br />到敢签字合并。</h2>
           </div>
-          <p data-en="All eight nodes share one project context and audit trail. Any requirement traces back to its materials, prototype, spec, code, test results and final deployment.">
-            八个节点共享同一份项目上下文与审计记录。任何需求都能追溯到物料、原型、Spec、代码、测试结果和最终部署。
+          <p data-en="All eight stages share one project context and audit trace. Any change traces back to its requirement, implementation, tests, security results and final merge.">
+            八个阶段共享同一份项目上下文与审计 trace。任何变更都能追溯到需求、实现、测试、安全结果和最终合并。
           </p>
         </div>
 
@@ -497,19 +497,19 @@ const pipeline = [
         <div class="manifesto-glow" aria-hidden="true"></div>
         <div class="manifesto-inner section-shell reveal">
           <p class="eyebrow">THE AUTOFORGE PRINCIPLE</p>
-          <blockquote data-en="&ldquo;Everything an agency can do,<br /><span>now done by one AI system.</span>&rdquo;">
-            “把外包公司能做的所有工作，<br />
-            <span>交给 AI 系统完成。</span>”
+          <blockquote data-en="&ldquo;Autonomous where it should be,<br /><span>human-gated where it matters.</span>&rdquo;">
+            “该自主的地方自主，<br />
+            <span>该把关的地方由你把关。</span>”
           </blockquote>
-          <p>AUTOFORGE / AI SOFTWARE FACTORY</p>
+          <p>AUTOFORGE / HUMAN-GATED SOFTWARE FACTORY</p>
         </div>
       </section>
 
       <section class="contact section-shell" id="contact">
         <div class="contact-copy reveal">
           <p class="eyebrow">START BUILDING</p>
-          <h2 data-en="Bring a requirement,<br />watch it become a product.">带上一个需求，<br />看它变成产品。</h2>
-          <p data-en="Connect an existing repo and issues, or let AI scan the project. AutoForge starts at requirements, moves through eight nodes, and ships a reachable production deployment. No outsourcing needed.">接入现有代码库与 Issue，或让 AI 扫描项目。AutoForge 从需求收集开始，经过八个节点，推进到可访问的生产部署，无需外包。</p>
+          <h2 data-en="Connect a repo,<br />start the line.">接入一个仓库，<br />让产线跑起来。</h2>
+          <p data-en="Connect any Git repository and issues, or collect requirements via widget and webhook. AutoForge runs locally: analysis, isolated implementation, testing and security audit happen on their own — you just sign off at two gates.">接入任意 Git 仓库与 Issue，或用 Widget、Webhook 收集需求。AutoForge 在本地运转：分析、隔离实现、测试与安全审计自动完成，你只在两道闸口签字放行。</p>
         </div>
         <div class="contact-action reveal">
           <a class="demo-cta magnetic spotlight-card" href="mailto:renmengkai@gmail.com">
@@ -523,9 +523,9 @@ const pipeline = [
             </div>
           </a>
           <div class="contact-meta">
-            <span data-en="Works with existing repos">支持现有代码库接入</span>
-            <span data-en="Imports GitHub Issues">支持 GitHub Issue 导入</span>
-            <span data-en="Configurable human review gates">人工审核节点可配置</span>
+            <span data-en="Works with any Git repo">支持任意 Git 仓库接入</span>
+            <span data-en="GitHub · Webhook · Widget intake">GitHub · Webhook · Widget 接入</span>
+            <span data-en="Local-first, state stays on device">本地优先，状态留在本机</span>
           </div>
         </div>
       </section>
@@ -538,13 +538,13 @@ const pipeline = [
             <img class="brand-logo" src="/autoforge-logo.png" alt="" />
             <span>Auto<span>Forge</span></span>
           </a>
-          <p data-en="An eight-node AI software factory that fully replaces traditional outsourcing.">八节点全链路 AI 软件工厂系统，完全替代传统外包。</p>
+          <p data-en="A human-gated autonomous software line, priced per requirement — not per hour.">人类轻度在环的自主软件产线，按需求计产，而不是按工时计价。</p>
         </div>
         <div>
           <p class="footer-label">PLATFORM</p>
           <a href="#platform" data-en="Capabilities">产品能力</a>
           <a href="#engines" data-en="Core engines">核心能力</a>
-          <a href="#workflow" data-en="Full cycle">完整产品周期</a>
+          <a href="#workflow" data-en="Full pipeline">完整产线</a>
         </div>
         <div>
           <p class="footer-label">COMPANY</p>
@@ -828,15 +828,15 @@ const pipeline = [
       const consoleMessages = {
         zh: [
           "需求 Agent 正在分析 Issue，生成验收标准…",
-          "物料整理完成，Spec 已生成，等待人工审核…",
-          "Claude Code 编码完成，测试 Agent 验证中…",
-          "安全审查通过，一键部署脚本已生成。"
+          "分析分流完成，等待需求审核闸口放行…",
+          "Claude Code 正在隔离 worktree 中实现变更…",
+          "测试与安全审计通过，等待代码审核闸口…"
         ],
         en: [
           "Requirement Agent is parsing the issue and drafting acceptance criteria…",
-          "Materials curated, spec generated, awaiting human review…",
-          "Claude Code finished the implementation, testing Agent verifying…",
-          "Security review passed, one-click deploy script is ready."
+          "Analysis done, waiting at the requirement-review gate…",
+          "Claude Code is implementing the change in an isolated worktree…",
+          "Tests and security audit passed, waiting at the code-review gate…"
         ]
       };
 
@@ -851,8 +851,8 @@ const pipeline = [
         document.documentElement.lang = next === "en" ? "en" : "zh-CN";
         document.title =
           next === "en"
-            ? "AutoForge — AI Software Factory · Automated Agent Workflow · Claude Code"
-            : "AutoForge — AI 软件工厂 · 自动化工作流 · Claude Code";
+            ? "AutoForge — Human-gated autonomous software factory · Claude Code · Git worktree"
+            : "AutoForge — 自主软件产线 · 人类轻度在环 · Claude Code";
         document.body.classList.toggle("lang-en", next === "en");
         i18nEls.forEach((el) => {
           const value = next === "en" ? el.dataset.en : el.dataset.zh;
